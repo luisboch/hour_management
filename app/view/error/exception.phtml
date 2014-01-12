@@ -1,0 +1,9 @@
+{% extends 'template/open.phtml' %}
+{% block content %}
+<div class="panel col-lg-12 col-md-12 col-xs-12" style="margin: auto;float:none" >
+    <p class="lead">Ops, encontramos um erro: <span>"{{message}}"</span></p>
+    <div style="padding-left: 15px" >
+        <pre>{{trace}}</pre>
+    </div>
+</div>
+{% endblock %}

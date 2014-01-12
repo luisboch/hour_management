@@ -1,0 +1,77 @@
+{% extends "template/open.phtml" %}
+{% block content %}
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="item active">
+            <img data-src="" src="{{ url('img/layout/Img1.jpg') }}" alt="First slide">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h3>Quarta da Pizza.</h3>
+                    <p>Aproveite as promoções de quarta feira</p>
+                    <p><a class="btn btn-lg btn-primary" href="?p=pages/open/deals.php" role="button">Saiba Mais &raquo;</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img data-src="" src="{{ url('img/layout/Img2.jpg') }}" alt="First slide">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h3>Segunda maluca.</h3>
+                    <p>Todos os sabores com 30% de desconto</p>
+                    <p><a class="btn btn-lg btn-primary" href="?p=pages/open/deals.php" role="button">Saiba Mais &raquo;</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <img data-src="" src="{{ url('img/layout/Img3.jpg') }}" alt="First slide">
+            <div class="container">
+                <div class="carousel-caption">
+                    <h3>Dia da familia.</h3>
+                    <p>Traga a familia e ganhe desconto*</p>
+                    <p><a class="btn btn-lg btn-primary" href="?p=pages/open/deals.php" role="button">Saiba Mais &raquo;</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+</div><!-- /.carousel -->
+
+
+
+<!-- Marketing messaging and featurettes
+================================================== -->
+<!-- Wrap the rest of the page in another container to center all the content. -->
+
+<div class="container" style="text-align:center;">
+
+    <!-- Three columns of text below the carousel -->
+    <div class="row">
+        <div class="col-lg-4">
+            <img class="img-circle" src="{{ url('img/layout/pizza-icon.png') }}" alt="Image">
+            <h2>Cardápio</h2>
+            <p>Conheça todas as nossas pizzas</p>
+            <p><a class="btn btn-default" href="{{ url('menu') }}" role="button">Ver Mais &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+            <img class="img-circle"src="{{ url('img/layout/dollar-icon.png') }}" alt="Generic placeholder image">
+            <h2>Promoções</h2>
+            <p>Fique por dentro das nossas promoções</p>
+            <p><a class="btn btn-default" href="{{ url('deals') }}" role="button">Ver Mais &raquo;</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+            <img class="img-circle"src="{{ url('img/layout/map-icon.png') }}" alt="Generic placeholder image">
+            <h2>Localização</h2>
+            <p>Saiba como encontrar a pizzaria</p>
+            <p><a class="btn btn-default" href="{{ url('map') }}" role="button">Ver Mais &raquo;</a></p>
+        </div>
+    </div>
+
+</div><!-- /.container -->
+{% endblock %}

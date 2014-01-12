@@ -1,0 +1,65 @@
+
+.text-justify{
+    text-align: justify;
+}
+.menu-icon{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+/* Show and affix the side nav when space allows it */
+@media (max-width: 768px) {
+    .bs-sidebar.affix {
+        position: static;
+        width: auto;
+        margin-bottom: 10px;
+    }
+}
+
+/* Show and affix the side nav when space allows it */
+@media (max-width: 992px) {
+    .bs-sidebar.affix {
+        position: static;
+        width: auto;
+        margin-bottom: 10px;
+    }
+
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .bs-sidebar .nav > .active > ul {
+        display: block;
+    }
+    /* Widen the fixed sidebar */
+    .bs-sidebar.affix,
+    .bs-sidebar.affix-bottom {
+        width: 213px;
+    }
+    .bs-sidebar.affix {
+        position: fixed; /* Undo the static from mobile first approach */
+        top: 80px;
+    }
+    .bs-sidebar.affix-bottom {
+        position: absolute; /* Undo the static from mobile first approach */
+    }
+    .bs-sidebar.affix-bottom .bs-sidenav,
+    .bs-sidebar.affix .bs-sidenav {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+@media (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .bs-sidebar.affix-bottom,
+    .bs-sidebar.affix {
+        width: 263px;
+    }
+}
+
+.pagination{
+    border: 1px solid #005732;
+}
+
+body{
+    padding-top: 20px;
+}
