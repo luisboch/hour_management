@@ -9,19 +9,31 @@
  */
 class User {
 
-    /** @Id @Column(type="integer") @GeneratedValue * */
+    /** 
+     * @Id 
+     * @Column(type="integer") 
+     * @GeneratedValue
+     */
     private $id;
 
-    /** @Column(type="string") * */
+    /** 
+     * @Column(type="string")
+     */
     private $name;
 
-    /** @Column(type="string") * */
+    /** 
+     * @Column(type="string")
+     */
     private $cpf;
 
-    /** @Column(type="string") * */
+    /** 
+     * @Column(type="string")
+     */
     private $email;
     
-    /** @Column(type="string") * */
+    /** 
+     * @Column(type="string")
+     */
     private $password;
     
     /** @Column(type="time", name="day_active_hour") * */
@@ -34,14 +46,14 @@ class User {
 
     /**
      *
-     * @var type 
+     * @var DateTime 
      * @Column(type="datetime", name="creation_date")
      */
     private $creationDate;
     
     /**
      *
-     * @var type 
+     * @var DateTime 
      * @Column(type="datetime", name="last_access")
      */
     private $lastAccess;
