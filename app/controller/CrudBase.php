@@ -47,9 +47,8 @@ abstract class CrudBase extends AdminBase {
         try {
             $params = $this->getSearchParams();
 
-
             $this->view->results = $this->service->search(
-                    $params, true, DEFAULT_LIMITS_PER_PAGE, 0);
+                    $params, true, $this->config['pagination']['registers_limit_per_page'], 0);
 
             $totalResults = $this->service->searchCount($params, true);
             $this->builPagination(1, $totalResults);
@@ -67,9 +66,9 @@ abstract class CrudBase extends AdminBase {
             $params = $this->getSearchParams();
 
             if ($this->beforeSearch()) {
-
+                $limitPerPage = $this->config['pagination']['registers_limit_per_page'];
                 $this->view->results = $this->service->search(
-                        $params, $this->showActiveResults, DEFAULT_LIMITS_PER_PAGE, $page * DEFAULT_LIMITS_PER_PAGE - DEFAULT_LIMITS_PER_PAGE);
+                        $params, $this->showActiveResults, $limitPerPage, $page * $limitPerPage - $limitPerPage);
 
                 $totalResults = $this->service->searchCount($params, $this->showActiveResults);
                 $this->builPagination($page, $totalResults);
@@ -104,9 +103,6 @@ abstract class CrudBase extends AdminBase {
             } else {
                 $this->dispatcher->setParams(array('instance' => $this->instance));
                 $this->dispatcher->forward(array('action' => 'view'));
-
-                //Disable the view to avoid rendering
-                $this->view->disable();
                 return false;
             }
         } else {
@@ -116,9 +112,9 @@ abstract class CrudBase extends AdminBase {
 
     private function builPagination($page, $total) {
         $pagination = new Pagination();
-        $pagination->setAmountLinkShow(9);
+        $pagination->setAmountLinkShow($this->config['pagination']['number_of_links_displayed']);
         $pagination->setCurrentPage($page);
-        $pagination->setAmountPerPage(DEFAULT_LIMITS_PER_PAGE);
+        $pagination->setAmountPerPage($this->config['pagination']['registers_limit_per_page']);
         $pagination->setTargetUrl($this->url->get($this->controllerName . '/search'));
         $pagination->setAmountRegisters($total);
         $pagination->setQueryString($this->getQueryString());
@@ -187,9 +183,6 @@ abstract class CrudBase extends AdminBase {
 
             $this->dispatcher->setParams(array('instance' => $this->instance));
             $this->dispatcher->forward(array('action' => 'view'));
-
-            //Disable the view to avoid rendering
-            $this->view->disable();
         } catch (Exception $ex) {
             $this->showError($ex);
         }

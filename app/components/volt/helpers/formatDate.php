@@ -5,7 +5,7 @@
  * @param string $format use NULL for default pathern
  * @return type
  */
-function formatDate(DateTime $date, $format = NULL) {
+function formatDate(DateTime $date = null, $format = NULL) {
 
     $pattern = 'd/m/Y H:i:s';
 
@@ -14,8 +14,11 @@ function formatDate(DateTime $date, $format = NULL) {
             case 'long':
                 $pattern = 'M, d \de Y H:i:s';
                 break;
-            case 'only-day':
+            case 'day-only':
                 $pattern = 'd/m/Y';
+                break;
+            case 'time-only':
+                $pattern = 'H:i:s';
                 break;
         }
     }

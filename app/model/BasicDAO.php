@@ -1,6 +1,7 @@
 <?php
 
 require_once ROOT_DIR . 'vendor/autoload.php';
+require_once SERVICE_DIR. 'Config.php';
 
 /**
  * Description of BasicDAO
@@ -9,6 +10,8 @@ require_once ROOT_DIR . 'vendor/autoload.php';
  * @since Jan 7, 2014
  */
 class BasicDAO {
+    
+    public static $config;
 
     /**
      * @var Doctrine\ORM\EntityManager
@@ -31,17 +34,10 @@ class BasicDAO {
         $paths = array(APP_DIR . "entity/");
 
         // the connection configuration
-        $dbParams = array(
-            'driver' => 'pdo_pgsql',
-            'user' => 'postgres',
-            'password' => 'postgres',
-            'dbname' => 'pizza',
-            'port' => 5432,
-            'host' => 'localhost'
-        );
+        $app_config = Config::getInstance();
 
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
-        $this->em = Doctrine\ORM\EntityManager::create($dbParams, $config);
+        $this->em = Doctrine\ORM\EntityManager::create($app_config['database'], $config);
     }
 
     public function save($obj) {

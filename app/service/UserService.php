@@ -56,6 +56,10 @@ class UserService extends BasicService {
             if ($user->getName() == '') {
                 $v->addError("Por favor insira seu nome", 'name');
             }
+            
+            if ($user->getDayActiveHour() == '') {
+                $v->addError("Por favor insira a quantidade de horas ativas", 'dayActiveHour');
+            }
 
             // Check password
             if ($user->getPassword() == '') {

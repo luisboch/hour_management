@@ -20,10 +20,12 @@ class User {
 
     /** @Column(type="string") * */
     private $email;
-
+    
     /** @Column(type="string") * */
     private $password;
-
+    
+    /** @Column(type="time", name="day_active_hour") * */
+    private $dayActiveHour;
     /**
      * @var boolean
      * @Column(type="boolean")
@@ -64,6 +66,22 @@ class User {
         return $this->password;
     }
 
+    public function getDayActiveHour() {
+        return $this->dayActiveHour;
+    }
+
+    public function getActive() {
+        return $this->active;
+    }
+
+    public function getCreationDate() {
+        return $this->creationDate;
+    }
+
+    public function getLastAccess() {
+        return $this->lastAccess;
+    }
+
     public function setId($id) {
         $this->id = $id;
     }
@@ -84,24 +102,16 @@ class User {
         $this->password = $password;
     }
 
-    public function getActive() {
-        return $this->active;
+    public function setDayActiveHour(DateTime $dayActiveHour) {
+        $this->dayActiveHour = $dayActiveHour;
     }
 
     public function setActive($active) {
         $this->active = $active;
     }
-    
-    public function getCreationDate() {
-        return $this->creationDate;
-    }
 
     public function setCreationDate(DateTime $creationDate) {
         $this->creationDate = $creationDate;
-    }
-    
-    public function getLastAccess() {
-        return $this->lastAccess;
     }
 
     public function setLastAccess(DateTime $lastAccess) {

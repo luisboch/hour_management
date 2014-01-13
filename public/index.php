@@ -8,7 +8,6 @@ define("SERVICE_DIR", APP_DIR . 'service/');
 define("LIB_DIR", APP_DIR . 'lib/');
 
 // Used for pagination
-define("DEFAULT_LIMITS_PER_PAGE", 20);
 
 // set default timezone
 date_default_timezone_set('America/Sao_Paulo');
@@ -28,7 +27,7 @@ try {
     //Setup a base URI so that all generated URIs include the "fornalha" folder
     $di->set('url', function() {
         $url = new \Phalcon\Mvc\Url();
-        $url->setBaseUri('/fornalha/');
+        $url->setBaseUri('/hour_management/');
         return $url;
     });
 

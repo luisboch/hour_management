@@ -30,8 +30,8 @@ class UsercrudController extends CrudBase {
         $user->setName($this->request->getPost("name"));
         $user->setEmail($this->request->getPost("email"));
         $user->setCpf($this->request->getPost("cpf"));
-
-        $user->setId($this->request->getPost("id"));
+        
+        $user->setDayActiveHour(new DateTime($this->request->getPost("day_active_hour")));
 
         if ($user->getId() == null || $this->request->getPost("passwd1") != '') {
             $user->setPassword($this->security->hash($this->request->getPost("passwd1")));
@@ -63,6 +63,7 @@ class UsercrudController extends CrudBase {
     protected function createNewInstance() {
         $user = new User();
         $user->setCreationDate(new DateTime());
+        $user->setDayActiveHour(new DateTime('08:00:00'));
         return $user;
     }
 

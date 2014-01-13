@@ -32,7 +32,7 @@ class SecurityController extends ControllerBase {
                     $this->session->setUser($user);
                     $user->setLastAccess(new DateTime());
                     $this->service->update($user);
-                    $this->response->redirect('admin');
+                    $this->response->redirect('');
                 } else {
                     $this->error("Email/Senha inválido(s)");
                     $this->session->setUser(null);
@@ -45,7 +45,7 @@ class SecurityController extends ControllerBase {
 
     public function logoutAction() {
         $this->session->setUser(null);
-        $this->response->redirect("");
+        $this->response->redirect("security/login");
     }
 
 }

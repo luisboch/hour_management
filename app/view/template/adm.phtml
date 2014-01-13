@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Pizzaria Fornalha Vinhedo</title>
+        <title>Hour Management</title>
 
         <!-- Bootstrap core CSS -->
         <!-- Custom styles for this template -->
@@ -48,7 +48,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url('admin') }}">Fornalha Vinhedo</a>
+                <a class="navbar-brand" href="{{ url('index') }}">Fornalha Vinhedo</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -62,29 +62,10 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ url('usercrud') }}">Usuarios</a></li>
-                            <li><a href="{{ url('config')}}">Configurações</a></li>
+                            <li><a href="{{ url('hourtype')}}">Tipos de horas</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            Produtos
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- new group -->
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Pizzas</li>
-                            <li><a href="?p=pages/adm/crudindex.php">Sabores</a></li>
-                            <li><a href="?p=pages/adm/crudindex.php">Tipos</a></li>
-
-                            <!-- new group -->
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Outros itens</li>
-                            <li><a href="?p=pages/adm/crudindex.php">Item</a></li>
-                            <li><a href="?p=pages/adm/crudindex.php">Grupo</a></li>
-
-                        </ul>
-                    </li>
+                    <li><a href="{{ url('activities')}}">Atividades</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -109,12 +90,12 @@
             <hr class="" />
             <div class="container marketing">
                 <div class="col-lg-4">
-                    <img class="img-rounded" src="images/layout/logo.gif" alt="Generic placeholder image">
+                    <!--<img class="img-rounded" src="images/layout/logo.gif" alt="Generic placeholder image">-->
                 </div>
                 <div class="col-lg-4">
-                    <p class="">Tv Santa Cruz, 1404 - final da indepedência - Pinheirinho</p>
+<!--                    <p class="">Tv Santa Cruz, 1404 - final da indepedência - Pinheirinho</p>
                     <p class="">Vinhedo, SP | CEP: 13280-000</p>
-                    <p class="">(19) 3876-2588</p>
+                    <p class="">(19) 3876-2588</p>-->
                 </div> 
                 <div class="col-lg-4 text-right">
                     <a href="#">Topo</a>
