@@ -6,6 +6,7 @@
             <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
                 <ul class="nav bs-sidenav">
                     <li>
+                        <a href="{{ url('usercrud') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Inicio</a>
                         <a href="{{ url('usercrud/view') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Novo</a>
                         <a href="{{ url('usercrud') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Pesquisar</a>
                     </li>
@@ -40,7 +41,13 @@
                     <label for="passwd2" >Confirme a senha</label>
                     <input  type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd2" />
                 </div>
-
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} class="form-control"/>Ativo?
+                        </label>
+                    </div>
+                </div>
                 <div class="form-group text-right" >
                     <a class="btn btn-danger" href="{{url('usercrud')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
                     <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>

@@ -1,5 +1,5 @@
 <?php
-
+require_once 'BasicEntity.php';
 /**
  * Description of HourType
  *
@@ -8,7 +8,7 @@
  * 
  * @Entity @Table(name="activity_type")
  */
-class ActivityType {
+class ActivityType implements BasicEntity {
 
     /** 
      * @Id 
@@ -28,23 +28,22 @@ class ActivityType {
     private $description;
     
     /** 
-     * @Column(type="time", name="creation_date) 
+     * @Column(type="datetime", name="creation_date") 
      * @var DateTime
      */
     private $creationDate;
     
     /**
-     *  @Column(type="datetime", name="creation_date)
+     *  @Column(type="datetime", name="last_update")
      * @var DateTime
      */
     private $lastUpdate;
-    /*
+    
     /**
-     * @ManyToOne(targetEntity="Activity")
-     * @var Activity
-     * /
-    private $activity;
-    */
+     * @var boolean
+     * @Column(type="boolean")
+     */
+    private $active = true;
     
     public function getId() {
         return $this->id;
@@ -86,4 +85,11 @@ class ActivityType {
         $this->lastUpdate = $lastUpdate;
     }
 
+    public function getActive() {
+        return $this->active;
+    }
+
+    public function setActive($active) {
+        $this->active = $active;
+    }
 }

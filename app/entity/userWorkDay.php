@@ -3,7 +3,7 @@
 /**
  * @author luis
  * @since Jan 13, 2014
- * @Entity
+ * @BasicEntity
  * @Table(name="user_work_day")
  */
 class userWorkDay {

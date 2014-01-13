@@ -12,7 +12,7 @@ require_once SERVICE_DIR. 'Config.php';
 class BasicDAO {
     
     public static $config;
-
+    
     /**
      * @var Doctrine\ORM\EntityManager
      */
@@ -29,7 +29,7 @@ class BasicDAO {
         $this->em->getConnection()->connect();
     }
 
-    public function setupDoctrine() {
+    public final function setupDoctrine() {
 
         $paths = array(APP_DIR . "entity/");
 
@@ -38,6 +38,10 @@ class BasicDAO {
 
         $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
         $this->em = Doctrine\ORM\EntityManager::create($app_config['database'], $config);
+    }
+
+    public function findById($id) {
+        return $this->em->find($this->className, $id);
     }
 
     public function save($obj) {

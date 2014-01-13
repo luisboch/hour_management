@@ -30,6 +30,8 @@ class UsercrudController extends CrudBase {
         $user->setName($this->request->getPost("name"));
         $user->setEmail($this->request->getPost("email"));
         $user->setCpf($this->request->getPost("cpf"));
+        $active = $this->request->getPost("active");
+        $user->setActive($active === "on");
         
         $user->setDayActiveHour(new DateTime($this->request->getPost("day_active_hour")));
 

@@ -1,5 +1,7 @@
 <?php
 
+require_once 'BasicEntity.php';
+
 /**
  * Description of User
  *
@@ -7,37 +9,38 @@
  * @since Jan 7, 2014
  * @Entity @Table(name="users")
  */
-class User {
+class User implements BasicEntity {
 
-    /** 
+    /**
      * @Id 
      * @Column(type="integer") 
      * @GeneratedValue
      */
     private $id;
 
-    /** 
+    /**
      * @Column(type="string")
      */
     private $name;
 
-    /** 
+    /**
      * @Column(type="string")
      */
     private $cpf;
 
-    /** 
+    /**
      * @Column(type="string")
      */
     private $email;
-    
-    /** 
+
+    /**
      * @Column(type="string")
      */
     private $password;
-    
+
     /** @Column(type="time", name="day_active_hour") * */
     private $dayActiveHour;
+
     /**
      * @var boolean
      * @Column(type="boolean")
@@ -50,14 +53,21 @@ class User {
      * @Column(type="datetime", name="creation_date")
      */
     private $creationDate;
-    
+
     /**
      *
      * @var DateTime 
      * @Column(type="datetime", name="last_access")
      */
     private $lastAccess;
-    
+
+    /**
+     *
+     * @var DateTime 
+     * @Column(type="datetime", name="last_update")
+     */
+    private $lastUpdate;
+
     public function getId() {
         return $this->id;
     }
@@ -92,6 +102,10 @@ class User {
 
     public function getLastAccess() {
         return $this->lastAccess;
+    }
+
+    public function getLastUpdate() {
+        return $this->lastUpdate;
     }
 
     public function setId($id) {
@@ -130,5 +144,8 @@ class User {
         $this->lastAccess = $lastAccess;
     }
 
+    public function setLastUpdate(DateTime $date) {
+        $this->lastUpdate = $date;
+    }
 
 }
