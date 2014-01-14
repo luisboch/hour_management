@@ -4,7 +4,6 @@ require_once 'BasicDAO.php';
 require_once APP_DIR . 'entity/ActivityType.php';
 
 /**
- * Description of UserDAO
  *
  * @author luis
  * @since Jan 7, 2014

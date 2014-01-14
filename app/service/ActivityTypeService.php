@@ -6,12 +6,9 @@ require_once 'exceptions/ValidationException.php';
 require_once 'utils/validation/StringValidation.php';
 
 /**
- * Description of UserService
- *
  * @author luis
  * @since Jan 7, 2014
- * 
- * @property UserDAO $dao 
+ * @property ActivityTypeDAO $dao 
  */
 class ActivityTypeService extends BasicService {
 
@@ -36,7 +33,7 @@ class ActivityTypeService extends BasicService {
             
             // Check name
             if ($activity->getName() == '') {
-                $v->addError("Por favor insira o nome da atividade", 'name');
+                $v->addError("Por favor insira o nome do tipo da atividade", 'name');
             }
             
             if (!$v->isEmtpy()) {

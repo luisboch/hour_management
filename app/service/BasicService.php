@@ -32,12 +32,16 @@ abstract class BasicService {
         
         try {
             // Begin Transaction
-            
+            $this->saveRelations($entity);
             $this->dao->save($entity);
             $this->dao->getEntityManager()->flush();
         } catch (Exception $ex) {
             throw $ex;
         }
+    }
+    
+    protected function saveRelations(BasicEntity $entity) {
+        // nothing to do at default ( @see ActivityService )
     }
 
     /**

@@ -154,6 +154,10 @@ abstract class CrudBase extends AdminBase {
         }
     }
 
+    public function newAction() {
+        $this->dispatcher->forward(array('action' => 'view'));
+    }
+
     protected function saveOrUpdate($instance) {
 
         $this->view->instance = $instance;

@@ -1,5 +1,10 @@
 <?php
 
+require_once 'ActivityType.php';
+require_once 'ActivityInteraction.php';
+require_once 'User.php';
+require_once 'BasicEntity.php';
+
 /**
  * Description of Activity
  *
@@ -7,64 +12,70 @@
  * @since Jan 13, 2014
  * @Entity @Table(name="activity")
  */
-class Activity {
+class Activity implements BasicEntity{
 
-    /** 
+    /**
      * @Id 
      * @Column(type="integer") 
      * @GeneratedValue
      */
     private $id;
 
-    /** 
+    /**
      * @Column(type="string")
      */
     private $name;
-    
-    /** 
+
+    /**
      * @Column(type="integer")
      */
-    private $priority;
-    
-    /** 
+    private $priority = 70;
+
+    /**
      * @Column(type="string")
      */
     private $description;
-    
+
     /**
      * @ManyToOne(targetEntity="ActivityType")
      * @JoinColumn(name="type_id", referencedColumnName="id")
      * @var ActivityType 
      */
     private $activityType;
-    
+
     /**
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      * @var User 
      */
     private $user;
-    
+
     /**
      *
      * @var DateTime 
      * @Column(type="datetime", name="creation_date")
      */
     private $creationDate;
-    
+
     /**
      *
      * @var DateTime 
      * @Column(type="datetime", name="last_update")
      */
     private $lastUpdate;
-    
+
     /**
-     * @OneToMany(targetEntity="ActivityInteractions", mappedBy="activity")
-     * @var ActivityInteractions[]
+     * @OneToMany(targetEntity="ActivityInteraction", mappedBy="activity")
+     * @var ActivityInteraction[]
      */
     private $interactions = array();
-    
+
+    /**
+     * @var boolean
+     * @Column(type="boolean")
+     */
+    private $active = true;
+
     public function getId() {
         return $this->id;
     }
@@ -97,6 +108,10 @@ class Activity {
         return $this->lastUpdate;
     }
 
+    /**
+     * 
+     * @return ActivityInteraction[]
+     */
     public function getInteractions() {
         return $this->interactions;
     }
@@ -117,11 +132,18 @@ class Activity {
         $this->description = $description;
     }
 
-    public function setActivityType(ActivityType $activityType) {
+    /**
+     * 
+     * @param ActivityType $activityType
+     */
+    public function setActivityType( $activityType) {
         $this->activityType = $activityType;
     }
 
-    public function setUser(User $user) {
+    /**
+     * @param User $user
+     */
+    public function setUser($user) {
         $this->user = $user;
     }
 
@@ -133,18 +155,26 @@ class Activity {
         $this->lastUpdate = $lastUpdate;
     }
 
-    public function setInteractions(ActivityInteractions $interactions) {
+    /**
+     * @param ActivityInteraction[] $interactions
+     */
+    public function setInteractions( $interactions) {
         $this->interactions = $interactions;
     }
-    
+
     /**
-     * @param ActivityInteractions $interaction
+     * @param ActivityInteraction $interaction
      */
-    public function addInteraction(ActivityInteractions $interaction) {
+    public function addInteraction(ActivityInteraction $interaction) {
         $this->interactions[] = $interaction;
     }
-    
 
+    public function getActive() {
+        return $this->active;
+    }
 
-    
+    public function setActive($active) {
+        $this->active = $active;
+    }
+
 }

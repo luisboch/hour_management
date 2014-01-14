@@ -67,30 +67,29 @@ class UserDAO extends BasicDAO {
                     $where .= "lower(x.name) like :search\n";
                     $where .= "or lower(x.email) like :search\n";
                     $whereEmpty = false;
-                    $filters['search'] = '%'.   mb_convert_case(str_replace(' ', '%', $filters['search']), MB_CASE_LOWER, "UTF-8").'%';
+                    $filters['search'] = mb_convert_case(str_replace(' ', '%', $filters['search'] . '%'), MB_CASE_LOWER, "UTF-8");
                 }
             } else {
                 $i = 0;
 
                 if (isset($filters['email']) && $filters['email'] != '') {
-                    
+
                     $where .= 'lower(x.email) like :email ';
-                    
-                    $filters['email'] = '%'.  strtolower(str_replace(' ', '%', $filters['email'])).'%';
-                    
+
+                    $filters['email'] = '%' . strtolower(str_replace(' ', '%', $filters['email'])) . '%';
+
                     $i++;
-                    
                 }
 
                 if (isset($filters['name']) && $filters['name'] != '') {
-                    
+
                     if ($i != 0) {
                         $where .= 'and ';
                     }
-                    
+
                     $where .= 'lower(x.name) like :name ';
-                    
-                    $filters['name'] = '%'.  strtolower(str_replace(' ', '%', $filters['name'])).'%';
+
+                    $filters['name'] = '%' . strtolower(str_replace(' ', '%', $filters['name'])) . '%';
                     $i++;
                 }
 
@@ -125,11 +124,11 @@ class UserDAO extends BasicDAO {
         }
 
         if ($activeOnly !== NULL) {
-            
+
             if (!$whereEmpty) {
                 $where .= "and ";
             }
-            
+
             $where .= "x.active = :active";
             $filters['active'] = $activeOnly;
             $whereEmpty = false;
@@ -178,30 +177,29 @@ class UserDAO extends BasicDAO {
                     $where .= "lower(x.name) like :search\n";
                     $where .= "or lower(x.email) like :search\n";
                     $whereEmpty = false;
-                    $filters['search'] = '%'.   mb_convert_case(str_replace(' ', '%', $filters['search']), MB_CASE_LOWER, "UTF-8").'%';
+                    $filters['search'] = '%' . mb_convert_case(str_replace(' ', '%', $filters['search']), MB_CASE_LOWER, "UTF-8") . '%';
                 }
             } else {
                 $i = 0;
 
                 if (isset($filters['email']) && $filters['email'] != '') {
-                    
+
                     $where .= 'lower(x.email) like :email ';
-                    
-                    $filters['email'] = '%'.  strtolower(str_replace(' ', '%', $filters['email'])).'%';
-                    
+
+                    $filters['email'] = '%' . strtolower(str_replace(' ', '%', $filters['email'])) . '%';
+
                     $i++;
-                    
                 }
 
                 if (isset($filters['name']) && $filters['name'] != '') {
-                    
+
                     if ($i != 0) {
                         $where .= 'and ';
                     }
-                    
+
                     $where .= 'lower(x.name) like :name ';
-                    
-                    $filters['name'] = '%'.  strtolower(str_replace(' ', '%', $filters['name'])).'%';
+
+                    $filters['name'] = '%' . strtolower(str_replace(' ', '%', $filters['name'])) . '%';
                     $i++;
                 }
 

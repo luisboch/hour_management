@@ -8,7 +8,6 @@ define("SERVICE_DIR", APP_DIR . 'service/');
 define("LIB_DIR", APP_DIR . 'lib/');
 
 // Used for pagination
-
 // set default timezone
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -48,9 +47,9 @@ try {
             ));
 
             $compiler = $volt->getCompiler();
-            
+
             $compiler->addFunction('formatDate', 'formatDate');
-            
+
             return $volt;
         };
 
@@ -77,7 +76,7 @@ try {
     $di->set('dispatcher', function() use ($di) {
         $evManager = $di->getShared('eventsManager');
         $evManager->attach("dispatch:beforeException", function($event, $dispatcher, $exception) {
-            switch ($exception->getCode()) {
+             switch ($exception->getCode()) {
                 case \Phalcon\Mvc\Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
                 case \Phalcon\Mvc\Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
                     $dispatcher->forward(
@@ -86,8 +85,15 @@ try {
                                 'action' => 'show404',
                             )
                     );
-                    return false;
+                    break;
+                default :
+                    $dispatcher->setParams(array('exception' => $exception));
+                    $dispatcher->forward(array(
+                        'controller' => 'error',
+                        'action' => 'exception'));
+                    break;
             }
+            return false;
         });
         $dispatcher = new \Phalcon\Mvc\Dispatcher();
         $dispatcher->setEventsManager($evManager);

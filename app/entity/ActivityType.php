@@ -1,5 +1,7 @@
 <?php
+
 require_once 'BasicEntity.php';
+
 /**
  * Description of HourType
  *
@@ -10,41 +12,41 @@ require_once 'BasicEntity.php';
  */
 class ActivityType implements BasicEntity {
 
-    /** 
+    /**
      * @Id 
      * @Column(type="integer") 
      * @GeneratedValue
      */
     private $id;
 
-    /** 
+    /**
      * @Column(type="string")
      */
     private $name;
-    
-    /** 
+
+    /**
      * @Column(type="string")
      */
     private $description;
-    
-    /** 
+
+    /**
      * @Column(type="datetime", name="creation_date") 
      * @var DateTime
      */
     private $creationDate;
-    
+
     /**
      *  @Column(type="datetime", name="last_update")
      * @var DateTime
      */
     private $lastUpdate;
-    
+
     /**
      * @var boolean
      * @Column(type="boolean")
      */
     private $active = true;
-    
+
     public function getId() {
         return $this->id;
     }
@@ -92,4 +94,23 @@ class ActivityType implements BasicEntity {
     public function setActive($active) {
         $this->active = $active;
     }
+
+    /**
+     * 
+     * @param ActivityType $activityType
+     * @return boolean
+     */
+    public function equals($activityType) {
+        if ($activityType !== null) {
+            if (is_object($activityType) && $activityType instanceof ActivityType) {
+                return $this->getId() === $activityType->getId();
+            }
+        }
+        return false;
+    }
+
+    public function __toString() {
+        return 'ActivityType@{id: ' . $this->id . ', name: ' . $this->name . '}';
+    }
+
 }

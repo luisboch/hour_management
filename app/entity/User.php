@@ -148,4 +148,18 @@ class User implements BasicEntity {
         $this->lastUpdate = $date;
     }
 
+    /**
+     * 
+     * @param User $user
+     */
+    public function equals($user) {
+        if ($user !== null &&
+                is_object($user) &&
+                $user instanceof User &&
+                $this->getId() === $user->getId()) {
+            return true;
+        }
+        return false;
+    }
+
 }

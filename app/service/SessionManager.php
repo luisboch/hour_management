@@ -1,8 +1,8 @@
 
 <?php
 
-require 'utils/MessageSession.php';
-require APP_DIR . 'entity/User.php';
+require_once 'utils/MessageSession.php';
+require_once APP_DIR . 'entity/User.php';
 
 /**
  * Description of SessionManager
@@ -78,7 +78,10 @@ class SessionManager {
     public function isLogged() {
         return $this->user !== null;
     }
-
+    /**
+     * 
+     * @return User
+     */
     public function getUser() {
         return $this->user;
     }

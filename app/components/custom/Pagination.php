@@ -20,9 +20,9 @@ class Pagination {
     private $targetUrl;
     private $showing;
     private $html = NULL;
-    
+    private $pageParamName = NULL;
     private $queryString;
-    
+
     public function __construct() {
         
     }
@@ -32,7 +32,11 @@ class Pagination {
      * @return string
      */
     private function getUrl($page) {
-        return $this->targetUrl . '/' . $page . '?' . $this->queryString;
+        if ($this->pageParamName === null) {
+            return $this->targetUrl . '/' . $page . '?' . $this->queryString;
+        } else {
+            return $this->targetUrl . '?' . $this->pageParamName . '=' . $page . '&' . $this->queryString;
+        }
     }
 
     public function calculate() {
@@ -87,6 +91,14 @@ class Pagination {
                 $this->next = $this->currentPage;
             }
         }
+    }
+
+    public function getPageParamName() {
+        return $this->pageParamName;
+    }
+
+    public function setPageParamName($pageParamName) {
+        $this->pageParamName = $pageParamName;
     }
 
     public function getHtml() {
@@ -229,7 +241,7 @@ class Pagination {
     public function __toString() {
         return $this->getHtml();
     }
-    
+
     public function getQueryString() {
         return $this->queryString;
     }

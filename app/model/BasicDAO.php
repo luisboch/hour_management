@@ -1,7 +1,7 @@
 <?php
 
 require_once ROOT_DIR . 'vendor/autoload.php';
-require_once SERVICE_DIR. 'Config.php';
+require_once SERVICE_DIR . 'Config.php';
 
 /**
  * Description of BasicDAO
@@ -10,34 +10,45 @@ require_once SERVICE_DIR. 'Config.php';
  * @since Jan 7, 2014
  */
 class BasicDAO {
-    
+
     public static $config;
-    
+
     /**
      * @var Doctrine\ORM\EntityManager
      */
     protected $em;
+    
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private static $entityManager;
     protected $className;
 
     function __construct($className) {
         $this->setupDoctrine();
-        $this->openDatabaseConnection();
         $this->className = $className;
     }
 
     private final function openDatabaseConnection() {
-        $this->em->getConnection()->connect();
+        BasicDAO::$entityManager->getConnection()->connect();
     }
 
     public final function setupDoctrine() {
+        
+        if (BasicDAO::$entityManager === null) {
+            
+            $paths = array(APP_DIR . "entity/");
 
-        $paths = array(APP_DIR . "entity/");
+            // the connection configuration
+            $app_config = Config::getInstance();
 
-        // the connection configuration
-        $app_config = Config::getInstance();
-
-        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
-        $this->em = Doctrine\ORM\EntityManager::create($app_config['database'], $config);
+            $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
+            BasicDAO::$entityManager = Doctrine\ORM\EntityManager::create($app_config['database'], $config);
+            
+            $this->openDatabaseConnection();
+        }
+        
+        $this->em = BasicDAO::$entityManager;
     }
 
     public function findById($id) {
@@ -79,9 +90,9 @@ class BasicDAO {
                 $i++;
             }
         }
-        
-        if($order != ""){
-            $dql .= "order by x.".$order."\n ";
+
+        if ($order != "") {
+            $dql .= "order by x." . $order . "\n ";
         }
 
         $query = $this->em->createQuery($dql);

@@ -7,7 +7,7 @@
  * @since Jan 13, 2014
  * @Entity @Table(name="activity_interaction")
  */
-class ActivityInteractions {
+class ActivityInteraction {
 
     /**
      * @Id 
