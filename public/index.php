@@ -16,7 +16,8 @@ try {
     $loader = new \Phalcon\Loader();
     $loader->registerDirs(array(
         '../app/controller/',
-        '../app/models/'
+        '../app/models/',
+        '../app/plugin/'
     ))->register();
     // Create a DI
     $di = new Phalcon\DI\FactoryDefault();
@@ -61,22 +62,11 @@ try {
         return $view;
     });
 
-    //Register the flash service with custom CSS classes
-    $di->set('flashSession', function() {
-        $flash = new \Phalcon\Flash\Session(array(
-            'error' => 'alert alert-error',
-            'success' => 'alert alert-success',
-            'notice' => 'alert alert-info',
-            'warning' => 'alert alert-warning'
-        ));
-        return $flash;
-    });
-
     // Get class/action not found error    
     $di->set('dispatcher', function() use ($di) {
         $evManager = $di->getShared('eventsManager');
         $evManager->attach("dispatch:beforeException", function($event, $dispatcher, $exception) {
-             switch ($exception->getCode()) {
+            switch ($exception->getCode()) {
                 case \Phalcon\Mvc\Dispatcher::EXCEPTION_HANDLER_NOT_FOUND:
                 case \Phalcon\Mvc\Dispatcher::EXCEPTION_ACTION_NOT_FOUND:
                     $dispatcher->forward(
@@ -95,8 +85,16 @@ try {
             }
             return false;
         });
+
+        //Instantiate the Security plugin
+        $security = new Security($di);
+
+        //Listen for events produced in the dispatcher using the Security plugin
+        $evManager->attach('dispatch', $security);
+
         $dispatcher = new \Phalcon\Mvc\Dispatcher();
         $dispatcher->setEventsManager($evManager);
+
         return $dispatcher;
     }, true);
 
@@ -106,5 +104,7 @@ try {
     echo $application->handle()->getContent();
 } catch (\Phalcon\Exception $e) {
     echo "PhalconException: ", $e->getMessage();
+    echo '<pre>';
     echo $e->getTraceAsString();
+    echo '</pre>';
 }

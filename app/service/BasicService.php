@@ -1,5 +1,5 @@
 <?php
-
+require_once 'SessionManager.php';
 /**
  * Description of BasicService
  *
@@ -12,9 +12,14 @@ abstract class BasicService {
      * @var BasicDAO
      */
     protected $dao;
-
+    
+    /**
+     * @var SessionManager
+     */
+    protected $session;
     function __construct(BasicDAO $dao) {
         $this->dao = $dao;
+        $this->session = SessionManager::getInstance();
     }
 
     /**
@@ -57,6 +62,7 @@ abstract class BasicService {
         
         try {
             // Begin Transaction
+            $this->saveRelations($entity);
             $this->dao->update($entity);
             $this->dao->getEntityManager()->flush();
         } catch (Exception $ex) {

@@ -31,7 +31,7 @@
                 </div>
                 <div class="form-group">
                     <label for="cpf" >Horas ativas:</label>
-                    <input type="text" class="form-control" name="day_active_hour" required placeholder="08:00:00" value="{{formatDate(instance.getDayActiveHour(), 'time-only')}}"/>
+                    <input type="text" class="form-control" name="day_active_hour" id="day_active_hour" required placeholder="08:00:00" value="{{formatDate(instance.getDayActiveHour(), 'time-only')}}"/>
                 </div>
                 <div class="form-group">
                     <label for="passwd1" >Senha (6 caracteres)</label>
@@ -56,4 +56,8 @@
         </div>
     </div> 
 </div>
+
+<script type="text/javascript">
+    $('#day_active_hour').timepicker({ 'timeFormat': 'H:i:s' });
+</script>
 {% endblock %}

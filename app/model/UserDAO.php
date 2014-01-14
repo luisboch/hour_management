@@ -2,6 +2,7 @@
 
 require_once 'BasicDAO.php';
 require_once APP_DIR . 'entity/User.php';
+require_once APP_DIR . 'entity/UserWorkDay.php';
 
 /**
  * Description of UserDAO
@@ -253,6 +254,30 @@ class UserDAO extends BasicDAO {
         $this->setParams($q, $filters);
 
         return $q->getSingleScalarResult();
+    }
+
+    /**
+     * 
+     * @param User $user
+     * @param DateTime $date
+     * @return UserWorkDay
+     */
+    public function getWorkDay(User $user, $date = NULL) {
+
+        $dql = "select w from UserWorkDay w where w.date = :date and w.user = :user";
+
+        $q = $this->em->createQuery($dql);
+
+        $q->setParameter('date', $date, 'date');
+        $q->setParameter('user', $user);
+        
+        try {
+            return $q->getSingleResult();
+        } catch (\Doctrine\ORM\NoResultException $ex) {
+            return null;
+        } catch (Doctrine\ORM\NonUniqueResultException $ex) {
+            return null;
+        }
     }
 
 }

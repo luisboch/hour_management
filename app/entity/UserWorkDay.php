@@ -1,14 +1,23 @@
 <?php
 
+require_once 'BasicEntity.php';
+
 /**
  * @author luis
  * @since Jan 13, 2014
- * @BasicEntity
+ * @Entity
  * @Table(name="user_work_day")
  */
-class userWorkDay {
+class UserWorkDay {
+    
     /**
-     *
+     * @Id 
+     * @Column(type="integer") 
+     * @GeneratedValue
+     */
+    private $id;
+    
+    /**
      * @Column(type="date")
      * @var DateTime
      */
@@ -26,7 +35,15 @@ class userWorkDay {
      */
     private $dayActiveHour;
     
-    public function getDate() {
+    public function getId() {
+        return $this->id;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
+
+        public function getDate() {
         return $this->date;
     }
 
