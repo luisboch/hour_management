@@ -65,7 +65,7 @@ class Activity implements BasicEntity{
     private $lastUpdate;
 
     /**
-     * @OneToMany(targetEntity="ActivityInteraction", mappedBy="activity")
+     * @OneToMany(targetEntity="ActivityInteraction", mappedBy="activity", cascade={"persist", "remove"}, orphanRemoval=true)
      * @var ActivityInteraction[]
      */
     private $interactions = array();
@@ -201,5 +201,13 @@ class Activity implements BasicEntity{
     
     public function isOpen() {
         return $this->status === 0;
+    }
+    
+    public function removeInteraction($id) {
+        foreach($this->interactions as $k => $v){
+            if($v->getId() == $id){
+                unset($this->interactions[$k]);
+            }
+        }
     }
 }

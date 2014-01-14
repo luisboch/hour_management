@@ -43,7 +43,7 @@ class ActivityInteraction {
     
     /**
      * @var DateTime 
-     * @Column(type="datetime", name="allocated_time")
+     * @Column(type="time", name="allocated_time")
      */
     private $allocatedTime;
     

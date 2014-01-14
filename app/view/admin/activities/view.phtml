@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-9" role="main">
             <p>{{ _session.getMessage() }}</ p>
-            <form action="{{ url('activities/save/') }}" method="post">
+            <form action="{{ url('activities/save/') }}" method="post" >
                 <input type="hidden" name="id" value="{{instance.getId()}}">
                 <div class="form-group">
                     <label for="name" >Nome</label>
@@ -47,17 +47,54 @@
                         {% endfor %}
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="status" >Status</label>
                     <select class="form-control" name="status">
                         <option value="">---Selecione---</option>
                         <option value="0" {{ 0 == instance.getStatus() ? 'selected':'' }} >Aberto</option>
                         <option value="1" {{ 1 == instance.getStatus() ? 'selected':'' }} >Finalizado</option>
-                        
                     </select>
                 </div>
-                
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Ações</h3>
+                    </div>
+                    <div class="panel-body" style="">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-6 col-xs-6">Descrição</th>
+                                    <th class="col-lg-3 col-xs-3">Usuário</th>
+                                    <th class="col-lg-2 col-xs-2">Alocado</th>
+                                    <th class="col-lg-1 col-xs-1"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in instance.getInteractions() %}
+                                <tr>
+                                    <td>{{a.getDescription()}}</td>
+                                    <td>{{a.getUser().getName()}}</td>
+                                    <td>{{formatDate(a.getAllocatedTime(), 'time-only')}}</td>
+                                    <td><a href="{{ url('activities/remove/'~ instance.getId() ~ '/' ~ a.getId()) }}" onclick="return confirm('Deseja realmente remover esta ação?')"><span class=" glyphicon glyphicon-ban-circle"></span></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="" style="{{ 1 == instance.getStatus() ? 'display:none;':'' }}">
+                            <div class="form-group">
+                                <label for="status" >Descrição</label>
+                                <input type="text" class="form-control" name="action_description" />
+                            </div>
+                            <div class="form-group">
+                                <label for="action_time" >Tempo alocado</label>
+                                <input type="time" class="form-control" name="action_time" id="action_time"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <div class="checkbox">
                         <label>
@@ -73,4 +110,7 @@
         </div>
     </div> 
 </div>
+<script type="text/javascript">
+    $('#action_time').timepicker({ 'timeFormat': 'H:i:s' });
+</script>
 {% endblock %}

@@ -50,8 +50,7 @@ class ActivityService extends BasicService {
                 $v->addError("Insira a prioridade", 'priority');
             }
             
-            if($activity->getInteractions() !== null &&
-                    is_array($activity->getInteractions())){
+            if($activity->getInteractions() !== null){
                 
                 foreach($activity->getInteractions() as $value){
                     

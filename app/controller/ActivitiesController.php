@@ -85,6 +85,18 @@ class ActivitiesController extends CrudBase {
         $this->view->users = $this->userService->search(array(), true, null, null);
     }
 
+    public function removeAction($activityId, $actionId) {
+        try {
+            $activity = $this->service->findById($activityId);
+            /* @var Activity $activity */
+            $activity->removeInteraction($actionId);
+            $this->service->save($activity);
+            $this->response->redirect('activities/view/' . $activityId);
+        } catch (Exception $ex) {
+            $this->showError($ex);
+        }
+    }
+
     protected function createNewInstance() {
         return new Activity();
     }
@@ -109,7 +121,7 @@ class ActivitiesController extends CrudBase {
         } else {
             $filters['user'] = null;
         }
-        
+
         $this->view->user_id = $userId;
 
         // Type filter
@@ -164,6 +176,18 @@ class ActivitiesController extends CrudBase {
             $instance->setUser(null);
         }
         $instance->setStatus($this->request->getPost('status'));
+
+        $description = $this->request->getPost('action_description');
+        $time = $this->request->getPost('action_time');
+
+        if ($description != '' || $time != '') {
+            $action = new ActivityInteraction();
+            $action->setUser($this->userService->findById($this->session->getUser()->getId()));
+            $action->setCreationDate(new DateTime());
+            $action->setDescription($description);
+            $action->setAllocatedTime(new DateTime($time));
+            $instance->getInteractions()->add($action);
+        }
     }
 
 }
