@@ -79,12 +79,60 @@ class ActivitiesController extends CrudBase {
         return $pagination;
     }
 
+    public function searchAction($page = 1) {
+        parent::searchAction($page);
+        $this->view->types = $this->activityTypeService->search(array(), true, null, null);
+        $this->view->users = $this->userService->search(array(), true, null, null);
+    }
+
     protected function createNewInstance() {
         return new Activity();
     }
 
     protected function getSearchParams() {
+
+        $filters = array();
+
+        // User filter
+        $userId = $this->request->getQuery('user');
+
+        // Is searching?
+        if ($userId !== NULL) {
+            // Yes, then get active status
+            $active = $this->request->getQuery('active');
+            $this->showActiveResults = $active === 'on';
+            $this->view->active = $this->showActiveResults;
+        }
+
+        if ($userId != '') {
+            $filters['user'] = $this->userService->findById($userId);
+        } else {
+            $filters['user'] = null;
+        }
         
+        $this->view->user_id = $userId;
+
+        // Type filter
+        $typeId = $this->request->getQuery('type');
+        if ($typeId != '') {
+            $filters['type'] = $typeId;
+            $this->view->type = $typeId;
+        }
+
+        // Status filter
+        $status = $this->request->getQuery('status');
+        if ($status != '') {
+            $filters['status'] = $status;
+            $this->view->status = $status;
+        }
+
+        // Name filter
+        $search = $this->request->getQuery('search');
+        if ($search != '') {
+            $filters['search'] = $search;
+            $this->view->search = $search;
+        }
+        return $filters;
     }
 
     protected function isValid($instance) {
@@ -112,9 +160,10 @@ class ActivitiesController extends CrudBase {
 
         if ($userId != '') {
             $instance->setUser($this->userService->findById($userId));
-        } else{
+        } else {
             $instance->setUser(null);
         }
+        $instance->setStatus($this->request->getPost('status'));
     }
 
 }

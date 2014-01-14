@@ -75,6 +75,12 @@ class Activity implements BasicEntity{
      * @Column(type="boolean")
      */
     private $active = true;
+    
+    /**
+     * @var integer
+     * @Column(type="integer")
+     */
+    private $status = 0;
 
     public function getId() {
         return $this->id;
@@ -177,4 +183,23 @@ class Activity implements BasicEntity{
         $this->active = $active;
     }
 
+    public function getStatus() {
+        return $this->status;
+    }
+
+    public function setStatus($status) {
+        $this->status = $status;
+    }
+    
+    public function __toString() {
+        return "Activity@{id: ".$this->id.', name: '.$this->name."}";
+    }
+    
+    public function isFinished() {
+        return $this->status === 1;
+    }
+    
+    public function isOpen() {
+        return $this->status === 0;
+    }
 }

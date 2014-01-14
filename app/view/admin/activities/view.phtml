@@ -8,7 +8,7 @@
                     <li>
                         <a href="{{ url('activities') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Inicio</a>
                         <a href="{{ url('activities/new') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Novo</a>
-                        <a href="{{ url('activities') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Pesquisar</a>
+                        <a href="{{ url('activities/search') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Pesquisar</a>
                     </li>
                 </ul>
             </div>
@@ -39,7 +39,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="cpf" >Responsável</label>
+                    <label for="user" >Responsável</label>
                     <select class="form-control" name="user">
                         <option value="">---Selecione---</option>
                         {% for t in users %}
@@ -47,6 +47,17 @@
                         {% endfor %}
                     </select>
                 </div>
+                
+                <div class="form-group">
+                    <label for="status" >Status</label>
+                    <select class="form-control" name="status">
+                        <option value="">---Selecione---</option>
+                        <option value="0" {{ 0 == instance.getStatus() ? 'selected':'' }} >Aberto</option>
+                        <option value="1" {{ 1 == instance.getStatus() ? 'selected':'' }} >Finalizado</option>
+                        
+                    </select>
+                </div>
+                
                 <div class="form-group">
                     <div class="checkbox">
                         <label>

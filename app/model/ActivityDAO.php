@@ -17,6 +17,11 @@ class ActivityDAO extends BasicDAO {
 
     public function search($filters = array(), $activeOnly = NULL, $limit = NULL, $offset = NULL) {
 
+        // Add status filter
+        if (!array_key_exists('status', $filters)) {
+            $filters['status'] = 0; // only opened activities
+        }
+
         $qb = $this->em->createQueryBuilder();
         $i = 0;
         $qb->select('a')
@@ -33,22 +38,38 @@ class ActivityDAO extends BasicDAO {
                 $qb->leftJoin('a.user', 'u');
                 $i++;
                 $whereArray[$i] = $qb->expr()->eq('u.id', '?' . $i);
-                $whereParams[$i] = $filters['user']->getId();
+                
+                if (is_object($filters['user'])) {
+                    $whereParams[$i] = $filters['user']->getId();
+                } else {
+                    $whereParams[$i] = $filters['user'];
+                }
             } else {
                 $whereWithoutParam[] = $qb->expr()->isNull('a.user');
             }
         }
+
         if (isset($filters['type'])) {
             $i++;
             $qb->join('a.activityType', 't');
             $whereArray[$i] = $qb->expr()->eq('t.id', '?' . $i);
-            $whereParams[$i] = $filters['type']->getId();
+            if (is_object($filters['type'])) {
+                $whereParams[$i] = $filters['type']->getId();
+            } else {
+                $whereParams[$i] = $filters['type'];
+            }
         }
 
         if (isset($filters['search'])) {
             $i++;
             $whereArray[$i] = $qb->expr()->like('lower(a.name)', '?' . $i);
             $whereParams[$i] = mb_convert_case(str_replace(' ', '%', $filters['search'] . '%'), MB_CASE_LOWER, "UTF-8");
+        }
+
+        if (isset($filters['status'])) {
+            $i++;
+            $whereArray[$i] = $qb->expr()->eq('a.status', '?' . $i);
+            $whereParams[$i] = $filters['status'];
         }
 
         if ($activeOnly !== null) {
@@ -65,8 +86,9 @@ class ActivityDAO extends BasicDAO {
                 $qb->andWhere($v);
             }
         }
+
         foreach ($whereWithoutParam as $k => $v) {
-            if (count($whereArray) == 0 && $k == 1) {
+            if (count($whereArray) == 0 && $k == 0) {
                 $qb->where($v);
             } else {
                 $qb->andWhere($v);
@@ -86,8 +108,7 @@ class ActivityDAO extends BasicDAO {
         if ($offset != NULL) {
             $qb->setFirstResult($offset);
         }
-        $q = $qb->getQuery();
-        $str = $q->getSQL();
+
         return $qb->getQuery()->getResult();
     }
 
@@ -99,30 +120,86 @@ class ActivityDAO extends BasicDAO {
      */
     public function searchCount($filters = array(), $activeOnly = NULL) {
 
-        $qb = $this->em->createQueryBuilder();
+        // Add status filter
+        if (!array_key_exists('status', $filters)) {
+            $filters['status'] = 0; // only opened activities
+        }
 
+        $qb = $this->em->createQueryBuilder();
+        $i = 0;
         $qb->select('count(a.id)')
                 ->from("Activity", 'a');
 
-        if (isset($filters['user'])) {
-            $qb->leftJoin('a.user', 'u');
+
+        $whereArray = array();
+        $whereParams = array();
+        $whereWithoutParam = array();
+        if (array_key_exists('user', $filters)) {
+
             if ($filters['user'] !== NULL) {
-                $qb->where($qb->expr()->eq('u.id', '?1'));
-                $qb->setParameter(1, $filters['user']->getId());
+
+                $qb->leftJoin('a.user', 'u');
+                $i++;
+                $whereArray[$i] = $qb->expr()->eq('u.id', '?' . $i);
+                
+                if (is_object($filters['user'])) {
+                    $whereParams[$i] = $filters['user']->getId();
+                } else {
+                    $whereParams[$i] = $filters['user'];
+                }
             } else {
-                $qb->where($qb->expr()->eq('u', '?1'));
-                $qb->setParameter(1, null);
+                $whereWithoutParam[] = $qb->expr()->isNull('a.user');
             }
         }
-        if (isset($filters['type']) && $filters['user'] != null) {
+
+        if (isset($filters['type'])) {
+            $i++;
             $qb->join('a.activityType', 't');
-            $qb->where($qb->expr()->eq('t.id', '?2'));
-            $qb->setParameter(2, $filters['type']->getId());
+            $whereArray[$i] = $qb->expr()->eq('t.id', '?' . $i);
+            if (is_object($filters['type'])) {
+                $whereParams[$i] = $filters['type']->getId();
+            } else {
+                $whereParams[$i] = $filters['type'];
+            }
         }
 
         if (isset($filters['search'])) {
-            $qb->where($qb->expr()->like('lower(a.name)', '?3'));
-            $qb->setParameter(3, mb_convert_case(str_replace(' ', '%', $filters['search'] . '%'), MB_CASE_LOWER, "UTF-8"));
+            $i++;
+            $whereArray[$i] = $qb->expr()->like('lower(a.name)', '?' . $i);
+            $whereParams[$i] = mb_convert_case(str_replace(' ', '%', $filters['search'] . '%'), MB_CASE_LOWER, "UTF-8");
+        }
+
+        if (isset($filters['status'])) {
+            $i++;
+            $whereArray[$i] = $qb->expr()->eq('a.status', '?' . $i);
+            $whereParams[$i] = $filters['status'];
+        }
+
+        if ($activeOnly !== null) {
+            $i++;
+            $whereArray[$i] = $qb->expr()->eq('a.active', '?' . $i);
+            $whereParams[$i] = $activeOnly;
+        }
+
+        // set Where
+        foreach ($whereArray as $k => $v) {
+            if ($k == 1) {
+                $qb->where($v);
+            } else {
+                $qb->andWhere($v);
+            }
+        }
+
+        foreach ($whereWithoutParam as $k => $v) {
+            if (count($whereArray) == 0 && $k == 0) {
+                $qb->where($v);
+            } else {
+                $qb->andWhere($v);
+            }
+        }
+        // Set Params
+        foreach ($whereParams as $k => $v) {
+            $qb->setParameter($k, $v);
         }
 
         return $qb->getQuery()->getSingleScalarResult();

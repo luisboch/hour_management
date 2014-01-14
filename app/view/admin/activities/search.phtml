@@ -1,0 +1,101 @@
+{% extends '../template/adm.phtml' %}
+{% block content %}
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li>
+                        <a href="{{ url('activities') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Inicio</a>
+                        <a href="{{ url('activities/new') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Novo</a>
+                        <a href="{{ url('activities/search') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Pesquisar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" role="main">
+            <div class="panel panel-default">
+                <div class="panel-heading text-right">
+                    <h3 class="panel-title">Pesquisar</h3>
+                </div>
+                <div class="panel-body" style="">
+                    <div class="table">
+                        <form action="{{url('activities/search')}}" method="get" class="form-horizontal">
+                            <div style="margin-bottom: 10px">
+                                <label for="search">Nome</label>
+                                <input type="text" class="form-control " name="search" value="<?= $_GET['search']; ?>" />
+                            </div>
+                            <div style="margin-bottom: 10px">
+                                <label for="type" >Tipo de Atividade</label>
+                                <select class="form-control" name="type">
+                                    <option value="">---Selecione---</option>
+                                    {% for t in types %}
+                                    <option value="{{t.getId()}}" {{type == t.getId() ? 'selected':''}} >{{t.getName()}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div style="margin-bottom: 10px">
+                                <label for="user" >Responsável</label>
+                                <select class="form-control" name="user">
+                                    <option value="">Não delegado </option>
+                                    {% for t in users %}
+                                    <option value="{{t.getId()}}" {{user_id == t.getId() ? 'selected':''}} >{{t.getName()}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div style="margin-bottom: 10px">
+                                <label for="status" >Status</label>
+                                <select class="form-control" name="status">
+                                    <option value="">---Selecione---</option>
+                                    <option value="0"  {{status == 0 ? 'selected':''}}>Aberto</option>
+                                    <option value="1" {{status == 1 ? 'selected':''}}>Finalizado</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-1 col-md-2 col-xs-12 col-lg-offset-9 col-md-offset-9">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="active" {{active?'checked="checked"':''}} class="form-control"/>Ativos
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-1 col-xs-12 text-right">
+                                    <button class="btn btn-default" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{ pagination }}
+            <div class="table-responsive">
+
+                <table class="table table-striped table-hover">
+                    <thead class="fixedthead" >
+                        <tr>
+                            <th class="col-xs-1 col-sm-1" >#</th>
+                            <th class="col-xs-3 col-sm-5" >Nome</th>
+                            <th class="col-xs-3 col-sm-3" >Usuário</th>
+                            <th class="col-xs-3 col-sm-3" >Tipo</th>
+                            <th class="col-xs-2 hidden-sm hidden-xs">Último update</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in results %}
+                        <tr>
+                            <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
+                            <td>{{ u.getName() }}</td>
+                            <td>{{ u.getUser() is empty ? '' : u.getUser().getName() }}</td>
+                            <td>{{ u.getActivityType().getName() }}</td>
+                            <td class="hidden-sm hidden-xs">{{ formatDate(u.getLastUpdate())}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {{ pagination }}
+        </div>
+    </div>
+</div>
+{% endblock %}

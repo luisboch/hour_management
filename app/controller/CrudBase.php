@@ -74,6 +74,7 @@ abstract class CrudBase extends AdminBase {
                 $this->builPagination($page, $totalResults);
 
                 $this->afterSearch();
+                $this->view->active = $this->showActiveResults;
             }
         } catch (Exception $ex) {
             $this->showError($ex);
