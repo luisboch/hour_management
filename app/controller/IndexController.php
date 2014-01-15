@@ -22,7 +22,7 @@ class IndexController extends AdminBase {
     public function indexAction() {
         
         $this->view->action = 'Home';
-        $userResults = $this->reportService->getUserActiveReport(array(), 0, 0);
+        $userResults = $this->reportService->getUserActiveReport(array(), null, null);
         
         $userResult = null;
         
@@ -32,8 +32,11 @@ class IndexController extends AdminBase {
             }
         }
         
+        $activityResult = $this->reportService->getActivityReport(array(), null, null);
+        
         $this->view->userResults = $userResults;
         $this->view->userResult = $userResult;
+        $this->view->activityResult = $activityResult;
         
     }
     

@@ -1,6 +1,7 @@
 <?php
 
-require_once APP_DIR . 'result/UserActivityResult.php';
+require_once APP_DIR . 'model/result/UserActivityResult.php';
+require_once APP_DIR . 'model/result/ActivityReportResult.php';
 
 /**
  * Description of ActivityReport
@@ -89,6 +90,62 @@ class ActivityReportDAO extends BasicDAO {
         }
 
         return $data;
+    }
+
+    /**
+     * 
+     * @param array $filters
+     * @param integer $limit
+     * @param integer $offset
+     * @return ActivityReportResult
+     */
+    public function getActivityReport($filters = array(), $limit = NULL, $offset = NULL) {
+
+        $startDate = $filters['startDate'];
+        $endDate = $filters['endDate'];
+
+        if ($startDate === null) {
+            $startDate = new DateTime('00:00:00');
+        }
+
+        if ($endDate === null) {
+            $endDate = new DateTime('23:59:59');
+        }
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
+
+        $rsm->addScalarResult('id', 'activityId', 'integer');
+        $rsm->addScalarResult('name', 'activityName', 'string');
+        $rsm->addScalarResult('allocated', 'allocated', 'string');
+        $rsm->addScalarResult('finished', 'finished', 'boolean');
+        $rsm->addScalarResult('wday', 'day', 'date');
+
+        $sql = 'select a.id,
+                       a.name, 
+                       a.status = 1 as finished,
+                       to_char(sum(ai.allocated_time),\'HH12:MI\') as allocated,
+                       to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
+                  from activity a
+                  join activity_interaction ai on ai.activity_id = a.id
+                 where ai.creation_date between :startDate and :endDate
+              group by a.id, wday';
+
+        $q = $this->em->createNativeQuery($sql, $rsm);
+
+        $q->setParameter('startDate', $startDate, 'datetime');
+        $q->setParameter('endDate', $endDate, 'datetime');
+
+        $dbResult = $q->getResult();
+
+        $result = new \report\result\ActivityReportResult();
+
+        foreach ($dbResult as $v) {
+            $r = new report\result\ResultData(
+                    $v['activityId'], $v['activityName'], $v['allocated'], $v['finished']);
+            $result->add($r);
+        }
+
+        return $result;
     }
 
 }
