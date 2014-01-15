@@ -20,12 +20,12 @@
                 <div class="col-lg-3 col-xs-3" style="font-weight: bold"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></div>
                 <div class="col-lg-3 col-xs-3" style="font-weight: bold"><span class="hidden-lg hidden-md">Disp.</span><span class="hidden-xs">Disponível</span></div>
                 {% for t in userResults %}
-                    <div class="col-lg-6 col-xs-6 text-left">{{t.getUserName()}}</div>
-                    <div class="col-lg-3 col-xs-3">{{t.getUserAllocatedHours()}}</div>
-                    <div class="col-lg-3 col-xs-3">{{t.getAvaliable()}}</div>
+                <div class="col-lg-6 col-xs-6 text-left">{{t.getUserName()}}</div>
+                <div class="col-lg-3 col-xs-3">{{t.getUserAllocatedHours()}}</div>
+                <div class="col-lg-3 col-xs-3">{{t.getAvaliable()}}</div>
                 {% endfor %}
             </div>
-            <div class="panel-footer text-right">Total 18:00</div>
+            <div class="panel-footer text-right">Total {{prodTotal}}</div>
         </div>
     </div>
     <div class="col-lg-6">
@@ -35,8 +35,8 @@
                 <div class="col-lg-8 col-xs-8 text-left" style="font-weight: bold">Atividade</div>
                 <div class="col-lg-4 col-xs-4" style="font-weight: bold">Alocado</div>
                 {% for r in activityResult.getData() %}
-                    <div class="col-lg-8 col-xs-8 text-left">{{ r.getActivityName() }}</div>
-                    <div class="col-lg-4 col-xs-4">{{ r.getAllocated() }}</div>
+                <div class="col-lg-8 col-xs-8 text-left">{{ r.getActivityName() }}</div>
+                <div class="col-lg-4 col-xs-4">{{ r.getAllocated() }}</div>
                 {% endfor %}
             </div>
             <div class="panel-footer text-right">{{activityResult.getTotal()}} atividades ({{activityResult.getFinished()}} concluídas)</div>

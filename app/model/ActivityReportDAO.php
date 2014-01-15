@@ -57,7 +57,7 @@ class ActivityReportDAO extends BasicDAO {
         $sql = 'select u.id, 
                        u.name, 
                        uw.day_active_hour as wd,
-                       to_char(sum(ai.allocated_time),\'HH12:MI\') as allocated,
+                       to_char(sum(ai.allocated_time),\'HH24:MI\') as allocated,
                        to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
                   from users u
                   join activity_interaction ai on ai.user_id = u.id
@@ -123,11 +123,12 @@ class ActivityReportDAO extends BasicDAO {
         $sql = 'select a.id,
                        a.name, 
                        a.status = 1 as finished,
-                       to_char(sum(ai.allocated_time),\'HH12:MI\') as allocated,
+                       to_char(sum(ai.allocated_time),\'HH24:MI\') as allocated,
                        to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
                   from activity a
                   join activity_interaction ai on ai.activity_id = a.id
                  where ai.creation_date between :startDate and :endDate
+                   and a.active = true
               group by a.id, wday';
 
         $q = $this->em->createNativeQuery($sql, $rsm);
