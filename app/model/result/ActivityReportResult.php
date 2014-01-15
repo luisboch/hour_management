@@ -11,10 +11,10 @@ class ActivityReportResult {
 
     private $total = 0;
     private $finished = 0;
-
+    private $idsFinished = array();
     /**
      *
-     * @var \ActivityReportResult\Data\ResultData[] 
+     * @var ResultData[] 
      */
     private $data = array();
 
@@ -26,6 +26,10 @@ class ActivityReportResult {
         return $this->finished;
     }
 
+    /**
+     * 
+     * @return ResultData[]
+     */
     public function getData() {
         return $this->data;
     }
@@ -39,7 +43,10 @@ class ActivityReportResult {
         $this->total++;
      
         if ($data->isFinished()) {
-            $this->finished++;
+            if(!in_array($data->getActivityId(), $this->idsFinished)){
+                $this->finished++;
+                $this->idsFinished[] = $data->getActivityId();
+            }
         }
     }
 
@@ -52,14 +59,16 @@ class ResultData {
     private $activityName;
     private $allocated;
     private $finished;
+    private $date;
 
-    function __construct($activityId, $activityName, $allocated, $finished) {
+    function __construct($activityId, $activityName, $allocated, $finished, $date) {
         $this->activityId = $activityId;
         $this->activityName = $activityName;
         $this->allocated = $allocated;
         $this->finished = $finished;
+        $this->date = $date;
     }
-
+    
     public function getActivityId() {
         return $this->activityId;
     }
@@ -70,6 +79,18 @@ class ResultData {
 
     public function getAllocated() {
         return $this->allocated;
+    }
+
+    public function getFinished() {
+        return $this->finished;
+    }
+    
+    public function isFinished() {
+        return $this->finished;
+    }
+
+    public function getDate() {
+        return $this->date;
     }
 
     public function setActivityId($activityId) {
@@ -84,12 +105,13 @@ class ResultData {
         $this->allocated = $allocated;
     }
 
-    public function isFinished() {
-        return $this->finished;
-    }
-
     public function setFinished($finished) {
         $this->finished = $finished;
     }
+
+    public function setDate($date) {
+        $this->date = $date;
+    }
+
 
 }

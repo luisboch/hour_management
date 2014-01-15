@@ -20,6 +20,7 @@
         <link href="{{ url('css/customizations.css') }}" rel="stylesheet">
         <link href="{{ url('css/bootstrap-tagsinput.css') }}" rel="stylesheet">
         <link href="{{ url('css/jquery.timepicker.css') }}" rel="stylesheet">
+        <link href="{{ url('css/datepicker.css') }}" rel="stylesheet">
 
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -36,6 +37,7 @@
         <script src="{{ url('js/holder.js') }}"></script>
         <script src="{{ url('js/bootstrap-tagsinput.min.js') }}"></script>
         <script src="{{ url('js/jquery.timepicker.min.js') }}"></script>
+        <script src="{{ url('js/bootstrap-datepicker.js') }}"></script>
 
         {% endblock %}
 
@@ -68,6 +70,7 @@
                         </ul>
                     </li>
                     <li><a href="{{ url('activities')}}">Atividades</a></li>
+                    <li><a href="{{ url('report')}}">Relatórios</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -104,5 +107,8 @@
                 </div>
             </div>
         </footer>
+        <script type="text/javascript">
+            $('.input-date').datepicker();
+        </script>
     </body>
 </html>

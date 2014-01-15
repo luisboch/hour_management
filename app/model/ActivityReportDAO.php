@@ -1,5 +1,6 @@
 <?php
 
+require_once APP_DIR . 'model/BasicDAO.php';
 require_once APP_DIR . 'model/result/UserActivityResult.php';
 require_once APP_DIR . 'model/result/ActivityReportResult.php';
 
@@ -64,9 +65,9 @@ class ActivityReportDAO extends BasicDAO {
                   join activity a on ai.activity_id = a.id
                   join user_work_day uw on uw.user_id = u.id and uw."date" =  ai.creation_date::date
                  where ai.creation_date between :startDate and :endDate
-                   and u.active = true
                    and a.active = true
-              group by u.id, wday, uw.id';
+              group by u.id, wday, uw.id
+              order by wday, u.name';
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
@@ -97,7 +98,7 @@ class ActivityReportDAO extends BasicDAO {
      * @param array $filters
      * @param integer $limit
      * @param integer $offset
-     * @return ActivityReportResult
+     * @return \report\result\ActivityReportResult
      */
     public function getActivityReport($filters = array(), $limit = NULL, $offset = NULL) {
 
@@ -129,7 +130,8 @@ class ActivityReportDAO extends BasicDAO {
                   join activity_interaction ai on ai.activity_id = a.id
                  where ai.creation_date between :startDate and :endDate
                    and a.active = true
-              group by a.id, wday';
+              group by a.id, wday
+              order by wday, a.name';
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
@@ -142,7 +144,7 @@ class ActivityReportDAO extends BasicDAO {
 
         foreach ($dbResult as $v) {
             $r = new report\result\ResultData(
-                    $v['activityId'], $v['activityName'], $v['allocated'], $v['finished']);
+                    $v['activityId'], $v['activityName'], $v['allocated'], $v['finished'], $v['day']);
             $result->add($r);
         }
 

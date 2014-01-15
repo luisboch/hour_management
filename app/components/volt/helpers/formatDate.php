@@ -20,6 +20,9 @@ function formatDate(DateTime $date = null, $format = NULL) {
             case 'time-only':
                 $pattern = 'H:i:s';
                 break;
+            case 'HM-only':
+                $pattern = 'H:i';
+                break;
         }
     }
     

@@ -50,7 +50,7 @@
 
                 <div class="form-group">
                     <label for="status" >Status</label>
-                    <select class="form-control" name="status">
+                    <select class="form-control" name="status" id="status">
                         <option value="">---Selecione---</option>
                         <option value="0" {{ 0 == instance.getStatus() ? 'selected':'' }} >Aberto</option>
                         <option value="1" {{ 1 == instance.getStatus() ? 'selected':'' }} >Finalizado</option>
@@ -84,7 +84,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="panel panel-default" style="{{ 1 == instance.getStatus() ? 'display:none;':'' }}">
+                <div class="panel panel-default" id="newActionPanel" style="{{ 1 == instance.getStatus() ? 'display:none;':'' }}">
                     <div class="panel-heading">
                         <h3 class="panel-title">Nova Ação</h3>
                     </div>
@@ -119,6 +119,22 @@
     </div> 
 </div>
 <script type="text/javascript">
-    $('#action_time').timepicker({ 'timeFormat': 'H:i:s' });
+    $('#action_time').timepicker({'timeFormat': 'H:i:s'});
+    $('#status').change(function() {
+        var newval = $('#status').val();
+        if (newval === '') {
+            $('#newActionPanel').slideUp();
+            $('input[name=action_description]').val('');
+            $('input[name=action_time]').val('');
+        } else {
+            if (newval == 0) {
+                $('#newActionPanel').slideDown();
+            } else if (newval == 1) {
+                $('input[name=action_description]').val('');
+                $('input[name=action_time]').val('');
+                $('#newActionPanel').slideUp();
+            }
+        }
+    });
 </script>
 {% endblock %}
