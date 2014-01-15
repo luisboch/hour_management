@@ -9,21 +9,31 @@
         </div>
     </div>
     <div class="text-right">
-        <p class="help-block">{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}}</p>
+        <p class="help-block">{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas</p>
     </div>
     {% endif %}
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">Produtividade do dia</div>
             <div class="panel-body">
-                <div class="col-lg-6 col-xs-6 text-left" style="font-weight: bold">Quem</div>
-                <div class="col-lg-3 col-xs-3" style="font-weight: bold"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></div>
-                <div class="col-lg-3 col-xs-3" style="font-weight: bold"><span class="hidden-lg hidden-md">Disp.</span><span class="hidden-xs">Disponível</span></div>
-                {% for t in userResults %}
-                <div class="col-lg-6 col-xs-6 text-left">{{t.getUserName()}}</div>
-                <div class="col-lg-3 col-xs-3">{{t.getUserAllocatedHours()}}</div>
-                <div class="col-lg-3 col-xs-3">{{t.getAvaliable()}}</div>
-                {% endfor %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-6 col-xs-6">Quem</th>
+                            <th class="col-lg-3 col-xs-3"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                            <th class="col-lg-3 col-xs-3"><span class="hidden-lg hidden-md">Disp.</span><span class="hidden-xs">Disponível</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in userResults %}
+                        <tr>
+                            <td class="text-left"><a href="{{ url('usercrud/view/' ~ t.getUserId()) }}">{{ t.getUserName() }}</a></td>
+                            <td>{{ t.getUserAllocatedHours() }}</td>
+                            <td>{{t.getAvaliable()}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             <div class="panel-footer text-right">Total {{prodTotal}}</div>
         </div>
@@ -32,12 +42,23 @@
         <div class="panel panel-default">
             <div class="panel-heading">Atividades do dia</div>
             <div class="panel-body">
-                <div class="col-lg-8 col-xs-8 text-left" style="font-weight: bold">Atividade</div>
-                <div class="col-lg-4 col-xs-4" style="font-weight: bold">Alocado</div>
-                {% for r in activityResult.getData() %}
-                <div class="col-lg-8 col-xs-8 text-left">{{ r.getActivityName() }}</div>
-                <div class="col-lg-4 col-xs-4">{{ r.getAllocated() }}</div>
-                {% endfor %}
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-10 col-xs-10">Atividade</th>
+                            <th class="col-lg-2 col-xs-2"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in activityResult.getData() %}
+                        <tr>
+                            <td class="text-left"><a href="{{ url('activities/view/' ~ r.getActivityId() ) }}">{{ r.getActivityName() }}</a></td>
+                            <td class="col-lg-4 col-xs-4">{{ r.getAllocated() }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             <div class="panel-footer text-right">{{activityResult.getTotal()}} atividades ({{activityResult.getFinished()}} concluídas)</div>
         </div>

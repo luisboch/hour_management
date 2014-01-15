@@ -14,7 +14,7 @@ abstract class CrudBase extends AdminBase {
     private $_initialized = false;
     protected $instance;
     protected $results = array();
-    private $controllerName;
+    protected $controllerName;
 
     /**
      *
@@ -122,11 +122,11 @@ abstract class CrudBase extends AdminBase {
         $this->view->pagination = $pagination;
     }
 
-    protected function getQueryString() {
+    protected function getQueryString($ignore = NULL) {
         $query = "";
         $get = isset($_GET) ? $_GET : array();
         foreach ($get as $k => $v) {
-            if ($k != '_url') {
+            if ($k != '_url'&& $k != $ignore) {
                 $query .= $k . '=' . urlencode($v) . '&';
             }
         }

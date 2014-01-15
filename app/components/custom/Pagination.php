@@ -112,8 +112,8 @@ class Pagination {
             $this->calculate();
 
             if ($this->amountRegisters > $this->amountPerPage) {
-                $html = '
-                        <ul class="pagination">';
+                $html = '<div class="text-right">
+                            <ul class="pagination">';
                 //<div>Paginas:<span class="desc">Exibindo <span>' . $this->showing . '</span> de <span>' . $this->amountRegisters . '</span> Resultados</span><div>';
                 $extraClass = '';
                 if ($this->currentPage == 1) {
@@ -139,7 +139,7 @@ class Pagination {
                 //    $html .= '
                 //    <a class="ui-button ' . $extraClass . '" href="' . $this->targetUrl . $this->pageNumber . '">&uacute;ltima</a>';
 
-                $html .= '</ul>';
+                $html .= '</ul></div>';
                 return $html;
             }
             return '';

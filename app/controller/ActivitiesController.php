@@ -49,7 +49,7 @@ class ActivitiesController extends CrudBase {
 
         $params1 = array('user' => $this->session->getUser());
 
-        $limitPerPage = $this->config['pagination']['registers_limit_per_page'];
+        $limitPerPage = 10;
 
         $this->view->results1 = $this->service->search(
                 $params1, true, $limitPerPage, $page1 * $limitPerPage - $limitPerPage);
@@ -67,14 +67,14 @@ class ActivitiesController extends CrudBase {
         $this->view->pagination2 = $this->createPagination($page2, $totalResults2, 'page2');
     }
 
-    private function createPagination($page, $total, $pageParamName = 'page') {
+    private function createPagination($page1, $total, $pageParamName) {
         $pagination = new Pagination();
         $pagination->setAmountLinkShow($this->config['pagination']['number_of_links_displayed']);
-        $pagination->setCurrentPage($page);
-        $pagination->setAmountPerPage($this->config['pagination']['registers_limit_per_page']);
+        $pagination->setCurrentPage($page1);
+        $pagination->setAmountPerPage(10);
         $pagination->setTargetUrl($this->url->get($this->controllerName . '/index'));
         $pagination->setAmountRegisters($total);
-        $pagination->setQueryString($this->getQueryString());
+        $pagination->setQueryString($this->getQueryString($pageParamName));
         $pagination->setPageParamName($pageParamName);
         return $pagination;
     }

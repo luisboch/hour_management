@@ -100,6 +100,7 @@ class ActivityDAO extends BasicDAO {
         }
 
         $qb->orderBy('a.priority', 'desc');
+        $qb->addOrderBy('a.lastUpdate', 'desc');
 
         if ($limit != NULL) {
             $qb->setMaxResults($limit);
