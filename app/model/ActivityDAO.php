@@ -19,7 +19,7 @@ class ActivityDAO extends BasicDAO {
 
         // Add status filter
         if (!array_key_exists('status', $filters)) {
-            $filters['status'] = 0; // only opened activities
+            $filters['status'] = 0; // Only opened activities
         }
 
         $qb = $this->em->createQueryBuilder();

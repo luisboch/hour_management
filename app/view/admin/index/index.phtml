@@ -1,27 +1,29 @@
 {% extends '../template/adm.phtml' %}
 {% block content %}
 <div class="col-lg-8 col-md-10 col-xs-12 text-center" style="float: none;margin: auto" >
+    {% if userResult is not empty %}
     <p class="has-success text-left">Seu dia:</p>
-    <div class="progress" title="02:30 de um total de 07:30 horas disponíveis">
-        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;" >
-            <span class="sr-only">02:30 de tempo disponivel no seu dia. </span>
+    <div class="progress" title="{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas disponíveis">
+        <div class="progress-bar" role="progressbar" aria-valuenow="{{userResult.getPercentFinished()}}" aria-valuemin="0" aria-valuemax="100" style="width: {{userResult.getPercentFinished()}}%;" >
+            <span class="sr-only">{{userResult.getAvaliable()}} de tempo disponivel no seu dia. </span>
         </div>
     </div>
     <div class="text-right">
-        <p class="help-block">02:30 de um total de 07:30 horas disponíveis</p>
+        <p class="help-block">{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas disponíveis</p>
     </div>
+    {% endif %}
     <div class="col-lg-6">
         <div class="panel panel-default">
             <div class="panel-heading">Produtividade do dia</div>
             <div class="panel-body">
-                <div class="col-lg-8 col-xs-8"><h4 class=" text-left">Quem</h4></div>
-                <div class="col-lg-4 col-xs-4"><h4>Tempo</h4></div>
-                <div class="col-lg-8 col-xs-8 text-left">Marathi</div>
-                <div class="col-lg-4 col-xs-4">02:00</div>
-                <div class="col-lg-8 col-xs-8 text-left ">Joseph</div>
-                <div class="col-lg-4 col-xs-4">02:00</div>
-                <div class="col-lg-8 col-xs-8  text-left">Paulo</div>
-                <div class="col-lg-4 col-xs-4">02:00</div>
+                <div class="col-lg-6 col-xs-6 text-left" style="font-weight: bold">Quem</div>
+                <div class="col-lg-3 col-xs-3" style="font-weight: bold">Alocado</div>
+                <div class="col-lg-3 col-xs-3" style="font-weight: bold"><span class="hidden-lg hidden-md">Disp.</span><span class="hidden-xs">Disponível</span></div>
+                {% for t in userResults %}
+                <div class="col-lg-6 col-xs-6 text-left">{{t.getUserName()}}</div>
+                <div class="col-lg-3 col-xs-3">{{t.getUserAllocatedHours()}}</div>
+                <div class="col-lg-3 col-xs-3">{{t.getAvaliable()}}</div>
+                {% endfor %}
             </div>
             <div class="panel-footer text-right">Total 18:00</div>
         </div>
