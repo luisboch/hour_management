@@ -12,6 +12,7 @@ class ActivityReportResult {
     private $total = 0;
     private $finished = 0;
     private $idsFinished = array();
+    private $idsTotal = array();
     /**
      *
      * @var ResultData[] 
@@ -39,8 +40,10 @@ class ActivityReportResult {
      */
     public function add(ResultData $data) {
         $this->data[] = $data;
-        
-        $this->total++;
+        if(!in_array($data->getActivityId(), $this->idsTotal)){
+            $this->total++;
+            $this->idsTotal[] = $data->getActivityId();
+        }
      
         if ($data->isFinished()) {
             if(!in_array($data->getActivityId(), $this->idsFinished)){
