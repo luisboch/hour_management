@@ -15,6 +15,7 @@ class SecurityController extends ControllerBase {
         parent::initialize();
         $this->view->action = "Segurança";
         $this->service = new UserService();
+        $this->setTitle('Segurança');
     }
 
     public function loginAction($target = '') {

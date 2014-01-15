@@ -28,6 +28,8 @@ class ActivitiesController extends CrudBase {
         parent::initialize(new ActivityService());
         $this->activityTypeService = new ActivityTypeService();
         $this->userService = new UserService();
+        
+        $this->setTitle('Atividades');
     }
 
     public function viewAction($id) {
@@ -37,7 +39,7 @@ class ActivitiesController extends CrudBase {
     }
 
     public function indexAction() {
-
+        
         $page1 = $this->request->getQuery("page1");
 
         $page1 = $page1 === null ? 1 : $page1;

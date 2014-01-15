@@ -19,6 +19,7 @@ class ReportController extends AdminBase {
     public function initialize() {
         parent::initialize();
         $this->service = new ActivityReportService();
+        $this->setTitle('Relatórios');
     }
 
     public function indexAction() {

@@ -25,13 +25,15 @@ class ControllerBase extends \Phalcon\Mvc\Controller {
         // Start session
         $this->session = SessionManager::getInstance();
 
-        $this->view->title = 'Pizzaria Fornalha Vinhedo';
+        $this->view->title = "";
         
         $this->view->_session = $this->session;
         
         $this->config = Config::getInstance();
-        
-        
+    }
+    
+    protected function setTitle($title) {
+        $this->view->title = $title;
     }
 
     protected function showError($ex) {

@@ -14,11 +14,10 @@ class ActivitytypeController extends CrudBase {
     public function initialize() {
 
         parent::initialize(new ActivityTypeService());
-
-        $this->action = "Tipo de Atividade";
         
         // Set default active of value
         $this->view->active = true;
+        $this->setTitle('Tipo de atividade');
     }
 
     /**

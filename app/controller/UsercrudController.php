@@ -15,10 +15,9 @@ class UsercrudController extends CrudBase {
 
         parent::initialize(new UserService());
 
-        $this->action = "Usuários";
-        
         // Set default active of value
         $this->view->active = true;
+        $this->setTitle('Usuários');
     }
 
     /**
