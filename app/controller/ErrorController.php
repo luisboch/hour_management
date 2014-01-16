@@ -20,6 +20,7 @@ class ErrorController extends ControllerBase {
     }
 
     public function exceptionAction() {
+        $this->response->setStatusCode(500, "Internal Error");
         $this->view->action = "Error";
         $this->view->exception = $this->dispatcher->getParam('exception');
         $this->view->trace = $this->view->exception->getTraceAsString();
