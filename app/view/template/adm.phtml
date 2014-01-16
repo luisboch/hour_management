@@ -45,7 +45,7 @@
     <!-- NAVBAR
     ================================================== -->
     <body>
-        <div class="navbar navbar-default navbar-fixed-top"role="navigation">
+        <div class="navbar navbar-default navbar-fixed-top navbar-inverse"role="navigation">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
@@ -54,7 +54,7 @@
                 </button>
                 <!--<a class="navbar-brand" href="{{ url('index') }}">Gerenciamento de Atividades</a>-->
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse navbar-inverse-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('index') }}">Inicio</a></li>
                     <!--<li><a  href="index.php?p=pages/open/menu.php" >Cardápio</a></li>-->
@@ -91,24 +91,21 @@
             {% endblock %}
         </div>
         <!-- FOOTER -->
-        <footer class="bs-footer" style="clear: both">
-            <hr class="" />
-            <div class="container marketing">
+        <footer class="bs-footer" style="clear: both;margin-top: 10px;">
+            <div class="navbar navbar-default navbar-inverse" >
                 <div class="col-lg-4">
-                    <!--<img class="img-rounded" src="images/layout/logo.gif" alt="Generic placeholder image">-->
                 </div>
                 <div class="col-lg-4">
-<!--                    <p class="">Tv Santa Cruz, 1404 - final da indepedência - Pinheirinho</p>
-                    <p class="">Vinhedo, SP | CEP: 13280-000</p>
-                    <p class="">(19) 3876-2588</p>-->
                 </div> 
                 <div class="col-lg-4 text-right">
-                    <a href="#">Topo</a>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Topo</a></li>
+                    </ul>
                 </div>
-            </div>
+            </div>  
         </footer>
         <script type="text/javascript">
-            $('.input-date').datepicker();
+$('.input-date').datepicker();
         </script>
     </body>
 </html>

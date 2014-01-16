@@ -12,28 +12,33 @@
             </div>
         </div>
         <div class="col-md-9" role="main">
-            <table class="table">
+            <div class="well">
+                <fieldset>
+                    <legend>Relatórios | Usuários</legend>
+                    <table class="table">
 
-                <thead>
-                    <tr>
-                        <th class="col-lg-3 col-md-3">Data</th>
-                        <th class="col-lg-5 col-md-5">Nome</th>
-                        <th class="col-lg-2 col-md-2">Alocado</th>
-                        <th class="col-lg-2 col-md-2">Total</th>
-                    </tr>
-                </thead>
+                        <thead>
+                            <tr>
+                                <th class="col-lg-3 col-md-3">Data</th>
+                                <th class="col-lg-5 col-md-5">Nome</th>
+                                <th class="col-lg-2 col-md-2">Alocado</th>
+                                <th class="col-lg-2 col-md-2">Total</th>
+                            </tr>
+                        </thead>
 
-                <tbody>
-                    {% for r in results %}
-                    <tr>
-                        <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
-                        <td><a href="{{url('usercrud/view/' ~ r.getUserId())}}">{{ r.getUserName() }}</a></td>
-                        <td>{{ r.getUserAllocatedHours() }}</td>
-                        <td>{{ formatDate(r.getUserTotalHours(),'HM-only') }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        <tbody>
+                            {% for r in results %}
+                            <tr>
+                                <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
+                                <td><a href="{{url('usercrud/view/' ~ r.getUserId())}}">{{ r.getUserName() }}</a></td>
+                                <td>{{ r.getUserAllocatedHours() }}</td>
+                                <td>{{ formatDate(r.getUserTotalHours(),'HM-only') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
         </div>
     </div>
 </div>

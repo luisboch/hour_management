@@ -15,49 +15,54 @@
         </div>
         <div class="col-md-9" role="main">
             <p>{{ _session.getMessage() }}</ p>
-            <form action="{{ url('usercrud/save/') }}" method="post">
-                <input type="hidden" name="id" value="{{instance.getId()}}">
-                <div class="form-group">
-                    <label for="name" >Nome</label>
-                    <input type="text" class="form-control" name="name" required placeholder="Meu Nome" value="{{instance.getName()}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="email" >Email</label>
-                    <input type="email" class="form-control" name="email" required placeholder="email@exemplo.com"  value="{{instance.getEmail()}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="cpf" >CPF</label>
-                    <input type="text" class="form-control" name="cpf" required placeholder="00000000000" value="{{instance.getCpf()}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="cpf" >Horas ativas:</label>
-                    <input type="text" class="form-control" name="day_active_hour" id="day_active_hour" required placeholder="08:00:00" value="{{formatDate(instance.getDayActiveHour(), 'time-only')}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="passwd1" >Senha (6 caracteres)</label>
-                    <input type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd1" />
-                </div>
-                <div class="form-group">
-                    <label for="passwd2" >Confirme a senha</label>
-                    <input  type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd2" />
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} class="form-control"/>Ativo?
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group text-right" >
-                    <a class="btn btn-danger" href="{{url('usercrud')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
-                    <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>
-                </div>
-            </form>
+            <div class="well">
+                <fieldset>
+                    <legend>Usuários | Dados</legend>
+                    <form action="{{ url('usercrud/save/') }}" method="post" class="">
+                        <input type="hidden" name="id" value="{{instance.getId()}}">
+                        <div class="form-group">
+                            <label for="name" >Nome</label>
+                            <input type="text" class="form-control" name="name" required placeholder="Meu Nome" value="{{instance.getName()}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" >Email</label>
+                            <input type="email" class="form-control" name="email" required placeholder="email@exemplo.com"  value="{{instance.getEmail()}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf" >CPF</label>
+                            <input type="text" class="form-control" name="cpf" required placeholder="00000000000" value="{{instance.getCpf()}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf" >Horas ativas:</label>
+                            <input type="text" class="form-control" name="day_active_hour" id="day_active_hour" required placeholder="08:00:00" value="{{formatDate(instance.getDayActiveHour(), 'time-only')}}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="passwd1" >Senha (6 caracteres)</label>
+                            <input type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="passwd2" >Confirme a senha</label>
+                            <input  type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd2" />
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} class="form-control"/>Ativo?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group text-right" >
+                            <a class="btn btn-danger" href="{{url('usercrud')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
+                            <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
         </div>
     </div> 
 </div>
 
 <script type="text/javascript">
-    $('#day_active_hour').timepicker({ 'timeFormat': 'H:i:s' });
+    $('#day_active_hour').timepicker({'timeFormat': 'H:i:s'});
 </script>
 {% endblock %}

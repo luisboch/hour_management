@@ -3,6 +3,7 @@
 <div class="container bs-docs-container">
     <div class="row">
         <div class="col-md-3 ">
+
             <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
                 <ul class="nav bs-sidenav">
                     <li><a href="{{ url('activities') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-play"></span>Inicio</a>
@@ -13,42 +14,33 @@
             </div>
         </div>
         <div class="col-md-9" role="main">
-            <div class="panel panel-default">
-                <div class="panel-heading text-right">
-                    <h3 class="panel-title">Atividades delegadas a você</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead class="fixedthead" >
-                                <tr>
-                                    <th class="col-xs-1 col-sm-1">#</th>
-                                    <th class="col-xs-3 col-sm-3">Nome</th>
-                                    <th class="col-xs-2 col-sm-2">Pr.</th>
-                                    <th class="col-xs-6 col-sm-6">Último update</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for u in results1 %}
-                                <tr>
-                                    <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
-                                    <td>{{ u.getName() }}</td>
-                                    <td>{{ u.getPriority()}}</td>
-                                    <td>{{ formatDate(u.getLastUpdate())}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="well">
+                <fieldset>
+                    <legend>Atividades delegadas a você</legend>
+                    <table class="table table-striped table-hover">
+                        <thead class="fixedthead" >
+                            <tr>
+                                <th class="col-xs-1 col-xs-1">#</th>
+                                <th class="col-xs-5 col-xs-5">Nome</th>
+                                <th class="col-xs-2 col-xs-2">Pr.</th>
+                                <th class="col-xs-4 col-xs-4">Último update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in results1 %}
+                            <tr>
+                                <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
+                                <td>{{ u.getName() }}</td>
+                                <td>{{ u.getPriority()}}</td>
+                                <td>{{ formatDate(u.getLastUpdate())}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     {{ pagination1 }}
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading text-right">
-                    <h3 class="panel-title">Atividades ainda não delegadas</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
+                </fieldset>
+                <fieldset>
+                    <legend>Atividades não delegadas</legend>
                         <table class="table table-striped table-hover">
                             <thead class="fixedthead" >
                                 <tr>
@@ -69,9 +61,8 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                    </div>
-                    {{pagination2}}
-                </div>
+                    {{ pagination2 }}
+                </fieldset>
             </div>
         </div>
     </div>
