@@ -42,6 +42,7 @@
     <form class="form-signin" action="{{ url('security/login')}}" role="form" method="post">
         <p>{{_session.getMessage()}}</p>
         <input type="hidden" name="targetUrl" value="{{ targetUrl }}"/>
+        <input type="hidden" name="{{tokenKey}}" value="{{tokenValue}}" />
         <p >Por favor, efetue o login para continuar</p>
         <input type="email" class="form-control" name="email" placeholder="Email" required autofocus>
         <input type="password" name="password" class="form-control" placeholder="senha" required>
