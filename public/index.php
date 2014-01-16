@@ -102,7 +102,7 @@ try {
     $application = new \Phalcon\Mvc\Application($di);
 
     echo $application->handle()->getContent();
-} catch (\Phalcon\Exception $e) {
+} catch (Exception $e) {
     echo "PhalconException: ", $e->getMessage();
     echo '<pre>';
     echo $e->getTraceAsString();

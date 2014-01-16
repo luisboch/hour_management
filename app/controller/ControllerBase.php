@@ -18,6 +18,10 @@ class ControllerBase extends \Phalcon\Mvc\Controller {
      * @var SessionManager
      */
     protected $session;
+    
+    /**
+     * @var Config
+     */
     protected $config;
 
     public function initialize() {
