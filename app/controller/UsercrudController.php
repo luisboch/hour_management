@@ -31,7 +31,7 @@ class UsercrudController extends CrudBase {
         $user->setCpf($this->request->getPost("cpf"));
         $active = $this->request->getPost("active");
         $user->setActive($active === "on");
-        
+
         $user->setDayActiveHour(new DateTime($this->request->getPost("day_active_hour")));
 
         if ($user->getId() == null || $this->request->getPost("passwd1") != '') {
@@ -73,9 +73,11 @@ class UsercrudController extends CrudBase {
     }
 
     protected function beforeSearch() {
-        $active = $this->request->getQuery('active');
-        $this->showActiveResults = $active === 'on';
-        $this->view->active = $this->showActiveResults;
+        if (!$this->state == CrudStates::INDEX_ACTION) {
+            $active = $this->request->getQuery('active');
+            $this->showActiveResults = $active === 'on';
+            $this->view->active = $this->showActiveResults;
+        }
         return true;
     }
 
