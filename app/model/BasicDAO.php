@@ -17,7 +17,7 @@ class BasicDAO {
      * @var Doctrine\ORM\EntityManager
      */
     protected $em;
-    
+
     /**
      * @var Doctrine\ORM\EntityManager
      */
@@ -34,9 +34,9 @@ class BasicDAO {
     }
 
     public final function setupDoctrine() {
-        
+
         if (BasicDAO::$entityManager === null) {
-            
+
             $paths = array(APP_DIR . "entity/");
 
             // the connection configuration
@@ -44,10 +44,10 @@ class BasicDAO {
 
             $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
             BasicDAO::$entityManager = Doctrine\ORM\EntityManager::create($app_config['database'], $config);
-            
+
             $this->openDatabaseConnection();
         }
-        
+
         $this->em = BasicDAO::$entityManager;
     }
 
