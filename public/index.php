@@ -1,5 +1,7 @@
 <?
 
+require_once '../etc/config.php';
+
 // Start some constants
 define("ROOT_DIR", realpath(__DIR__ . '/../') . '/');
 define("APP_DIR", realpath(__DIR__ . '/../app') . '/');
@@ -27,7 +29,7 @@ try {
     //Setup a base URI so that all generated URIs include the "fornalha" folder
     $di->set('url', function() {
         $url = new \Phalcon\Mvc\Url();
-        $url->setBaseUri('/hour_management/');
+        $url->setBaseUri('/activities/');
         return $url;
     });
 
