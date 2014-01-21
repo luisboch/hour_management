@@ -6,8 +6,12 @@
  * @return type
  */
 function formatDate(DateTime $date = null, $format = NULL) {
-
-    $pattern = 'd/m/Y H:i:s';
+    
+    if($date == null){
+        return '';
+    }
+    
+    $pattern = 'd/m/y H:i';
 
     if ($format != NULL) {
         switch ($format) {
@@ -15,7 +19,7 @@ function formatDate(DateTime $date = null, $format = NULL) {
                 $pattern = 'M, d \de Y H:i:s';
                 break;
             case 'day-only':
-                $pattern = 'd/m/Y';
+                $pattern = 'd/m/y';
                 break;
             case 'time-only':
                 $pattern = 'H:i:s';

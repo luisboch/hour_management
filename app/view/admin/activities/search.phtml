@@ -20,7 +20,7 @@
                         <legend>Atividades | Pesquisa</legend>
                         <div style="margin-bottom: 10px">
                             <label for="search">Nome</label>
-                            <input type="text" class="form-control " name="search" value="<?= $_GET['search']; ?>" />
+                            <input type="text" class="form-control " name="search" value="<?= array_key_exists('search', $_GET) ? $_GET['search'] :''; ?>" />
                         </div>
                         <div style="margin-bottom: 10px">
                             <label for="type" >Tipo de Atividade</label>

@@ -1,7 +1,7 @@
 {% extends '../template/adm.phtml' %}
 {% block content %}
 <div class="col-lg-10 col-md-11 col-xs-12 text-center well" style="float: none;margin: auto" >
-    {% if userResult is not empty %}
+    {% if count(userResult) > 0 %}
     <p class="has-success text-left">Seu dia:</p>
     <div class="progress" title="{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas disponíveis">
         <div class="progress-bar" role="progressbar" aria-valuenow="{{userResult.getPercentFinished()}}" aria-valuemin="0" aria-valuemax="100" style="width: {{userResult.getPercentFinished()}}%;" >

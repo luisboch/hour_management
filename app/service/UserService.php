@@ -32,15 +32,15 @@ class UserService extends BasicService {
             throw new InvalidArgumentException("The object need an id to update");
         } else {
 
-            // Check cpf
-            if ($user->getCpf() == '' || !StringValidation::checkCpf($user->getCpf())) {
-                $v->addError("Por favor insira um CPF válido", 'cpf');
-            } else {
-                $userCPF = $this->dao->findByCPF($user->getCpf());
-                if ($userCPF != null && $user->getId() != $userCPF->getId()) {
-                    $v->addError("O CPF inserido já está sendo utilizado, insira um válido");
-                }
-            }
+//            // Check cpf
+//            if ($user->getCpf() == '' || !StringValidation::checkCpf($user->getCpf())) {
+//                $v->addError("Por favor insira um CPF válido", 'cpf');
+//            } else {
+//                $userCPF = $this->dao->findByCPF($user->getCpf());
+//                if ($userCPF != null && $user->getId() != $userCPF->getId()) {
+//                    $v->addError("O CPF inserido já está sendo utilizado, insira um válido");
+//                }
+//            }
 
             // Check email
             if ($user->getEmail() == '' || !StringValidation::checkEmail($user->getEmail())) {

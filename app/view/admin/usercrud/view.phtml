@@ -29,10 +29,6 @@
                             <input type="email" class="form-control" name="email" required placeholder="email@exemplo.com"  value="{{instance.getEmail()}}"/>
                         </div>
                         <div class="form-group">
-                            <label for="cpf" >CPF</label>
-                            <input type="text" class="form-control" name="cpf" required placeholder="00000000000" value="{{instance.getCpf()}}"/>
-                        </div>
-                        <div class="form-group">
                             <label for="cpf" >Horas ativas:</label>
                             <input type="text" class="form-control" name="day_active_hour" id="day_active_hour" required placeholder="08:00:00" value="{{formatDate(instance.getDayActiveHour(), 'time-only')}}"/>
                         </div>
