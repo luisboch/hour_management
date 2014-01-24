@@ -1,4 +1,9 @@
+#
+#RewriteCond $1 !^(index\.php|css|js|img|fonts|less|robots\.txt)
+#RewriteRule ^([^index.php|^/resources/].*)$ /index.php/?_url=$1
+
 <IfModule mod_rewrite.c>
+    RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^(.*)$ index.php?_url=/$1 [QSA,L]
