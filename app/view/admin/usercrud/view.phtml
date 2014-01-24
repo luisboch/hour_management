@@ -34,11 +34,11 @@
                         </div>
                         <div class="form-group">
                             <label for="passwd1" >Senha (6 caracteres)</label>
-                            <input type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd1" />
+                            <input type="password" class="form-control" {{ instance.getId() == '' ? "required":"" }} name="passwd1" />
                         </div>
                         <div class="form-group">
                             <label for="passwd2" >Confirme a senha</label>
-                            <input  type="password" class="form-control" {{ instance.getId() is empty ? "required":"" }} name="passwd2" />
+                            <input  type="password" class="form-control" {{ instance.getId() == '' ? "required":"" }} name="passwd2" />
                         </div>
                         <div class="form-group">
                             <div class="checkbox">
