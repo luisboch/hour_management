@@ -23,26 +23,22 @@ class SecurityController extends ControllerBase {
             $this->view->targetUrl = $target;
 
             if ($this->request->isPost()) {
-                if ($this->security->checkToken()) {
-                    $email = $this->request->getPost('email');
-                    $passwd = $this->request->getPost('password');
+                $email = $this->request->getPost('email');
+                $passwd = $this->request->getPost('password');
 
-                    $user = $this->service->findByEmail($email);
+                $user = $this->service->findByEmail($email);
 
-                    if ($user != null && $this->security->checkHash($passwd, $user->getPassword())) {
-                        $this->session->setUser($user);
-                        $user->setLastAccess(new DateTime());
-                        $this->service->update($user);
-                        $this->response->redirect('');
-                    } else {
-                        $this->error("Email/Senha inválido(s)");
-                        $this->session->setUser(null);
-                    }
+                if ($user != null && $this->security->checkHash($passwd, $user->getPassword())) {
+                    $this->session->setUser($user);
+                    $user->setLastAccess(new DateTime());
+                    $this->service->update($user);
+                    $this->response->redirect('');
                 } else {
-                    $this->error("A pagina expirou, tente novamente!");
+                    $this->error("Email/Senha inválido(s)");
+                    $this->session->setUser(null);
                 }
             }
-            
+
             $this->view->tokenKey = $this->security->getTokenKey();
             $this->view->tokenValue = $this->security->getToken();
         } catch (Exception $ex) {
