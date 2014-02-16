@@ -80,7 +80,7 @@
                             <tr>
                                 <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
                                 <td>{{ u.getName() }}</td>
-                                <td>{{ u.getUser() is empty ? '' : u.getUser().getName() }}</td>
+                                <td>{{ u.getUser() == NULL ? '' : u.getUser().getName() }}</td>
                                 <td>{{ u.getActivityType().getName() }}</td>
                                 <td class="hidden-sm hidden-xs">{{ formatDate(u.getLastUpdate())}}</td>
                             </tr>
