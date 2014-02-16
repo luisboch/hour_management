@@ -47,6 +47,16 @@ class ActivityReportService extends BasicService {
         return $this->dao->getActivityReport($filters, $limit, $offset);
     }
 
+    /**
+     * @param array $filters
+     * @param integer $limit
+     * @param integer $offset
+     * @return report\result\ActivityReportTypeResult[]
+     */
+    public function getActivityTypeReport($filters = array(), $limit = NULL, $offset = NULL) {
+        return $this->dao->getActivityTypeReport($filters, $limit, $offset);
+    }
+
     private function calculeAvaliable(DateTime $avaliable, $allocated) {
         $allocated = new DateTime($allocated);
         if ($allocated->getTimestamp() > $avaliable->getTimestamp()) {
