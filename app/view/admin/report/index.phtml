@@ -25,6 +25,7 @@
                                         <option value="">---Selecione---</option>
                                         <option value="1">Usuários</option>
                                         <option value="2">Atividades</option>
+                                        <option value="3">Tipos de atividade</option>
                                     </select>
                                 </div>
                             </form>
@@ -80,10 +81,12 @@
             $('#paramsPanel').slideUp();
         } else {
             $('#paramsPanel').slideDown();
-            if (newval == 1) {
-                $('#paramsForm').attr('action', '{{ url("report/user")}}')
-            } else if (newval == 2) {
-                $('#paramsForm').attr('action', '{{ url("report/activity")}}')
+            if (newval === '1') {
+                $('#paramsForm').attr('action', '{{ url("report/user")}}');
+            } else if (newval === '2') {
+                $('#paramsForm').attr('action', '{{ url("report/activity")}}');
+            } else if (newval === '3') {
+                $('#paramsForm').attr('action', '{{ url("report/type")}}');
             }
         }
     });

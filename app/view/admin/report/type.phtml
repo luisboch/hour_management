@@ -1,0 +1,47 @@
+{% extends '../template/adm.phtml' %}
+{% block content %}
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li>
+                        <a href="{{ url('report/index') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-play"></span>Inicio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" role="main">
+            <div class="well">
+                <fieldset>
+                    <legend>Relatórios | Usuários</legend>
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th class="col-lg-3 col-md-3">Data</th>
+                                <th class="col-lg-5 col-md-5">Usuário</th>
+                                <th class="col-lg-2 col-md-2">Tipo</th>
+                                <th class="col-lg-2 col-md-2">Finalizado</th>
+                                <th class="col-lg-2 col-md-2">Total</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for r in results %}
+                            <tr>
+                                <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
+                                <td>{{ r.getActivityUser() }}</td>
+                                <td>{{ r.getActivityType() }}</td>
+                                <td>{{ r.isFinished() ? 'SIM' : 'NÃO' }}</td>
+                                <td>{{ r.getAllocated() }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

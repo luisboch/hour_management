@@ -34,6 +34,11 @@ class ReportController extends AdminBase {
         $results = $this->service->getActivityReport($this->getParams());
         $this->view->results = $results;
     }
+    
+    public function typeAction() {
+        $results = $this->service->getActivityTypeReport($this->getParams());
+        $this->view->results = $results;
+    }
 
     /**
      * @return array

@@ -3,6 +3,7 @@
 require_once APP_DIR . 'model/BasicDAO.php';
 require_once APP_DIR . 'model/result/UserActivityResult.php';
 require_once APP_DIR . 'model/result/ActivityReportResult.php';
+require_once APP_DIR . 'model/result/ActivityReportTypeResult.php';
 
 /**
  * Description of ActivityReport
@@ -149,6 +150,63 @@ class ActivityReportDAO extends BasicDAO {
         }
 
         return $result;
+    }
+    /**
+     * 
+     * @param array $filters
+     * @param integer $limit
+     * @param integer $offset
+     * @return \report\result\ActivityReportTypeResult[]
+     */
+    public function getActivityTypeReport($filters = array(), $limit = NULL, $offset = NULL) {
+
+        $startDate = $filters['startDate'];
+        $endDate = $filters['endDate'];
+
+        if ($startDate === null) {
+            $startDate = new DateTime('00:00:00');
+        }
+
+        if ($endDate === null) {
+            $endDate = new DateTime('23:59:59');
+        }
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
+
+        $rsm->addScalarResult('username', 'userName', 'string');
+        $rsm->addScalarResult('activitytype', 'activityType', 'string');
+        $rsm->addScalarResult('finished', 'finished', 'boolean');
+        $rsm->addScalarResult('allocated', 'allocated', 'string');
+        $rsm->addScalarResult('wday', 'day', 'date');
+
+        $sql = "select u.name as username,
+                       t.name as activitytype, 
+                       a.status = 1 as finished,
+                       to_char(sum(ai.allocated_time),'HH24:MI') as allocated,
+                       to_char(ai.creation_date, 'YYYY-MM-DD') as wday
+                  from activity a
+                  join activity_interaction ai on ai.activity_id = a.id
+                  join activity_type t on a.type_id = t.id
+                  join users u on u.id = ai.user_id
+                 where ai.creation_date between :startDate and :endDate
+                   and a.active = true
+              group by userName, activityType, finished, wday
+              order by wday, userName, activityType, finished";
+
+        $q = $this->em->createNativeQuery($sql, $rsm);
+
+        $q->setParameter('startDate', $startDate, 'datetime');
+        $q->setParameter('endDate', $endDate, 'datetime');
+
+        $dbResult = $q->getResult();
+        $results = array();    
+
+        foreach ($dbResult as $v) {
+             $results[] = new \report\result\ActivityReportTypeResult(
+                     $v['activityType'], $v['userName'], $v['finished'], $v['allocated'], $v['day']);
+        }
+
+        return $results;
     }
 
 }

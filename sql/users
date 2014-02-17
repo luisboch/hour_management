@@ -1,3 +1,0 @@
-
-INSERT INTO users (name, cpf, email, password, day_active_hour, active, creation_date, last_access, last_update) VALUES ('Administrador', NULL, 'admin@admin.com', '$2a$08$8kxMyHlhIAYRnhqy5a0q5OMbVf8hkK05Bt9qK0HEeY.Nk9RQ6B3AG', '07:30:00', true, '2014-01-20 10:06:48', '2014-01-21 19:32:07', '2014-01-21 19:32:07');
-
