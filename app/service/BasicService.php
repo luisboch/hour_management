@@ -73,6 +73,11 @@ abstract class BasicService {
     
     public abstract function validate($entity, $newObject = true);
     
+    /**
+     * 
+     * @param integer $id
+     * @return BasicEntity
+     */
     public function findById($id) {
         return $this->dao->findById($id);
     }

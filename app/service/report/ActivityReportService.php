@@ -58,7 +58,6 @@ class ActivityReportService extends BasicService {
     }
 
     private function calculeAvaliable(DateTime $avaliable, $allocated) {
-        $allocated = new DateTime($allocated);
         if ($allocated->getTimestamp() > $avaliable->getTimestamp()) {
             return '00:00';
         }

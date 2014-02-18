@@ -17,13 +17,13 @@
             <div class="well">
                 <fieldset>
                     <legend>Atividades delegadas a você</legend>
-                    <table class="table table-striped table-hover">
+                    <table class="table  table-responsive table-striped table-hover">
                         <thead class="fixedthead" >
                             <tr>
-                                <th class="col-xs-1 col-xs-1">#</th>
-                                <th class="col-xs-5 col-xs-5">Nome</th>
-                                <th class="col-xs-2 col-xs-2">Pr.</th>
-                                <th class="col-xs-4 col-xs-4">Último update</th>
+                                <th class="col-xs-1 col-sm-1">#</th>
+                                <th class="col-xs-7 col-sm-7">Nome</th>
+                                <th class="col-xs-2 col-sm-2">Pr.</th>
+                                <th class="col-xs-2 col-sm-2">Último update</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,26 +41,26 @@
                 </fieldset>
                 <fieldset>
                     <legend>Atividades não delegadas</legend>
-                        <table class="table table-striped table-hover">
-                            <thead class="fixedthead" >
-                                <tr>
-                                    <th class="col-xs-1 col-sm-1">#</th>
-                                    <th class="col-xs-3 col-sm-3">Nome</th>
-                                    <th class="col-xs-2 col-sm-2">Pr.</th>
-                                    <th class="col-xs-6 col-sm-6">Último update</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for u in results2 %}
-                                <tr>
-                                    <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
-                                    <td>{{ u.getName() }}</td>
-                                    <td>{{ u.getPriority()}}</td>
-                                    <td>{{ formatDate(u.getLastUpdate())}}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <table class="table table-striped table-hover">
+                        <thead class="fixedthead" >
+                            <tr>
+                                <th class="col-xs-1 col-sm-1">#</th>
+                                <th class="col-xs-7 col-sm-7">Nome</th>
+                                <th class="col-xs-2 col-sm-2">Pr.</th>
+                                <th class="col-xs-2 col-sm-2">Último update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in results2 %}
+                            <tr>
+                                <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
+                                <td>{{ u.getName() }}</td>
+                                <td>{{ u.getPriority()}}</td>
+                                <td>{{ formatDate(u.getLastUpdate())}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                     {{ pagination2 }}
                 </fieldset>
             </div>

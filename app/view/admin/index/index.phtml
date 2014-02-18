@@ -3,13 +3,13 @@
 <div class="col-lg-10 col-md-11 col-xs-12 text-center well" style="float: none;margin: auto" >
     {% if count(userResult) > 0 %}
     <p class="has-success text-left">Seu dia:</p>
-    <div class="progress" title="{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas disponíveis">
+    <div class="progress" title="{{formatDate(userResult.getUserAllocatedHours(),'HM-only')}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas disponíveis">
         <div class="progress-bar" role="progressbar" aria-valuenow="{{userResult.getPercentFinished()}}" aria-valuemin="0" aria-valuemax="100" style="width: {{userResult.getPercentFinished()}}%;" >
             <span class="sr-only">{{userResult.getAvaliable()}} de tempo disponivel no seu dia. </span>
         </div>
     </div>
     <div class="text-right">
-        <p class="help-block">{{userResult.getUserAllocatedHours()}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas</p>
+        <p class="help-block">{{ formatDate(userResult.getUserAllocatedHours(), 'HM-only')}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas</p>
     </div>
     {% endif %}
     <div class="row">
@@ -29,7 +29,7 @@
                             {% for t in userResults %}
                             <tr>
                                 <td class="text-left"><a href="{{ url('usercrud/view/' ~ t.getUserId()) }}">{{ t.getUserName() }}</a></td>
-                                <td>{{ t.getUserAllocatedHours() }}</td>
+                                <td>{{ formatDate(t.getUserAllocatedHours(), 'HM-only') }}</td>
                                 <td>{{t.getAvaliable()}}</td>
                             </tr>
                             {% endfor %}

@@ -16,26 +16,24 @@
             <div class="well">
                 <fieldset>
                     <legend>Relatório</legend>
-                    <div class="panel-body">
-                        <div class="container col-lg-10 col-lg-offset-1">
-                            <form class="form-horizontal" action="#" method="get">
-                                <div class="form-group">
-                                    <label for="report_selection">Selecione o relatório</label>
-                                    <select name="report_selection" id="report_selection" class="form-control">
-                                        <option value="">---Selecione---</option>
-                                        <option value="1">Usuários</option>
-                                        <option value="2">Atividades</option>
-                                        <option value="3">Tipos de atividade</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="col-lg-10 col-lg-offset-1">
+                        <form class="form-horizontal" action="#" method="get">
+                            <div class="form-group">
+                                <label for="report_selection">Selecione o relatório</label>
+                                <select name="report_selection" id="report_selection" class="form-control">
+                                    <option value="">---Selecione---</option>
+                                    <option value="1">Usuários</option>
+                                    <option value="2">Atividades</option>
+                                    <option value="3">Tipos de atividade</option>
+                                </select>
+                            </div>
+                        </form>
                     </div>
                 </fieldset>
                 <div id="paramsPanel" style="display: none;">
                     <fieldset>
                         <legend>Filtros</legend>
-                        <div class="container col-lg-10 col-lg-offset-1">
+                        <div class="col-lg-10 col-lg-offset-1">
                             <form action="#" id="paramsForm" method="get" class="form-inline">
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-md-6 col-xs-12 col-sm-6">
@@ -46,7 +44,7 @@
                                                     <span class="glyphicon glyphicon-calendar icon-calendar"></span>
                                                 </button>
                                             </span>
-                                            <input type="text" class="form-control" name="startDate" value="{{ date('d/m/y') }}"  >
+                                            <input type="text" class="form-control" name="startDate" value="{{ date('d/m/y') }}"  />
                                         </div>
                                     </div>
                                     <div class=" col-lg-6 col-md-6 col-xs-12 col-sm-6">
@@ -57,13 +55,13 @@
                                                     <span class="glyphicon glyphicon-calendar icon-calendar"></span>
                                                 </button>
                                             </span>
-                                            <input type="text" class="form-control" name="endDate" value="{{ date('d/m/y') }}"  >
+                                            <input type="text" class="form-control" name="endDate" value="{{ date('d/m/y') }}"  />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group clearfix">
-                                    <div class=" text-right col-lg-offset-11 col-md-offset-10 col-sm-offset-6 " style="margin-top: 20px">
-                                        <button class="btn btn-primary" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
+                                <div class="row">
+                                    <div class="" style="margin-top: 20px">
+                                        <button class="btn btn-primary pull-right" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
                                     </div>
                                 </div>
                             </form>

@@ -59,7 +59,7 @@ class ActivityReportDAO extends BasicDAO {
         $sql = 'select u.id, 
                        u.name, 
                        uw.day_active_hour as wd,
-                       to_char(sum(ai.allocated_time),\'HH24:MI\') as allocated,
+                       to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
                        to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
                   from users u
                   join activity_interaction ai on ai.user_id = u.id
@@ -67,6 +67,7 @@ class ActivityReportDAO extends BasicDAO {
                   join user_work_day uw on uw.user_id = u.id and uw."date" =  ai.creation_date::date
                  where ai.creation_date between :startDate and :endDate
                    and a.active = true
+                   and ai.end_date is not null
               group by u.id, wday, uw.id
               order by wday, u.name';
 
@@ -85,9 +86,15 @@ class ActivityReportDAO extends BasicDAO {
 
             $val->setUserId($v['userId']);
             $val->setUserName($v['userName']);
-            $val->setUserAllocatedHours($v['allocated']);
+            $val->setUserAllocatedHours(new DateTime($v['allocated']));
             $val->setUserTotalHours($v['day_active_hour']);
             $val->setDate($v['day']);
+            
+            if($val->getUserTotalHours()->getTimestamp() < $val->getUserAllocatedHours()->getTimestamp()){
+                $diff = $val->getUserTotalHours()->diff($val->getUserAllocatedHours());
+                /* @var DateInterval $diff */
+                $val->setExtra(new DateTime($diff->format('%H:%I:%S')));
+            }
             $data[] = $val;
         }
 
@@ -125,12 +132,13 @@ class ActivityReportDAO extends BasicDAO {
         $sql = 'select a.id,
                        a.name, 
                        a.status = 1 as finished,
-                       to_char(sum(ai.allocated_time),\'HH24:MI\') as allocated,
+                       to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
                        to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
                   from activity a
                   join activity_interaction ai on ai.activity_id = a.id
                  where ai.creation_date between :startDate and :endDate
                    and a.active = true
+                   and ai.end_date is not null
               group by a.id, wday
               order by wday, a.name';
 
@@ -182,7 +190,7 @@ class ActivityReportDAO extends BasicDAO {
         $sql = "select u.name as username,
                        t.name as activitytype, 
                        a.status = 1 as finished,
-                       to_char(sum(ai.allocated_time),'HH24:MI') as allocated,
+                       to_char(sum((ai.end_date - ai.start_date)::time),'HH24:MI') as allocated,
                        to_char(ai.creation_date, 'YYYY-MM-DD') as wday
                   from activity a
                   join activity_interaction ai on ai.activity_id = a.id
@@ -190,6 +198,7 @@ class ActivityReportDAO extends BasicDAO {
                   join users u on u.id = ai.user_id
                  where ai.creation_date between :startDate and :endDate
                    and a.active = true
+                   and ai.end_date is not null
               group by userName, activityType, finished, wday
               order by wday, userName, activityType, finished";
 

@@ -20,9 +20,10 @@
                         <thead>
                             <tr>
                                 <th class="col-lg-3 col-md-3">Data</th>
-                                <th class="col-lg-5 col-md-5">Nome</th>
+                                <th class="col-lg-4 col-md-4">Nome</th>
                                 <th class="col-lg-2 col-md-2">Alocado</th>
                                 <th class="col-lg-2 col-md-2">Total</th>
+                                <th class="col-lg-1 col-md-1">Extra</th>
                             </tr>
                         </thead>
 
@@ -31,8 +32,9 @@
                             <tr>
                                 <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
                                 <td><a href="{{url('usercrud/view/' ~ r.getUserId())}}">{{ r.getUserName() }}</a></td>
-                                <td>{{ r.getUserAllocatedHours() }}</td>
+                                <td>{{ formatDate(r.getUserAllocatedHours(), 'HM-only') }}</td>
                                 <td>{{ formatDate(r.getUserTotalHours(),'HM-only') }}</td>
+                                <td>{{ formatDate(r.getExtra(),'HM-only') }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

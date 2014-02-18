@@ -14,6 +14,11 @@ class UserActivityResult {
     private $userTotalHours;
     private $date;
     private $percentFinished;
+    /**
+     *
+     * @var DateTime
+     */
+    private $extra;
     private $avaliable;
 
     public function getUserName() {
@@ -24,10 +29,18 @@ class UserActivityResult {
         return $this->userId;
     }
 
+    /**
+     * 
+     * @return DateTime
+     */
     public function getUserAllocatedHours() {
         return $this->userAllocatedHours;
     }
 
+    /**
+     * 
+     * @return DateTime
+     */
     public function getUserTotalHours() {
         return $this->userTotalHours;
     }
@@ -78,4 +91,21 @@ class UserActivityResult {
     public function setAvaliable($avaliable) {
         $this->avaliable = $avaliable;
     }
+    
+    /**
+     * 
+     * @return DateTime
+     */
+    public function getExtra() {
+        return $this->extra;
+    }
+    /**
+     * 
+     * @param DateTime $extra
+     */
+    public function setExtra($extra) {
+        $this->extra = $extra;
+    }
+
+
 }

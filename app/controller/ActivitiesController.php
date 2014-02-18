@@ -28,7 +28,7 @@ class ActivitiesController extends CrudBase {
         parent::initialize(new ActivityService());
         $this->activityTypeService = new ActivityTypeService();
         $this->userService = new UserService();
-        
+
         $this->setTitle('Atividades');
     }
 
@@ -39,7 +39,7 @@ class ActivitiesController extends CrudBase {
     }
 
     public function indexAction() {
-        
+
         $page1 = $this->request->getQuery("page1");
 
         $page1 = $page1 === null ? 1 : $page1;
@@ -93,6 +93,22 @@ class ActivitiesController extends CrudBase {
             /* @var Activity $activity */
             $activity->removeInteraction($actionId);
             $this->service->save($activity);
+            $this->success("Ação removida");
+            $this->response->redirect('activities/view/' . $activityId);
+        } catch (Exception $ex) {
+            $this->showError($ex);
+        }
+    }
+
+    public function finishAction($activityId, $actionId) {
+        try {
+            $activity = $this->service->findById($activityId);
+            /** @var Activity $activity */
+            $action = $activity->getInteractionById($actionId);
+            $action->setEndDate(new DateTime());
+            $this->service->save($activity);
+
+            $this->success("Ação concluída");
             $this->response->redirect('activities/view/' . $activityId);
         } catch (Exception $ex) {
             $this->showError($ex);
@@ -179,15 +195,17 @@ class ActivitiesController extends CrudBase {
         }
         $instance->setStatus($this->request->getPost('status'));
 
-        $description = $this->request->getPost('action_description');
-        $time = $this->request->getPost('action_time');
+        $startDate = $this->request->getPost('action_start_date');
+        $endDate = $this->request->getPost('action_end_date');
 
-        if ($description != '' || $time != '') {
+        if (trim($startDate) != '') {
             $action = new ActivityInteraction();
             $action->setUser($this->userService->findById($this->session->getUser()->getId()));
             $action->setCreationDate(new DateTime());
-            $action->setDescription($description);
-            $action->setAllocatedTime(new DateTime($time));
+            $action->setStartDate(new DateTime($startDate));
+            if (trim($endDate) != '') {
+                $action->setEndDate(new DateTime($endDate));
+            }
             $instance->getInteractions()->add($action);
         }
     }

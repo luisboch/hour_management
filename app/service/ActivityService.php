@@ -62,16 +62,12 @@ class ActivityService extends BasicService {
                         $value->setActivity($activity);
                     }
 
-                    if ($value->getAllocatedTime() === null) {
-                        $v->addError("Insira o tempo alocado na ação", "interaction.allocatedTime");
+                    if ($value->getStartDate() === null) {
+                        $v->addError("Insira a data de inicio", "interaction.startDate");
                     }
 
                     if ($value->getUser() === null) {
                         $v->addError("Please enter a selected user", "interaction.user");
-                    }
-
-                    if ($value->getDescription() == '') {
-                        $v->addError("Insira a descrição da ação", "interaction.description");
                     }
                 }
             }
@@ -89,7 +85,7 @@ class ActivityService extends BasicService {
     protected function saveRelations(Activity $entity) {
         foreach ($entity->getInteractions() as $i) {
             if ($i->getId() == null) {
-                // When saving a sactivity we need to save a work day to User, to 
+                // When saving a activity we need to save a work day to User, to 
                 // keep the history of $dayActiveHour property by day
                 $userDAO = new UserDAO();
                 $workDay = $userDAO->getWorkDay($i->getUser(), new DateTime());

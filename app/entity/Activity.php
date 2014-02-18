@@ -210,4 +210,18 @@ class Activity implements BasicEntity{
             }
         }
     }
+    
+    /**
+     * 
+     * @return ActivityInteraction
+     * @param integer $id
+     */
+    public function getInteractionById($id) {
+        foreach($this->interactions as $k => $v){
+            if($v->getId() == $id){
+                return $this->interactions[$k];
+            }
+        }
+        return null;
+    }
 }

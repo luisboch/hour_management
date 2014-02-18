@@ -15,12 +15,7 @@ class ActivityInteraction {
      * @GeneratedValue
      */
     private $id;
-
-    /**
-     * @Column(type="string")
-     */
-    private $description;
-
+    
     /**
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="user_id", referencedColumnName="id")
@@ -43,16 +38,17 @@ class ActivityInteraction {
     
     /**
      * @var DateTime 
-     * @Column(type="time", name="allocated_time")
+     * @Column(type="datetime", name="start_date")
      */
-    private $allocatedTime;
+    private $startDate;
+    /**
+     * @var DateTime 
+     * @Column(type="datetime", name="end_date")
+     */
+    private $endDate;
     
     public function getId() {
         return $this->id;
-    }
-
-    public function getDescription() {
-        return $this->description;
     }
 
     public function getUser() {
@@ -67,16 +63,16 @@ class ActivityInteraction {
         return $this->creationDate;
     }
 
-    public function getAllocatedTime() {
-        return $this->allocatedTime;
+    public function getStartDate() {
+        return $this->startDate;
+    }
+
+    public function getEndDate() {
+        return $this->endDate;
     }
 
     public function setId($id) {
         $this->id = $id;
-    }
-
-    public function setDescription($description) {
-        $this->description = $description;
     }
 
     public function setUser(User $user) {
@@ -87,12 +83,25 @@ class ActivityInteraction {
         $this->activity = $activity;
     }
 
-    public function setCreationDate(DateTime $creationDate) {
+    /**
+     * @param DateTime $creationDate
+     */
+    public function setCreationDate($creationDate) {
         $this->creationDate = $creationDate;
     }
 
-    public function setAllocatedTime(DateTime $allocatedTime) {
-        $this->allocatedTime = $allocatedTime;
+    /**
+     * @param DateTime $startDate
+     */
+    public function setStartDate($startDate) {
+        $this->startDate = $startDate;
+    }
+
+    /**
+     * @param DateTime $endDate
+     */
+    public function setEndDate($endDate) {
+        $this->endDate = $endDate;
     }
 
 }
