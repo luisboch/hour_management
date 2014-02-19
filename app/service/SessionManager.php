@@ -23,6 +23,8 @@ class SessionManager {
      * @var MessageSession
      */
     private $message;
+    private $canStartWork = false;
+    private $canEndWork = false;
 
     private function __construct() {
         $this->message = new MessageSession();
@@ -78,6 +80,7 @@ class SessionManager {
     public function isLogged() {
         return $this->user !== null;
     }
+
     /**
      * 
      * @return User
@@ -88,6 +91,27 @@ class SessionManager {
 
     public function setUser($user) {
         $this->user = $user;
+    }
+    public function clear() {
+        $this->user = null;
+        $this->canEndWork = false;
+        $this->canStartWorkWork = false;
+    }
+
+    public function getCanStartWork() {
+        return $this->canStartWork;
+    }
+
+    public function getCanEndWork() {
+        return $this->canEndWork;
+    }
+
+    public function setCanStartWork($canStartWork) {
+        $this->canStartWork = $canStartWork;
+    }
+
+    public function setCanEndWork($canEndWork) {
+        $this->canEndWork = $canEndWork;
     }
 
 }

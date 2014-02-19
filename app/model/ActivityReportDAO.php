@@ -4,6 +4,7 @@ require_once APP_DIR . 'model/BasicDAO.php';
 require_once APP_DIR . 'model/result/UserActivityResult.php';
 require_once APP_DIR . 'model/result/ActivityReportResult.php';
 require_once APP_DIR . 'model/result/ActivityReportTypeResult.php';
+require_once APP_DIR . 'model/result/WorkReportResult.php';
 
 /**
  * Description of ActivityReport
@@ -89,8 +90,8 @@ class ActivityReportDAO extends BasicDAO {
             $val->setUserAllocatedHours(new DateTime($v['allocated']));
             $val->setUserTotalHours($v['day_active_hour']);
             $val->setDate($v['day']);
-            
-            if($val->getUserTotalHours()->getTimestamp() < $val->getUserAllocatedHours()->getTimestamp()){
+
+            if ($val->getUserTotalHours()->getTimestamp() < $val->getUserAllocatedHours()->getTimestamp()) {
                 $diff = $val->getUserTotalHours()->diff($val->getUserAllocatedHours());
                 /* @var DateInterval $diff */
                 $val->setExtra(new DateTime($diff->format('%H:%I:%S')));
@@ -159,6 +160,7 @@ class ActivityReportDAO extends BasicDAO {
 
         return $result;
     }
+
     /**
      * 
      * @param array $filters
@@ -208,11 +210,74 @@ class ActivityReportDAO extends BasicDAO {
         $q->setParameter('endDate', $endDate, 'datetime');
 
         $dbResult = $q->getResult();
-        $results = array();    
+        $results = array();
 
         foreach ($dbResult as $v) {
-             $results[] = new \report\result\ActivityReportTypeResult(
-                     $v['activityType'], $v['userName'], $v['finished'], $v['allocated'], $v['day']);
+            $results[] = new \report\result\ActivityReportTypeResult(
+                    $v['activityType'], $v['userName'], $v['finished'], $v['allocated'], $v['day']);
+        }
+
+        return $results;
+    }
+
+    public function getWorkReport($filters = array(), $limit = NULL, $offset = NULL) {
+
+        $startDate = $filters['startDate'];
+        $endDate = $filters['endDate'];
+        $user = $filters['user'];
+        
+        if ($startDate === null) {
+            $startDate = new DateTime('00:00:00');
+        }
+
+        if ($endDate === null) {
+            $endDate = new DateTime('23:59:59');
+        }
+        
+        $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
+
+        $rsm->addScalarResult('username', 'userName', 'string');
+        $rsm->addScalarResult('userid', 'userId', 'integer');
+        $rsm->addScalarResult('start_work', 'startWork', 'datetime');
+        $rsm->addScalarResult('end_work', 'endWork', 'datetime');
+        $rsm->addScalarResult('active_hour', 'activeHour', 'string');
+        $rsm->addScalarResult('wday', 'day', 'date');
+
+        $sql = "select u.name as username,
+                       u.id as userid, 
+                       w.start_work,
+                       w.end_work,
+                       w.day_active_hour as active_hour,
+                       to_char(w.\"date\", 'YYYY-MM-DD') as wday
+                  from user_work_day w
+                  join users u on w.user_id = u.id
+                 where w.\"date\" between :startDate and :endDate\n";
+        
+        if($user != null){
+            $sql .= "and u.id = :user\n";
+        }
+        
+        $sql .= "order by wday, userName";
+
+        $q = $this->em->createNativeQuery($sql, $rsm);
+
+        $q->setParameter('startDate', $startDate, 'datetime');
+        $q->setParameter('endDate', $endDate, 'datetime');
+        
+        if($user != null){
+            $q->setParameter('user', $user->getId(), 'integer');
+        }
+        
+        $dbResult = $q->getResult();
+        $results = array();
+
+        foreach ($dbResult as $v) {
+            $r = new \report\result\WorkReportResult(
+                    $v['userName'], $v['userId'], $v['startWork'], $v['endWork'], $v['day'], $v['activeHour']);
+            
+            $r->calculateExtra();
+            
+            $results[] = $r;
         }
 
         return $results;

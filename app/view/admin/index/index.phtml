@@ -1,5 +1,8 @@
 {% extends '../template/adm.phtml' %}
 {% block content %}
+<div class="col-lg-10" style="float: none;margin: auto">
+<p>{{ _session.getMessage() }}</ p>
+</div>
 <div class="col-lg-10 col-md-11 col-xs-12 text-center well" style="float: none;margin: auto" >
     {% if count(userResult) > 0 %}
     <p class="has-success text-left">Seu dia:</p>
@@ -12,6 +15,7 @@
         <p class="help-block">{{ formatDate(userResult.getUserAllocatedHours(), 'HM-only')}} de um total de {{userResult.getUserTotalHours().format('H:i')}} horas</p>
     </div>
     {% endif %}
+
     <div class="row">
         <div class="col-lg-6 ">
             <div class="panel panel-primary">

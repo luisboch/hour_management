@@ -1,0 +1,46 @@
+{% extends '../template/adm.phtml' %}
+{% block content %}
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li>
+                        <a href="{{ url('report/index') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-play"></span>Inicio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" role="main">
+            <div class="well">
+                <fieldset>
+                    <legend>Relatórios | Ponto</legend>
+                    <h3><a href="{{url('usercrud/view/' ~ user.getId())}}">{{ user.getName() }}</a></h3>
+                    <table class="table">
+
+                        <thead>
+                            <tr>
+                                <th class="col-lg-3 col-md-3">Data</th>
+                                <th class="col-lg-3 col-md-3">Início</th>
+                                <th class="col-lg-3 col-md-3">Fim</th>
+                                <th class="col-lg-3 col-md-3">Extra</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for r in results %}
+                            <tr>
+                                <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
+                                <td>{{ formatDate(r.getStartWork(), 'HM-only') }}</td>
+                                <td>{{ formatDate(r.getEndWork(),'HM-only') }}</td>
+                                <td>{{ formatDate(r.getExtra(),'HM-only') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

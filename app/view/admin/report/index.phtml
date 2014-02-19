@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="col-md-9" role="main">
-
+            <p>{{ _session.getMessage() }}</ p>
             <div class="well">
                 <fieldset>
                     <legend>Relatório</legend>
@@ -25,6 +25,7 @@
                                     <option value="1">Usuários</option>
                                     <option value="2">Atividades</option>
                                     <option value="3">Tipos de atividade</option>
+                                    <option value="4">Ponto</option>
                                 </select>
                             </div>
                         </form>
@@ -59,6 +60,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row" id="user" style="margin: 10px 0px;">
+                                    <div class="">
+                                        <label>Usuário <span class="text-danger">*</span></label>
+                                        <select name="user_id" id="user_id" class="form-control"  style="width: 100%">
+                                            <option value="">---Selecione---</option>
+                                            {% for u in users %}
+                                            <option value="{{u.getId()}}">{{u.getName()}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="" style="margin-top: 20px">
                                         <button class="btn btn-primary pull-right" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
@@ -75,6 +87,7 @@
 <script type="text/javascript">
     $('#report_selection').change(function() {
         var newval = $('#report_selection').val();
+        $('div#user').css('display', 'none');
         if (newval === '') {
             $('#paramsPanel').slideUp();
         } else {
@@ -85,6 +98,9 @@
                 $('#paramsForm').attr('action', '{{ url("report/activity")}}');
             } else if (newval === '3') {
                 $('#paramsForm').attr('action', '{{ url("report/type")}}');
+            } else if (newval === '4') {
+                $('#paramsForm').attr('action', '{{ url("report/work")}}');
+                $('div#user').css('display', 'block');
             }
         }
     });

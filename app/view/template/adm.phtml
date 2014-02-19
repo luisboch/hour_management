@@ -79,6 +79,12 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{url('security/logout')}}">Sair</a></li>
+                            {% if _session.getCanStartWork() %}
+                            <li><a href="{{url('work/start')}}">Iniciar dia</a></li>
+                            {% endif %}
+                            {% if _session.getCanEndWork() %}
+                            <li><a href="{{url('work/end')}}">Terminar dia</a></li>
+                            {% endif %}
                         </ul>
                     </li>
                 </ul>

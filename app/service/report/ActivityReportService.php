@@ -104,5 +104,9 @@ class ActivityReportService extends BasicService {
         $min = ($float - $hour) * 60;
         return str_pad($hour, 2, 0, STR_PAD_LEFT) . ':' . str_pad($min, 2, 0, STR_PAD_LEFT);
     }
+    
+    public function getWorkReport($filters = array(), $limit = NULL, $offset = NULL) {
+        return $this->dao->getWorkReport($filters, $limit, $offset);
+    }
 
 }
