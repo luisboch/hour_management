@@ -27,16 +27,16 @@ class WorkController extends AdminBase {
             $this->session->setCanStartWork(false);
             $this->session->setCanEndWork(true);
             $this->success("Dia iniciado com sucesso!");
-            $this->response->redirect('index');
+            $this->response->redirect('');
         } catch (StartedWorkException $ex) {
             $this->warn("Não é possível iniciar o dia novamente!");
-            $this->response->redirect('index');
+            $this->response->redirect('');
         } catch (ValidationException $ex) {
             $this->showError($ex);
-            $this->response->redirect('index');
+            $this->response->redirect('');
         } catch (Exception $ex) {
             $this->showError($ex);
-            $this->response->redirect('index');
+            $this->response->redirect('');
         }
     }
 
@@ -46,13 +46,13 @@ class WorkController extends AdminBase {
             $this->service->endWork($user);
             $this->success("Dia concluído com sucesso!");
             $this->session->setCanEndWork(false);
-            $this->response->redirect('index');
+            $this->response->redirect('');
         } catch (ValidationException $ex) {
             $this->warn("Você deve iniciar o dia para poder finalizá-lo");
-            $this->response->redirect('index');
+            $this->response->redirect('');
         } catch (Exception $ex) {
             $this->showError($ex);
-            $this->response->redirect('index');
+            $this->response->redirect('');
         }
     }
 

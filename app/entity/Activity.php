@@ -212,9 +212,8 @@ class Activity implements BasicEntity{
     }
     
     /**
-     * 
-     * @return ActivityInteraction
      * @param integer $id
+     * @return ActivityInteraction
      */
     public function getInteractionById($id) {
         foreach($this->interactions as $k => $v){
