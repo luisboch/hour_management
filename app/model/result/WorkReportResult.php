@@ -27,7 +27,7 @@ class WorkReportResult {
         $this->userAvaliable = $userAvaliable;
     }
 
-        public function getUserName() {
+    public function getUserName() {
         return $this->userName;
     }
 
@@ -82,19 +82,20 @@ class WorkReportResult {
     public function setExtra($extra) {
         $this->extra = $extra;
     }
-    
-    public function calculateExtra(){
-        if($this->startWork != null && $this->endWork != null && $this->userAvaliable != null){
+
+    public function calculateExtra() {
+        if ($this->startWork != null && $this->endWork != null && $this->userAvaliable != null) {
             $diff = $this->startWork->diff($this->endWork);
             /* @var DateInterval $diff */
             $workTime = new \DateTime($diff->format('%H:%I:00'));
             $normalTime = new \DateTime($this->userAvaliable);
-            
+
             // Has extra?
-            if($workTime->getTimestamp() > $normalTime->getTimestamp()){
+            if ($workTime->getTimestamp() > $normalTime->getTimestamp()) {
                 $diff = $workTime->diff($normalTime);
                 $this->setExtra(new \DateTime($diff->format('%H:%I:00')));
             }
         }
     }
+
 }

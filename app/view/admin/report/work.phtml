@@ -20,10 +20,11 @@
 
                         <thead>
                             <tr>
-                                <th class="col-lg-3 col-md-3">Data</th>
-                                <th class="col-lg-3 col-md-3">Início</th>
-                                <th class="col-lg-3 col-md-3">Fim</th>
-                                <th class="col-lg-3 col-md-3">Extra</th>
+                                <th class="col-lg-2 col-md-2">Data</th>
+                                <th class="col-lg-2 col-md-2">Início</th>
+                                <th class="col-lg-2 col-md-2">Fim</th>
+                                <th class="col-lg-2 col-md-2">Disp.</th>
+                                <th class="col-lg-2 col-md-2">Extra</th>
                             </tr>
                         </thead>
 
@@ -33,6 +34,7 @@
                                 <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
                                 <td>{{ formatDate(r.getStartWork(), 'HM-only') }}</td>
                                 <td>{{ formatDate(r.getEndWork(),'HM-only') }}</td>
+                                <td>{{ r.getUserAvaliable() }}</td>
                                 <td>{{ formatDate(r.getExtra(),'HM-only') }}</td>
                             </tr>
                             {% endfor %}
