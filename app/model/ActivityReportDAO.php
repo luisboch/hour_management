@@ -61,12 +61,12 @@ class ActivityReportDAO extends BasicDAO {
                        u.name, 
                        uw.day_active_hour as wd,
                        to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
-                       to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
+                       to_char(ai.start_date, \'YYYY-MM-DD\') as wday
                   from users u
                   join activity_interaction ai on ai.user_id = u.id
                   join activity a on ai.activity_id = a.id
-                  join user_work_day uw on uw.user_id = u.id and uw."date" =  ai.creation_date::date
-                 where ai.creation_date between :startDate and :endDate
+                  join user_work_day uw on uw.user_id = u.id and uw."date" =  ai.start_date::date
+                 where ai.start_date between :startDate and :endDate
                    and a.active = true
                    and ai.end_date is not null
               group by u.id, wday, uw.id
@@ -134,10 +134,10 @@ class ActivityReportDAO extends BasicDAO {
                        a.name, 
                        a.status = 1 as finished,
                        to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
-                       to_char(ai.creation_date, \'YYYY-MM-DD\') as wday
+                       to_char(ai.start_date, \'YYYY-MM-DD\') as wday
                   from activity a
                   join activity_interaction ai on ai.activity_id = a.id
-                 where ai.creation_date between :startDate and :endDate
+                 where ai.start_date between :startDate and :endDate
                    and a.active = true
                    and ai.end_date is not null
               group by a.id, wday
@@ -193,12 +193,12 @@ class ActivityReportDAO extends BasicDAO {
                        t.name as activitytype, 
                        a.status = 1 as finished,
                        to_char(sum((ai.end_date - ai.start_date)::time),'HH24:MI') as allocated,
-                       to_char(ai.creation_date, 'YYYY-MM-DD') as wday
+                       to_char(ai.start_date, 'YYYY-MM-DD') as wday
                   from activity a
                   join activity_interaction ai on ai.activity_id = a.id
                   join activity_type t on a.type_id = t.id
                   join users u on u.id = ai.user_id
-                 where ai.creation_date between :startDate and :endDate
+                 where ai.start_date between :startDate and :endDate
                    and a.active = true
                    and ai.end_date is not null
               group by userName, activityType, finished, wday

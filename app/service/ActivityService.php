@@ -89,11 +89,11 @@ class ActivityService extends BasicService {
                 // keep the history of $dayActiveHour property by day
                 $userDAO = new UserDAO();
                 $workDay = $userDAO->getWorkDay($i->getUser(), new DateTime());
-                if($workDay != null){
+                if ($workDay != null) {
                     $workDay->setDayActiveHour($i->getUser()->getDayActiveHour());
                     $this->dao->update($workDay);
                 } else {
-                    $workDay =new UserWorkDay();
+                    $workDay = new UserWorkDay();
                     $workDay->setUser($i->getUser());
                     $workDay->setDate(new DateTime());
                     $workDay->setDayActiveHour($i->getUser()->getDayActiveHour());

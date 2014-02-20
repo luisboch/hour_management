@@ -79,7 +79,7 @@
                                         {% for a in instance.getInteractions() %}
                                         <tr>
                                             <td>{{a.getUser().getName()}}</td>
-                                            <td>{{formatDate(a.getStartDate(), 'time-only')}}</td>
+                                            <td>{{formatDate(a.getStartDate())}}</td>
                                             {% if a.getEndDate() == null %}
                                             <td>
                                                 <a href="{{ url('activities/finish/'~ instance.getId() ~ '/' ~ a.getId()) }}">
@@ -88,7 +88,7 @@
                                             </td>
                                             {% endif %}
                                             {% if a.getEndDate() != null %}
-                                            <td>{{formatDate(a.getEndDate(), 'time-only')}}</td>
+                                            <td>{{formatDate(a.getEndDate())}}</td>
                                             {% endif %}
                                             <td><a href="{{ url('activities/remove/'~ instance.getId() ~ '/' ~ a.getId()) }}" onclick="return confirm('Deseja realmente remover esta ação?')"><span class=" glyphicon glyphicon-ban-circle"></span></a></td>
 
@@ -100,17 +100,28 @@
                             {% endif %}
                             <fieldset class="form-inline">
                                 <legend>Incluir Tempo</legend>
-                                <div class="form-group col-xs-6">
+                                <div class="form-group col-lg-4 col-md-4">
+                                    <label class="control-label">Data</label>
+                                    <div class="input-date input-group date" data-date-format="dd/mm/yy" data-date="{{ date('d/m/y') }}">
+                                        <span class="input-group-btn add-on">
+                                            <button class="btn btn-primary">
+                                                <span class="glyphicon glyphicon-calendar icon-calendar"></span>
+                                            </button>
+                                        </span>
+                                        <input type="text" class="form-control" name="action_date" value="{{ date('d/m/y') }}"  />
+                                    </div>
+                                </div>
+                                <div class="form-group  col-lg-4 col-md-4">
                                     <label for="action_time" >
                                         <span>Inicio</span>
                                     </label>
-                                    <input type="time" class="form-control" name="action_start_date" id="action_start_date"/>
+                                    <input type="time" class="form-control" name="action_start_time" id="action_start_time"/>
                                 </div>
-                                <div class="form-group col-xs-6">
+                                <div class="form-group col-lg-4 col-md-4">
                                     <label for="action_time" >
                                         <span>Fim</span>
                                     </label>
-                                    <input type="time" class="form-control" name="action_end_date" id="action_end_date"/>
+                                    <input type="time" class="form-control" name="action_end_time" id="action_end_time"/>
                                 </div>
                             </fieldset>
                             {% endif %}
@@ -132,20 +143,20 @@
     </div>
 </div>
 <script type="text/javascript">
-    $('#action_end_date').timepicker({'timeFormat': 'H:i:s'});
-    $('#action_start_date').timepicker({'timeFormat': 'H:i:s'});
+    $('#action_end_time').timepicker({'timeFormat': 'H:i:s'});
+    $('#action_start_time').timepicker({'timeFormat': 'H:i:s'});
     $('#status').change(function() {
         var newval = $('#status').val();
         if (newval === '') {
             $('#newActionPanel').slideUp();
-            $('input[name=action_start_date]').val('');
-            $('input[name=action_end_date]').val('');
+            $('input[name=action_start_time]').val('');
+            $('input[name=action_end_time]').val('');
         } else {
             if (newval === '0') {
                 $('#newActionPanel').slideDown();
             } else if (newval === '1') {
-                $('input[name=action_start_date]').val('');
-                $('input[name=action_end_date]').val('');
+                $('input[name=action_start_time]').val('');
+                $('input[name=action_end_time]').val('');
                 $('#newActionPanel').slideUp();
             }
         }

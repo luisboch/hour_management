@@ -61,14 +61,6 @@ class SessionManager {
         session_destroy();
     }
 
-    public function getUsuario() {
-        return $this->usuario;
-    }
-
-    public function setUsuario(Usuario $usuario) {
-        $this->usuario = $usuario;
-    }
-
     public function getShowChat() {
         return $this->showChat;
     }

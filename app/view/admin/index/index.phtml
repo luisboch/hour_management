@@ -1,7 +1,7 @@
 {% extends '../template/adm.phtml' %}
 {% block content %}
 <div class="col-lg-10" style="float: none;margin: auto">
-<p>{{ _session.getMessage() }}</ p>
+    <p>{{ _session.getMessage() }}</ p>
 </div>
 <div class="col-lg-10 col-md-11 col-xs-12 text-center well" style="float: none;margin: auto" >
     {% if count(userResult) > 0 %}
@@ -51,21 +51,46 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="col-lg-10 col-xs-10">Atividade</th>
-                                <th class="col-lg-2 col-xs-2"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                                <th class="col-lg-7 col-xs-7">Atividade</th>
+                                <th class="col-lg-3 col-xs-3"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                                <th class="col-lg-2 col-xs-2">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for r in activityResult.getData() %}
                             <tr>
                                 <td class="text-left"><a href="{{ url('activities/view/' ~ r.getActivityId() ) }}">{{ r.getActivityName() }}</a></td>
-                                <td class="col-lg-4 col-xs-4">{{ r.getAllocated() }}</td>
+                                <td class="">{{ r.getAllocated() }}</td>
+                                <td class="">{{ r.isFinished() ? 'Finalizado' : 'Aberto' }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
                 <div class="panel-footer text-right">{{activityResult.getTotal()}} atividades ({{activityResult.getFinished()}} concluídas)</div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Atividades abertas</div>
+                <div class="panel-body">
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-12 col-xs-12">Atividade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in openActivities %}
+                            <tr>
+                                <td class="text-left"><a href="{{ url('activities/view/' ~ r.getId() ) }}">{{ r.getName() }}</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer text-right"><a href="{{ url('activities') }}">&DDotrahd;</a></div>
             </div>
         </div>
     </div>

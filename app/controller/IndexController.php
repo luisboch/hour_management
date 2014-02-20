@@ -2,6 +2,7 @@
 
 require_once 'ControllerBase.php';
 require_once SERVICE_DIR . 'report/ActivityReportService.php';
+require_once SERVICE_DIR . 'ActivityService.php';
 
 /**
  * Description of DefaultController
@@ -14,10 +15,16 @@ class IndexController extends AdminBase {
      * @var ActivityReportService
      */
     private $reportService;
-
+    /**
+     *
+     * @var ActivityService
+     */
+    private $activityService;
+    
     public function initialize() {
         parent::initialize();
         $this->reportService = new ActivityReportService();
+        $this->activityService = new ActivityService();
         $this->setTitle("Home");
     }
 
@@ -28,6 +35,7 @@ class IndexController extends AdminBase {
 
         $userResult = null;
         $prodTotal = 0;
+        
         foreach ($userResults as $v) {
             if ($v->getUserId() == $this->session->getUser()->getId()) {
                 $userResult = $v;
@@ -44,6 +52,8 @@ class IndexController extends AdminBase {
         $this->view->userResult = $userResult;
         $this->view->activityResult = $activityResult;
         $this->view->prodTotal = $prodTotal;
+        
+        $this->view->openActivities = $this->activityService->search(array('status' => 0), TRUE);
     }
 
 }
