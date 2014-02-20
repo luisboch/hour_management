@@ -3,6 +3,7 @@
 require_once SERVICE_DIR . 'ActivityService.php';
 require_once SERVICE_DIR . 'ActivityTypeService.php';
 require_once SERVICE_DIR . 'UserService.php';
+require_once SERVICE_DIR . 'utils/DateUtils.php';
 
 /**
  * Description of ActivitiesController
@@ -195,17 +196,36 @@ class ActivitiesController extends CrudBase {
         }
         $instance->setStatus($this->request->getPost('status'));
 
-        $startDate = $this->request->getPost('action_start_date');
-        $endDate = $this->request->getPost('action_end_date');
+        $date = $this->request->getPost('action_date');
+        $startTime = $this->request->getPost('action_start_time');
+        $endTime = $this->request->getPost('action_end_time');
 
-        if (trim($startDate) != '') {
+        if (trim($startTime) != '' && trim($date) != '') {
+            /* @var DateTime $today */
+            $startDate = DateTime::createFromFormat('d/m/y', $date);
+            DateUtils::addTimeToDate($startDate, $startTime);
+            
+            $user = $this->userService->findById($this->session->getUser()->getId());
+            
             $action = new ActivityInteraction();
-            $action->setUser($this->userService->findById($this->session->getUser()->getId()));
+            
+            $action->setUser($user);
+            
             $action->setCreationDate(new DateTime());
-            $action->setStartDate(new DateTime($startDate));
-            if (trim($endDate) != '') {
-                $action->setEndDate(new DateTime($endDate));
+            
+            $action->setStartDate($startDate);
+
+            // Call userService to create work date if it not created before
+            $this->userService->getWorkDate($user, $startDate);
+            
+            if (trim($endTime) != '') {
+
+                $endDate = DateTime::createFromFormat('d/m/y', $date);
+                DateUtils::addTimeToDate($endDate, $endTime);
+
+                $action->setEndDate($endDate);
             }
+
             $instance->getInteractions()->add($action);
         }
     }

@@ -134,9 +134,41 @@ class UserService extends BasicService {
         }
         $this->dao->getEntityManager()->flush();
     }
-
+    
+    /**
+     * 
+     * @param User $user
+     * @return UserWorkDay|null null when not foud UserWorkDate
+     */
     public function getCurrentWorkDay(User $user) {
         return $this->dao->getWorkDay($user, new DateTime());
+    }
+
+    /**
+     * 
+     * @param User $user
+     * @param DateTime $dateTime
+     * @return UserWorkDay $workDate to specified date, when not found, a new one will be created.
+     */
+    public function getWorkDate(User $user, DateTime $dateTime) {
+
+        $userDAO = new UserDAO();
+
+        $workDay = $userDAO->getWorkDay($user, $dateTime);
+
+        if ($workDay != null) {
+            $this->dao->update($workDay);
+        } else {
+            $workDay = new UserWorkDay();
+            $workDay->setUser($user);
+            $workDay->setDate($dateTime);
+            $workDay->setDayActiveHour($user->getDayActiveHour());
+            $this->dao->save($workDay);
+        }
+
+        $this->dao->getEntityManager()->flush();
+        
+        return $workDay;
     }
 
 }

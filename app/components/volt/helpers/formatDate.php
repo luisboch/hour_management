@@ -6,12 +6,11 @@
  * @return type
  */
 function formatDate(DateTime $date = null, $format = NULL) {
-    
-    if($date == null){
+
+    if ($date == null) {
         return '';
     }
-    
-    $pattern = 'd/m/y H:i';
+
 
     if ($format != NULL) {
         switch ($format) {
@@ -27,8 +26,14 @@ function formatDate(DateTime $date = null, $format = NULL) {
             case 'HM-only':
                 $pattern = 'H:i';
                 break;
+            case 'short-date':
+            default:
+                $pattern = 'd/m/y H:i';
+                break;
         }
+    } else {
+        $pattern = 'd/m/y H:i';
     }
-    
+
     return $date->format($pattern);
 }
