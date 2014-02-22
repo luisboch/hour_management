@@ -78,13 +78,25 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="col-lg-12 col-xs-12">Atividade</th>
+                                <th class="col-lg-8 col-xs-10">Atividade</th>
+                                <th class="col-lg-2 hidden-xs">Prioridade</th>
+                                <th class="col-lg-2 col-xs-2 ">Ação</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for r in openActivities %}
                             <tr>
                                 <td class="text-left"><a href="{{ url('activities/view/' ~ r.getId() ) }}">{{ r.getName() }}</a></td>
+                                <td class="text-left hidden-xs">{{ r.getPriority() }}</td>
+                                
+                                {% if r.canStart(_session.getUser()) %}
+                                <td><a href="{{ url('activities/start/' ~ r.getId() )}}" 
+                                       class="glyphicon glyphicon-play"></a></td>
+                                {% endif %}
+                                {% if r.canFinish(_session.getUser()) %}
+                                <td><a href="{{ url('activities/finish/' ~ r.getId() ~ '/' ~ r.canFinish(_session.getUser()).getId() ) }}" 
+                                       class="glyphicon glyphicon-stop"></a></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>

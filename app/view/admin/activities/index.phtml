@@ -21,9 +21,10 @@
                         <thead class="fixedthead" >
                             <tr>
                                 <th class="col-xs-1 col-sm-1">#</th>
-                                <th class="col-xs-7 col-sm-7">Nome</th>
-                                <th class="col-xs-2 col-sm-2">Pr.</th>
-                                <th class="col-xs-2 col-sm-2">Último update</th>
+                                <th class="col-xs-9 col-sm-6">Nome</th>
+                                <th class="col-xs-2 col-sm-2 hidden-xs ">Pr.</th>
+                                <th class="col-xs-2 col-sm-2 hidden-xs" >Último update</th>
+                                <th class="col-xs-2 col-sm-1">Ação</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,8 +32,16 @@
                             <tr>
                                 <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
                                 <td>{{ u.getName() }}</td>
-                                <td>{{ u.getPriority()}}</td>
-                                <td>{{ formatDate(u.getLastUpdate())}}</td>
+                                <td class="hidden-xs">{{ u.getPriority()}}</td>
+                                <td class="hidden-xs">{{ formatDate(u.getLastUpdate())}}</td>
+                                {% if u.canStart(_session.getUser()) %}
+                                <td><a href="{{ url('activities/start/' ~ u.getId() )}}" 
+                                       class="glyphicon glyphicon-play"></a></td>
+                                {% endif %}
+                                {% if u.canFinish(_session.getUser()) %}
+                                <td><a href="{{ url('activities/finish/' ~ u.getId() ~ '/' ~ u.canFinish(_session.getUser()).getId() ) }}" 
+                                       class="glyphicon glyphicon-stop"></a></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -45,9 +54,10 @@
                         <thead class="fixedthead" >
                             <tr>
                                 <th class="col-xs-1 col-sm-1">#</th>
-                                <th class="col-xs-7 col-sm-7">Nome</th>
-                                <th class="col-xs-2 col-sm-2">Pr.</th>
-                                <th class="col-xs-2 col-sm-2">Último update</th>
+                                <th class="col-xs-9 col-sm-6">Nome</th>
+                                <th class="col-xs-2 col-sm-2 hidden-xs ">Pr.</th>
+                                <th class="col-xs-2 col-sm-2 hidden-xs" >Último update</th>
+                                <th class="col-xs-2 col-sm-1">Ação</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,8 +65,16 @@
                             <tr>
                                 <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
                                 <td>{{ u.getName() }}</td>
-                                <td>{{ u.getPriority()}}</td>
-                                <td>{{ formatDate(u.getLastUpdate())}}</td>
+                                <td class="hidden-xs">{{ u.getPriority()}}</td>
+                                <td class="hidden-xs">{{ formatDate(u.getLastUpdate())}}</td>
+                                {% if u.canStart(_session.getUser()) %}
+                                <td><a href="{{ url('activities/start/' ~ u.getId() )}}" 
+                                       class="glyphicon glyphicon-play"></a></td>
+                                {% endif %}
+                                {% if u.canFinish(_session.getUser()) %}
+                                <td><a href="{{ url('activities/finish/' ~ u.getId() ~ '/' ~ u.canFinish(_session.getUser()).getId() ) }}" 
+                                       class="glyphicon glyphicon-stop"></a></td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                         </tbody>

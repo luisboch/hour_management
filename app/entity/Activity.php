@@ -12,7 +12,7 @@ require_once 'BasicEntity.php';
  * @since Jan 13, 2014
  * @Entity @Table(name="activity")
  */
-class Activity implements BasicEntity{
+class Activity implements BasicEntity {
 
     /**
      * @Id 
@@ -75,7 +75,7 @@ class Activity implements BasicEntity{
      * @Column(type="boolean")
      */
     private $active = true;
-    
+
     /**
      * @var integer
      * @Column(type="integer")
@@ -142,7 +142,7 @@ class Activity implements BasicEntity{
      * 
      * @param ActivityType $activityType
      */
-    public function setActivityType( $activityType) {
+    public function setActivityType($activityType) {
         $this->activityType = $activityType;
     }
 
@@ -164,7 +164,7 @@ class Activity implements BasicEntity{
     /**
      * @param ActivityInteraction[] $interactions
      */
-    public function setInteractions( $interactions) {
+    public function setInteractions($interactions) {
         $this->interactions = $interactions;
     }
 
@@ -190,38 +190,61 @@ class Activity implements BasicEntity{
     public function setStatus($status) {
         $this->status = $status;
     }
-    
+
     public function __toString() {
-        return "Activity@{id: ".$this->id.', name: '.$this->name."}";
+        return "Activity@{id: " . $this->id . ', name: ' . $this->name . "}";
     }
-    
+
     public function isFinished() {
         return $this->status === 1;
     }
-    
+
     public function isOpen() {
         return $this->status === 0;
     }
-    
+
     public function removeInteraction($id) {
-        foreach($this->interactions as $k => $v){
-            if($v->getId() == $id){
+        foreach ($this->interactions as $k => $v) {
+            if ($v->getId() == $id) {
                 unset($this->interactions[$k]);
             }
         }
     }
-    
+
     /**
      * 
      * @return ActivityInteraction
      * @param integer $id
      */
     public function getInteractionById($id) {
-        foreach($this->interactions as $k => $v){
-            if($v->getId() == $id){
+        foreach ($this->interactions as $k => $v) {
+            if ($v->getId() == $id) {
                 return $this->interactions[$k];
             }
         }
         return null;
     }
+
+    public function canStart(User $user) {
+        foreach ($this->interactions as $k => $v) {
+            if ($v->getUser()->getId() == $user->getId() && $v->getEndDate() == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param User $user
+     * @return boolean
+     */
+    public function canFinish(User $user) {
+        foreach ($this->interactions as $k => $v) {
+            if ($v->getUser()->getId() == $user->getId() && $v->getEndDate() == null) {
+                return $v;
+            }
+        }
+        return false;
+    }
+
 }

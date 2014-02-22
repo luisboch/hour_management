@@ -116,6 +116,22 @@ class ActivitiesController extends CrudBase {
         }
     }
 
+    public function startAction($activityId) {
+        $activity = $this->service->findById($activityId);
+        $user = $this->userService->findById($this->session->getUser()->getId());
+
+        try {
+            $this->service->startInteraction($activity, $user);
+            $this->success("Atividade iniciada");
+            $this->response->redirect('activities/view/' . $activityId);
+        } catch (ValidationException $ex) {
+            $this->warn($ex->getMessage());
+            $this->response->redirect('activities/view/' . $activityId);
+        } catch (Exception $ex) {
+            $this->showError($ex);
+        }
+    }
+
     protected function createNewInstance() {
         return new Activity();
     }
@@ -204,20 +220,20 @@ class ActivitiesController extends CrudBase {
             /* @var DateTime $today */
             $startDate = DateTime::createFromFormat('d/m/y', $date);
             DateUtils::addTimeToDate($startDate, $startTime);
-            
+
             $user = $this->userService->findById($this->session->getUser()->getId());
-            
+
             $action = new ActivityInteraction();
-            
+
             $action->setUser($user);
-            
+
             $action->setCreationDate(new DateTime());
-            
+
             $action->setStartDate($startDate);
 
             // Call userService to create work date if it not created before
             $this->userService->getWorkDate($user, $startDate);
-            
+
             if (trim($endTime) != '') {
 
                 $endDate = DateTime::createFromFormat('d/m/y', $date);
