@@ -103,4 +103,26 @@ class ActivityService extends BasicService {
             }
         }
     }
+    
+    public function startInteraction(Activity $activity, User $user) {
+        
+        foreach($activity->getInteractions() as $i){
+            if($i->getUser()->getId() == $user->getId()){
+                if($i->getEndDate() == null){
+                    throw new ValidationException("Você já possui uma ação aberta!");
+                }
+            }
+        }
+        
+        $ai = new ActivityInteraction();
+        $ai->setActivity($activity);
+        $ai->setStartDate(new DateTime());
+        $ai->setCreationDate(new DateTime());
+        $ai->setUser($user);
+        
+        $activity->getInteractions()->add($ai);
+        
+        $this->update($activity);
+        
+    }
 }
