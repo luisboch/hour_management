@@ -112,7 +112,7 @@ class ActivitiesController extends CrudBase {
 
                 $this->success("Ação concluída");
             } else {
-                $this->warn("Somente o próprio usuário que pode alterar a ação!");
+                $this->warn("Somente o próprio usuário pode alterar a ação!");
             }
             $this->response->redirect('activities/view/' . $activityId);
         } catch (Exception $ex) {
