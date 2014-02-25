@@ -82,10 +82,14 @@ class WorkReportResult {
     public function setExtra($extra) {
         $this->extra = $extra;
     }
-
+    
     public function calculateExtra() {
         if ($this->startWork != null && $this->endWork != null && $this->userAvaliable != null) {
             $diff = $this->startWork->diff($this->endWork);
+            
+            if ($diff->h > 8 || ($diff->h == 8 && $diff->i > 0 )) {
+                $diff->h--;
+            }
             /* @var DateInterval $diff */
             $workTime = new \DateTime($diff->format('%H:%I:00'));
             $normalTime = new \DateTime($this->userAvaliable);
@@ -93,6 +97,9 @@ class WorkReportResult {
             // Has extra?
             if ($workTime->getTimestamp() > $normalTime->getTimestamp()) {
                 $diff = $workTime->diff($normalTime);
+                /* @var DateInterval $diff */
+
+
                 $this->setExtra(new \DateTime($diff->format('%H:%I:00')));
             }
         }
