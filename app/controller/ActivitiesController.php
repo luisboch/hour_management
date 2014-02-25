@@ -104,12 +104,16 @@ class ActivitiesController extends CrudBase {
     public function finishAction($activityId, $actionId) {
         try {
             $activity = $this->service->findById($activityId);
-            /** @var Activity $activity */
+            /* @var Activity $activity */
             $action = $activity->getInteractionById($actionId);
-            $action->setEndDate(new DateTime());
-            $this->service->save($activity);
+            if ($action->getUser()->getId() === $this->session->getUser()->getId()) {
+                $action->setEndDate(new DateTime());
+                $this->service->save($activity);
 
-            $this->success("Ação concluída");
+                $this->success("Ação concluída");
+            } else {
+                $this->warn("Somente o próprio usuário pode alterar a ação!");
+            }
             $this->response->redirect('activities/view/' . $activityId);
         } catch (Exception $ex) {
             $this->showError($ex);
