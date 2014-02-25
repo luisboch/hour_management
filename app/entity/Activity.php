@@ -196,11 +196,11 @@ class Activity implements BasicEntity {
     }
 
     public function isFinished() {
-        return $this->status === 1;
+        return $this->status == 1;
     }
 
     public function isOpen() {
-        return $this->status === 0;
+        return $this->status == 0;
     }
 
     public function removeInteraction($id) {

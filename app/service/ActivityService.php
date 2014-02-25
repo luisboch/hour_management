@@ -69,6 +69,10 @@ class ActivityService extends BasicService {
                     if ($value->getUser() === null) {
                         $v->addError("Please enter a selected user", "interaction.user");
                     }
+                    
+                    if($activity->isFinished() && $value->getEndDate() == null){
+                        $v->addError("A atividade não pode ser finalizada com hora em aberto!");
+                    }
                 }
             }
 
