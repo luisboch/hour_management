@@ -12,14 +12,12 @@ class ActivityReportTypeResult {
 
     private $activityType;
     private $activityUser;
-    private $finished;
     private $allocated;
     private $date;
 
-    function __construct($activityType, $activityUser, $finished, $allocated, $date) {
+    function __construct($activityType, $activityUser, $allocated, $date) {
         $this->activityType = $activityType;
         $this->activityUser = $activityUser;
-        $this->finished = $finished;
         $this->allocated = $allocated;
         $this->date = $date;
     }
@@ -34,14 +32,6 @@ class ActivityReportTypeResult {
 
     public function getAllocated() {
         return $this->allocated;
-    }
-
-    public function getFinished() {
-        return $this->finished;
-    }
-
-    public function isFinished() {
-        return $this->finished;
     }
 
     public function getDate() {
@@ -59,11 +49,7 @@ class ActivityReportTypeResult {
     public function setAllocated($allocated) {
         $this->allocated = $allocated;
     }
-
-    public function setFinished($finished) {
-        $this->finished = $finished;
-    }
-
+    
     public function setDate($date) {
         $this->date = $date;
     }

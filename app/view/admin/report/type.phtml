@@ -20,9 +20,8 @@
                         <thead>
                             <tr>
                                 <th class="col-lg-3 col-md-3">Data</th>
-                                <th class="col-lg-5 col-md-5">Usuário</th>
-                                <th class="col-lg-2 col-md-2">Tipo</th>
-                                <th class="col-lg-2 col-md-2">Finalizado</th>
+                                <th class="col-lg-3 col-md-3">Usuário</th>
+                                <th class="col-lg-5 col-md-5">Tipo</th>
                                 <th class="col-lg-2 col-md-2">Total</th>
                             </tr>
                         </thead>
@@ -33,7 +32,6 @@
                                 <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
                                 <td>{{ r.getActivityUser() }}</td>
                                 <td>{{ r.getActivityType() }}</td>
-                                <td>{{ r.isFinished() ? 'SIM' : 'NÃO' }}</td>
                                 <td>{{ r.getAllocated() }}</td>
                             </tr>
                             {% endfor %}

@@ -62,6 +62,14 @@
                                     <option value="1" {{ 1 == instance.getStatus() ? 'selected':'' }} >Finalizado</option>
                                 </select>
                             </div>
+
+                            <div class="form-group col-lg-offset-11">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} />Ativo?
+                                    </label>
+                                </div>
+                            </div>
                             {% if (instance.getId() != null) %}
                             {% if count(instance.getInteractions()) > 0 %} 
                             <fieldset >
@@ -125,13 +133,6 @@
                                 </div>
                             </fieldset>
                             {% endif %}
-                            <div class="form-group col-lg-offset-11">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} />Ativo?
-                                    </label>
-                                </div>
-                            </div>
                             <div class="form-group text-right" >
                                 <a class="btn btn-danger" href="{{url('activities')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
                                 <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>

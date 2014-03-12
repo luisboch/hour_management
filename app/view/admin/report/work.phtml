@@ -35,7 +35,7 @@
                                 <td>{{ formatDate(r.getStartWork(), 'HM-only') }}</td>
                                 <td>{{ formatDate(r.getEndWork(),'HM-only') }}</td>
                                 <td>{{ r.getUserAvaliable() }}</td>
-                                <td>{{ formatDate(r.getExtra(),'HM-only') }}</td>
+                                <td>{{ (r.isNegativeExtra()?'-':'') ~ formatDate(r.getExtra(),'HM-only') }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

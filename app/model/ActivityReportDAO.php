@@ -185,13 +185,11 @@ class ActivityReportDAO extends BasicDAO {
 
         $rsm->addScalarResult('username', 'userName', 'string');
         $rsm->addScalarResult('activitytype', 'activityType', 'string');
-        $rsm->addScalarResult('finished', 'finished', 'boolean');
         $rsm->addScalarResult('allocated', 'allocated', 'string');
         $rsm->addScalarResult('wday', 'day', 'date');
 
         $sql = "select u.name as username,
                        t.name as activitytype, 
-                       a.status = 1 as finished,
                        to_char(sum((ai.end_date - ai.start_date)::time),'HH24:MI') as allocated,
                        to_char(ai.start_date, 'YYYY-MM-DD') as wday
                   from activity a
@@ -201,8 +199,8 @@ class ActivityReportDAO extends BasicDAO {
                  where ai.start_date between :startDate and :endDate
                    and a.active = true
                    and ai.end_date is not null
-              group by userName, activityType, finished, wday
-              order by wday, userName, activityType, finished";
+              group by userName, activityType, wday
+              order by wday, userName, activityType";
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
@@ -214,7 +212,7 @@ class ActivityReportDAO extends BasicDAO {
 
         foreach ($dbResult as $v) {
             $results[] = new \report\result\ActivityReportTypeResult(
-                    $v['activityType'], $v['userName'], $v['finished'], $v['allocated'], $v['day']);
+                    $v['activityType'], $v['userName'], $v['allocated'], $v['day']);
         }
 
         return $results;

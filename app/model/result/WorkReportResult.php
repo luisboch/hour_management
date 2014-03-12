@@ -17,6 +17,7 @@ class WorkReportResult {
     private $date;
     private $userAvaliable;
     private $extra;
+    private $negativeExtra;
 
     function __construct($userName, $userId, $startWork, $endWork, $date, $userAvaliable) {
         $this->userName = $userName;
@@ -82,26 +83,40 @@ class WorkReportResult {
     public function setExtra($extra) {
         $this->extra = $extra;
     }
-    
+
+    public function getNegativeExtra() {
+        return $this->negativeExtra;
+    }
+
+    public function isNegativeExtra() {
+        return $this->negativeExtra;
+    }
+
+    public function setNegativeExtra($negativeExtra) {
+        $this->negativeExtra = $negativeExtra;
+    }
+
     public function calculateExtra() {
         if ($this->startWork != null && $this->endWork != null && $this->userAvaliable != null) {
             $diff = $this->startWork->diff($this->endWork);
-            
-            if ($diff->h > 8 || ($diff->h == 8 && $diff->i > 0 )) {
-                $diff->h--;
+
+            $config = \Config::getInstance();
+            if ($config['report']['discount_lunchtime']) {
+                if ($diff->h > 8 || ($diff->h == 8 && $diff->i > 0 )) {
+                    $diff->h--;
+                }
             }
+
             /* @var DateInterval $diff */
             $workTime = new \DateTime($diff->format('%H:%I:00'));
             $normalTime = new \DateTime($this->userAvaliable);
 
             // Has extra?
-            if ($workTime->getTimestamp() > $normalTime->getTimestamp()) {
-                $diff = $workTime->diff($normalTime);
-                /* @var DateInterval $diff */
+            $this->setNegativeExtra(!($workTime->getTimestamp() > $normalTime->getTimestamp()));
 
-
-                $this->setExtra(new \DateTime($diff->format('%H:%I:00')));
-            }
+            $diff = $workTime->diff($normalTime);
+            /* @var DateInterval $diff */
+            $this->setExtra(new \DateTime($diff->format('%H:%I:00')));
         }
     }
 
