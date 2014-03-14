@@ -72,7 +72,7 @@
                             </div>
                             {% if (instance.getId() != null) %}
                             {% if count(instance.getInteractions()) > 0 %} 
-                            <fieldset >
+                            <fieldset>
                                 <legend>Ações</legend>
                                 <table class="table">
                                     <thead>
@@ -106,7 +106,7 @@
                                 </table>
                             </fieldset>
                             {% endif %}
-                            <fieldset class="form-inline">
+                            <fieldset class="form-inline" style="" >
                                 <legend>Incluir Tempo</legend>
                                 <div class="form-group col-lg-4 col-md-4">
                                     <label class="control-label">Data</label>
@@ -133,7 +133,7 @@
                                 </div>
                             </fieldset>
                             {% endif %}
-                            <div class="form-group text-right" >
+                            <div class="form-group pull-right" >
                                 <a class="btn btn-danger" href="{{url('activities')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
                                 <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>
                             </div>
