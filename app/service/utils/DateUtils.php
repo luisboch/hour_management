@@ -22,4 +22,12 @@ class DateUtils {
             $d->setTime($h, $m, 0);
         }
     } 
+    
+    public static function toDataBaseDate(DateTime $df) {
+        return $df->format('Y-m-d');
+    }
+    
+    public static function toDataBaseDateTime(DateTime $df) {
+        return $df->format('Y-m-d H:i:s');
+    }
 }

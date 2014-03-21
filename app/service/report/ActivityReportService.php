@@ -51,7 +51,7 @@ class ActivityReportService extends BasicService {
      * @param array $filters
      * @param integer $limit
      * @param integer $offset
-     * @return report\result\ActivityReportTypeResult[]
+     * @return report\result\ActivityReportTypeTotal
      */
     public function getActivityTypeReport($filters = array(), $limit = NULL, $offset = NULL) {
         return $this->dao->getActivityTypeReport($filters, $limit, $offset);
