@@ -77,10 +77,11 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th class="col-lg-5 col-xs-5">Usuário</th>
-                                            <th class="col-lg-3 col-xs-3">Inicio</th>
-                                            <th class="col-lg-3 col-xs-3">Fim</th>
-                                            <th class="col-lg-1 col-xs-1"></th>
+                                            <th>Usuário</th>
+                                            <th>Inicio</th>
+                                            <th>Fim</th>
+                                            <th class="hidden-xs">Total</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -98,6 +99,7 @@
                                             {% if a.getEndDate() != null %}
                                             <td>{{formatDate(a.getEndDate())}}</td>
                                             {% endif %}
+                                            <td class="hidden-xs">{{a.getAllocatedTime()}}</td>
                                             <td><a href="{{ url('activities/remove/'~ instance.getId() ~ '/' ~ a.getId()) }}" onclick="return confirm('Deseja realmente remover esta ação?')"><span class=" glyphicon glyphicon-ban-circle"></span></a></td>
 
                                         </tr>

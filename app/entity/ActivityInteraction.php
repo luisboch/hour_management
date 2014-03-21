@@ -15,7 +15,7 @@ class ActivityInteraction {
      * @GeneratedValue
      */
     private $id;
-    
+
     /**
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="user_id", referencedColumnName="id")
@@ -35,18 +35,19 @@ class ActivityInteraction {
      * @Column(type="datetime", name="creation_date")
      */
     private $creationDate;
-    
+
     /**
      * @var DateTime 
      * @Column(type="datetime", name="start_date")
      */
     private $startDate;
+
     /**
      * @var DateTime 
      * @Column(type="datetime", name="end_date")
      */
     private $endDate;
-    
+
     public function getId() {
         return $this->id;
     }
@@ -102,6 +103,18 @@ class ActivityInteraction {
      */
     public function setEndDate($endDate) {
         $this->endDate = $endDate;
+    }
+
+    public function getAllocatedTime() {
+
+        if ($this->startDate != null && $this->endDate != null) {
+            $diff = $this->endDate->getTimestamp() - $this->startDate->getTimestamp();
+            $hour = intval($diff / 3600);
+            $min = intval(( $diff % 3600) / 60);
+            return str_pad($hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($min, 2, '0', STR_PAD_LEFT);
+        }
+
+        return '';
     }
 
 }
