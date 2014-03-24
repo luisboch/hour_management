@@ -91,10 +91,16 @@ class ActivitiesController extends CrudBase {
     public function removeAction($activityId, $actionId) {
         try {
             $activity = $this->service->findById($activityId);
-            /* @var Activity $activity */
-            $activity->removeInteraction($actionId);
-            $this->service->save($activity);
-            $this->success("Ação removida");
+
+            $ia = $activity->getInteractionById($actionId);
+            if ($ia->getUser()->getId() === $this->session->getUser()->getId()) {
+                $activity->removeInteraction($actionId);
+                $this->service->save($activity);
+                $this->success("Ação removida");
+            } else {
+                $this->warn("Somente o próprio usuário pode excluir a ação!");
+            }
+
             $this->response->redirect('activities/view/' . $activityId);
         } catch (Exception $ex) {
             $this->showError($ex);

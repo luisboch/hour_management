@@ -52,6 +52,9 @@ class ActivityInteraction {
         return $this->id;
     }
 
+    /**
+     * @return User
+     */
     public function getUser() {
         return $this->user;
     }
