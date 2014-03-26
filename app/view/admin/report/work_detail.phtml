@@ -1,0 +1,46 @@
+{% extends '../template/adm.phtml' %}
+{% block content %}
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li>
+                        <a href="{{ url('report/index') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-play"></span>Inicio</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9" role="main">
+            <div class="well">
+                <fieldset>
+                    <legend>Relatórios | Atividades | <a href="{{url('usercrud/view/' ~ userResult.getId())}}">{{ userResult.getName() }}</a></legend>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-2 col-md-2">Data</th>
+                                <th class="col-lg-4 col-md-4">Atividade</th>
+                                <th class="col-lg-2 col-md-2">Início</th>
+                                <th class="col-lg-2 col-md-2">Fim</th>
+                                <th class="col-lg-2 col-md-2">Alocado</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for r in results %}
+                            <tr>
+                                <td>{{ r.getDate() }}</td>
+                                <td><a href="{{url('activities/' ~ r.getActivityId())}}">{{ r.getActivityName() }}</a></td>
+                                <td>{{ formatDate(r.getStartDate(), 'HM-only') }}</td>
+                                <td>{{ formatDate(r.getEndDate(),'HM-only') }}</td>
+                                <td>{{ r.getAllocated() }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

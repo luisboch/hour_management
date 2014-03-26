@@ -30,4 +30,23 @@ class DateUtils {
     public static function toDataBaseDateTime(DateTime $df) {
         return $df->format('Y-m-d H:i:s');
     }
+    
+    
+    /**
+     * 
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @return string
+     */
+    public static function getAllocatedTime($startDate, $endDate) {
+
+        if ($startDate != null && $endDate != null) {
+            $diff = $endDate->getTimestamp() - $startDate->getTimestamp();
+            $hour = intval($diff / 3600);
+            $min = intval(( $diff % 3600) / 60);
+            return str_pad($hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($min, 2, '0', STR_PAD_LEFT);
+        }
+
+        return '';
+    }
 }

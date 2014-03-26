@@ -1,6 +1,7 @@
 <?php
 
 require_once SERVICE_DIR . 'report/ActivityReportService.php';
+require_once SERVICE_DIR . 'report/UserReport.php';
 require_once APP_DIR . 'service/UserService.php';
 
 /**
@@ -95,6 +96,13 @@ class ReportController extends AdminBase {
             $user = $this->userService->findById($userId);
         }
         return array('startDate' => $startDate, 'endDate' => $endDate, 'user' => $user);
+    }
+    
+    public function work_detailAction(){
+        $params = $this->getParams();
+        $service = new UserReport();
+        $this->view->userResult = $params['user'];
+        $this->view->results = $service->getUserActivityReport($params);
     }
 
 }

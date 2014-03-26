@@ -32,7 +32,14 @@
                         <tbody>
                             {% for t in userResults %}
                             <tr>
-                                <td class="text-left"><a href="{{ url('usercrud/view/' ~ t.getUserId()) }}">{{ t.getUserName() }}</a></td>
+                                <td class="text-left">
+                                    <form id="{{ 'formReportUser' ~ t.getUserId() }}" action="{{ url('report/work_detail/') }}">
+                                        <a type="submit" href="#" onclick="$('#{{'formReportUser' ~ t.getUserId() }}').submit();">{{ t.getUserName() }}</a>
+                                        <input type="hidden" value="{{ date('d/m/y') }}" name="endDate" />
+                                        <input type="hidden" value="{{ date('d/m/y') }}" name="startDate" />
+                                        <input type="hidden" value="{{ t.getUserId() }}" name="user_id" />
+                                    </form>
+                                </td>
                                 <td>{{ formatDate(t.getUserAllocatedHours(), 'HM-only') }}</td>
                                 <td>{{t.getAvaliable()}}</td>
                             </tr>

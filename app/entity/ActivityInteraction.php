@@ -1,5 +1,5 @@
 <?php
-
+require_once SERVICE_DIR.'utils/DateUtils.php';
 /**
  * Description of ActivityInteractions
  *
@@ -109,15 +109,7 @@ class ActivityInteraction {
     }
 
     public function getAllocatedTime() {
-
-        if ($this->startDate != null && $this->endDate != null) {
-            $diff = $this->endDate->getTimestamp() - $this->startDate->getTimestamp();
-            $hour = intval($diff / 3600);
-            $min = intval(( $diff % 3600) / 60);
-            return str_pad($hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($min, 2, '0', STR_PAD_LEFT);
-        }
-
-        return '';
+        return DateUtils::getAllocatedTime($this->getStartDate(), $this->getEndDate());
     }
 
 }

@@ -26,6 +26,7 @@
                                     <option value="2">Atividades</option>
                                     <option value="3">Tipos de atividade</option>
                                     <option value="4">Ponto</option>
+                                    <option value="5">Atividades Dia</option>
                                 </select>
                             </div>
                         </form>
@@ -101,8 +102,29 @@
             } else if (newval === '4') {
                 $('#paramsForm').attr('action', '{{ url("report/work")}}');
                 $('div#user').css('display', 'block');
+            } else if (newval === '5') {
+                $('#paramsForm').attr('action', '{{ url("report/work_detail")}}');
+                $('div#user').css('display', 'block');
             }
         }
+    });
+
+    $('#paramsForm').submit(function() {
+
+        var user = $('div#user');
+
+        if (user.is(':visible')) {
+            try{
+                if (user.find('option:selected').val() === "") {
+                    alert("Selecione um usuário!");
+                    return false;
+                }
+            } catch (e){
+                return false;
+            }
+        return true;
+    }
+
     });
 </script>
 {% endblock %}
