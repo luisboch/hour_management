@@ -30,8 +30,8 @@
                             <tr>
                                 <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
                                 <td><a href="{{ url('activities/view/'~r.getActivityId() )}}">{{r.getActivityName()}}</a></td>
-                                <td>{{r.getAllocated()}}</td>
-                                <td>{{r.isFinished() ? 'SIM':'NAO'}}</td>
+                                <td>{{ r.getAllocated() }}</td>
+                                <td>{{ r.isFinished() ? 'SIM':'NAO' }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>

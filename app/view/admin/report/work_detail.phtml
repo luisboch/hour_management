@@ -30,7 +30,7 @@
                             {% for r in results %}
                             <tr>
                                 <td>{{ r.getDate() }}</td>
-                                <td><a href="{{url('activities/' ~ r.getActivityId())}}">{{ r.getActivityName() }}</a></td>
+                                <td><a href="{{url('activities/view/' ~ r.getActivityId())}}">{{ r.getActivityName() }}</a></td>
                                 <td>{{ formatDate(r.getStartDate(), 'HM-only') }}</td>
                                 <td>{{ formatDate(r.getEndDate(),'HM-only') }}</td>
                                 <td>{{ r.getAllocated() }}</td>
