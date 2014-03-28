@@ -227,32 +227,37 @@ class ActivitiesController extends CrudBase {
         $endTime = $this->request->getPost('action_end_time');
 
         if (trim($startTime) != '' && trim($date) != '') {
-            /* @var DateTime $today */
-            $startDate = DateTime::createFromFormat('d/m/y', $date);
-            DateUtils::addTimeToDate($startDate, $startTime);
+            
+            if (!$instance->isFinished()) {
+                /* @var DateTime $today */
+                $startDate = DateTime::createFromFormat('d/m/y', $date);
+                DateUtils::addTimeToDate($startDate, $startTime);
 
-            $user = $this->userService->findById($this->session->getUser()->getId());
+                $user = $this->userService->findById($this->session->getUser()->getId());
 
-            $action = new ActivityInteraction();
+                $action = new ActivityInteraction();
 
-            $action->setUser($user);
+                $action->setUser($user);
 
-            $action->setCreationDate(new DateTime());
+                $action->setCreationDate(new DateTime());
 
-            $action->setStartDate($startDate);
+                $action->setStartDate($startDate);
 
-            // Call userService to create work date if it not created before
-            $this->userService->getWorkDate($user, $startDate);
+                // Call userService to create work date if it not created before
+                $this->userService->getWorkDate($user, $startDate);
 
-            if (trim($endTime) != '') {
+                if (trim($endTime) != '') {
 
-                $endDate = DateTime::createFromFormat('d/m/y', $date);
-                DateUtils::addTimeToDate($endDate, $endTime);
+                    $endDate = DateTime::createFromFormat('d/m/y', $date);
+                    DateUtils::addTimeToDate($endDate, $endTime);
 
-                $action->setEndDate($endDate);
+                    $action->setEndDate($endDate);
+                }
+
+                $instance->getInteractions()->add($action);
+            } else {
+                $this->warn("Não é possível iniciar uma ação em uma atividade fechada!");
             }
-
-            $instance->getInteractions()->add($action);
         }
     }
 

@@ -110,6 +110,10 @@ class ActivityService extends BasicService {
     
     public function startInteraction(Activity $activity, User $user) {
         
+        if($activity->isFinished()){
+            throw new ValidationException("Não é possível iniciar uma ação em atividade fechada!");
+        }
+        
         foreach($activity->getInteractions() as $i){
             if($i->getUser()->getId() == $user->getId()){
                 if($i->getEndDate() == null){

@@ -66,7 +66,10 @@
                             <div class="form-group col-lg-offset-11">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} />Ativo?
+                                        <input 
+                                            type="checkbox"
+                                            name="active"
+                                            id="active" {{instance.getActive()?'checked="checked"':''}} />Ativo?
                                     </label>
                                 </div>
                             </div>
@@ -108,7 +111,10 @@
                                 </table>
                             </fieldset>
                             {% endif %}
-                            <fieldset class="form-inline" style="margin-bottom: 15px" >
+                            <fieldset class="form-inline" 
+                                      style="margin-bottom: 15px;
+                                      display:{{ instance.isFinished() or not instance.getActive()?'none':'block'}} ;"
+                                      id="newActionPanel" >
                                 <legend>Incluir Tempo</legend>
                                 <div class="form-group col-lg-4 col-md-4">
                                     <label class="control-label">Data</label>
@@ -149,20 +155,29 @@
     $('#action_end_time').timepicker({'timeFormat': 'H:i:s'});
     $('#action_start_time').timepicker({'timeFormat': 'H:i:s'});
     $('#status').change(function() {
+        var chkActive = $('#active').is(':checked');
         var newval = $('#status').val();
-        if (newval === '') {
-            $('#newActionPanel').slideUp();
+        if (newval === '0' && chkActive) {
+            $('#newActionPanel').slideDown('fast');
+        } else {
             $('input[name=action_start_time]').val('');
             $('input[name=action_end_time]').val('');
-        } else {
-            if (newval === '0') {
-                $('#newActionPanel').slideDown();
-            } else if (newval === '1') {
-                $('input[name=action_start_time]').val('');
-                $('input[name=action_end_time]').val('');
-                $('#newActionPanel').slideUp();
-            }
+            $('#newActionPanel').slideUp('fast');
         }
+    });
+
+    $('#active').change(function() {
+        console.log("aaaa...");
+        var chkActive = $('#active').is(':checked');
+        var newval = $('#status').val();
+        if (newval === '0' && chkActive) {
+            $('#newActionPanel').slideDown('fast');
+        } else {
+            $('input[name=action_start_time]').val('');
+            $('input[name=action_end_time]').val('');
+            $('#newActionPanel').slideUp('fast');
+        }
+
     });
 </script>
 {% endblock %}
