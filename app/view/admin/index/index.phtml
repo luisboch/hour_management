@@ -17,16 +17,16 @@
     {% endif %}
 
     <div class="row">
-        <div class="col-lg-6 ">
+        <div class="">
             <div class="panel panel-primary">
                 <div class="panel-heading">Produtividade do dia</div>
-                <div class="panel-body">
+                <div class="panel-body" style="height: 200px;overflow: auto">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="col-lg-6 col-xs-6">Quem</th>
-                                <th class="col-lg-3 col-xs-3"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
-                                <th class="col-lg-3 col-xs-3"><span class="hidden-lg hidden-md">Disp.</span><span class="hidden-xs">Disponível</span></th>
+                                <th class="col-lg-3 col-xs-3 text-center"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                                <th class="col-lg-3 col-xs-3 text-center"><span class="hidden-lg hidden-md">Disp.</span><span class="hidden-xs">Disponível</span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,17 +50,17 @@
                 <div class="panel-footer text-right">Total {{prodTotal}}</div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div>
             <div class="panel panel-primary">
                 <div class="panel-heading">Atividades do dia</div>
-                <div class="panel-body">
+                <div class="panel-body" style="height: 400px;overflow: auto">
 
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="col-lg-7 col-xs-7">Atividade</th>
-                                <th class="col-lg-3 col-xs-3"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
-                                <th class="col-lg-2 col-xs-2">Status</th>
+                                <th class="col-lg-3 col-xs-3 text-center"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                                <th class="col-lg-2 col-xs-2 text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,24 +77,24 @@
                 <div class="panel-footer text-right">{{activityResult.getTotal()}} atividades ({{activityResult.getFinished()}} concluídas)</div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div>
             <div class="panel panel-primary">
                 <div class="panel-heading">Atividades abertas</div>
-                <div class="panel-body">
+                <div class="panel-body" style="height: 400px;overflow: auto">
 
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="col-lg-8 col-xs-10">Atividade</th>
-                                <th class="col-lg-2 hidden-xs">Prioridade</th>
-                                <th class="col-lg-2 col-xs-2 ">Ação</th>
+                                <th class="col-lg-2 hidden-xs text-center">Prioridade</th>
+                                <th class="col-lg-2 col-xs-2  text-center">Ação</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for r in openActivities %}
                             <tr>
                                 <td class="text-left"><a href="{{ url('activities/view/' ~ r.getId() ) }}">{{ r.getName() }}</a></td>
-                                <td class="text-left hidden-xs">{{ r.getPriority() }}</td>
+                                <td class="hidden-xs">{{ r.getPriority() }}</td>
                                 
                                 {% if r.canStart(_session.getUser()) %}
                                 <td><a href="{{ url('activities/start/' ~ r.getId() )}}" 
