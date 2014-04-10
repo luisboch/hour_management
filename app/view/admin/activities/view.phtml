@@ -152,8 +152,14 @@
     </div>
 </div>
 <script type="text/javascript">
-    $('#action_end_time').timepicker({'timeFormat': 'H:i:s'});
-    $('#action_start_time').timepicker({'timeFormat': 'H:i:s'});
+    var opts = {
+        'minTime': '06:00am',
+        'maxTime': '08:00pm',
+        'timeFormat': 'H:i:s'
+    };
+    $('#action_end_time').timepicker(opts);
+    $('#action_start_time').timepicker(opts);
+
     $('#status').change(function() {
         var chkActive = $('#active').is(':checked');
         var newval = $('#status').val();

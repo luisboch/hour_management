@@ -59,6 +59,12 @@
 </div>
 
 <script type="text/javascript">
-    $('#day_active_hour').timepicker({'timeFormat': 'H:i:s'});
+    var opts = {
+        'minTime': '04:00am',
+        'maxTime': '08:00am',
+        'step': 60,
+        'timeFormat': 'H:i:s'
+    };
+    $('#day_active_hour').timepicker(opts);
 </script>
 {% endblock %}
