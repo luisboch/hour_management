@@ -102,7 +102,7 @@ class ActivityReportService extends BasicService {
 
         $hour = (int) $float;
         $min = ($float - $hour) * 60;
-        return str_pad($hour, 2, 0, STR_PAD_LEFT) . ':' . str_pad($min, 2, 0, STR_PAD_LEFT);
+        return str_pad($hour, 2, 0, STR_PAD_LEFT) . ':' . str_pad(round($min, 0), 2, 0, STR_PAD_LEFT);
     }
     
     public function getWorkReport($filters = array(), $limit = NULL, $offset = NULL) {

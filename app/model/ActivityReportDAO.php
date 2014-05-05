@@ -49,7 +49,8 @@ class ActivityReportDAO extends BasicDAO {
         if ($endDate === null) {
             $endDate = new DateTime('23:59:59');
         }
-
+        
+        
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
 
         $rsm->addScalarResult('id', 'userId', 'integer');

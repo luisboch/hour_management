@@ -11,27 +11,27 @@
  * @since Feb 19, 2014
  */
 class DateUtils {
-    public static function addTimeToDate(DateTime $d, $time){
+
+    public static function addTimeToDate(DateTime $d, $time) {
         $arr = split(':', $time);
         $h = $arr[0];
         $m = $arr[1];
-        if(count($arr) == 3){
+        if (count($arr) == 3) {
             $s = $arr[2];
             $d->setTime($h, $m, $s);
         } else {
             $d->setTime($h, $m, 0);
         }
-    } 
-    
+    }
+
     public static function toDataBaseDate(DateTime $df) {
         return $df->format('Y-m-d');
     }
-    
+
     public static function toDataBaseDateTime(DateTime $df) {
         return $df->format('Y-m-d H:i:s');
     }
-    
-    
+
     /**
      * 
      * @param DateTime $startDate
@@ -49,4 +49,73 @@ class DateUtils {
 
         return '';
     }
+
+    /**
+     * @param int $qtd
+     * @return DateTime[]
+     */
+    public function createArrayOfDates($qtd) {
+        // Work Array
+        $work = array();
+
+        // Get current date
+        $month = date("m");
+        $day = date("d");
+        $year = date("Y");
+
+        // Loop generating dates
+        for ($i = 1; $i <= $qtd; $i++) {
+            $str = date('Y-m-d', mktime(0, 0, 0, $month, ($day - $i), $year));
+            $work[] = DateTime::createFromFormat('Y-m-d', $str);
+        }
+
+        // Return
+        return $work;
+    }
+
+    /**
+     * 
+     * @param DateTime $date
+     * @return DateTime
+     */
+    public function getNextDate(DateTime $date = null) {
+
+        if($date == null){
+            $date = new DateTime();
+        }
+        
+        // Get current date
+        $month = $date->format('m');
+        $day = $date->format('d');
+        $year = $date->format('Y');
+
+        $str = date('Y-m-d', mktime(0, 0, 0, $month, ($day + 1), $year));
+        
+        $next = DateTime::createFromFormat('Y-m-d', $str);
+        
+        return $next;
+    }
+    
+    /**
+     * @param DateTime $date
+     * @return DateTime
+     */
+    public function getPreviousDate(DateTime $date = null) {
+
+        if($date == null){
+            $date = new DateTime();
+        }
+        
+        // Get current date
+        $month = $date->format('m');
+        $day = $date->format('d');
+        $year = $date->format('Y');
+
+        $str = date('Y-m-d', mktime(0, 0, 0, $month, ($day - 1), $year));
+        
+        $previous = DateTime::createFromFormat('Y-m-d', $str);
+        
+        return $previous;
+    }
+
 }

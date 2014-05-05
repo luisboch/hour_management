@@ -137,5 +137,73 @@ class BasicDAO {
             }
         }
     }
+    
+    /**
+     * @param DateTime $date
+     * @return DateTime
+     */
+    public function getPreviousWorkDate(DateTime $date = null) {
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
+
+        $rsm->addScalarResult('available', 'available', 'datetime');
+        
+        if($date == null){
+            $date = new DateTime();
+        }
+        
+        // Generate 1 month ago
+        $month = clone $date;
+        $month->modify('-1 month');
+        $dbDate = DateUtils::toDataBaseDate($date);
+        
+        $sql = "
+            select dates.dt as available
+              from (select CURRENT_DATE + i as dt from generate_series(date '".DateUtils::toDataBaseDate($month)."' - CURRENT_DATE, date '".$dbDate."' - CURRENT_DATE ) i) as dates
+             where extract (DOW from dates.dt) in (1,2,3,4,5)
+               and dates.dt not in (select h.date from holiday h where h.active = true)
+               and dates.dt < date '".$dbDate."'
+          order by dates.dt desc limit 1";
+        
+        $q = $this->em->createNativeQuery($sql, $rsm);
+        
+        $result = $q->getSingleScalarResult();
+        
+        return DateTime::createFromFormat('Y-m-d', $result);
+    }
+    
+    /**
+     * @param DateTime $date
+     * @return DateTime
+     */
+    public function getNextWorkDate(DateTime $date = null) {
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
+
+        $rsm->addScalarResult('available', 'available', 'datetime');
+        
+        if($date == null){
+            $date = new DateTime();
+        }
+        
+        // Generate 1 month ago
+        $month = clone $date;
+        $month->modify('+1 month');
+        $dbDate = DateUtils::toDataBaseDate($date);
+        
+        $sql = "
+            select dates.dt as available
+              from (select CURRENT_DATE + i as dt from generate_series(date '".$dbDate."' - CURRENT_DATE, date '".DateUtils::toDataBaseDate($month)."' - CURRENT_DATE ) i) as dates
+             where extract (DOW from dates.dt) in (1,2,3,4,5)
+               and dates.dt not in (select h.date from holiday h where h.active = true)
+               and dates.dt > date '".$dbDate."'
+          order by dates.dt asc limit 1";
+        
+        $q = $this->em->createNativeQuery($sql, $rsm);
+        
+        $result = $q->getSingleScalarResult();
+        
+        return DateTime::createFromFormat('Y-m-d', $result);
+    }
 
 }

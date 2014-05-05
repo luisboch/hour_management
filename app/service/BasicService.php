@@ -156,5 +156,22 @@ abstract class BasicService {
     public function searchCount($filters = array(), $activeOnly = NULL) {
         return $this->dao->searchCount($filters, $activeOnly);
     }
+    
+    
+    /**
+     * @param DateTime $date
+     * @return DateTime
+     */
+    public function getNextWorkDate(DateTime $date = null) {
+        return $this->dao->getNextWorkDate($date);
+    }
+    
+    /**
+     * @param DateTime $date
+     * @return type
+     */
+    public function getPreviousWorkDate(DateTime $date = null) {
+        return $this->dao->getPreviousWorkDate($date);
+    }
 
 }
