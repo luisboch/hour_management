@@ -199,6 +199,11 @@ class ActivityReportDAO extends BasicDAO {
         // Retrieve Indicators by User
         $report->setUserIndicators($this->getTypeUserReportIndicators($startDate, $endDate));
 
+        require_once APP_DIR . 'model/HolidayDAO.php';
+        $holidayDAO = new HolidayDAO();
+        
+        $report->setHolidays($holidayDAO->getHolidays($startDate, $endDate));
+
         return $report;
     }
 
@@ -223,6 +228,7 @@ class ActivityReportDAO extends BasicDAO {
                              left join activity_interaction ai on (ai.user_id = u.id and ai.start_date::date = dates.dt and ai.end_date is not null)
                              left join activity a on (ai.activity_id = a.id and a.active = true)
                                  where extract (DOW from dates.dt) in (1,2,3,4,5)
+                                   and dates.dt not in (select h.date from holiday h where h.active = true)
                               group by u.id , dates.dt)
                             as tmp
                       group by tmp.user_name) as tmp2
@@ -236,7 +242,7 @@ class ActivityReportDAO extends BasicDAO {
         $dbResult = $q->getResult();
 
         $results = array();
-        
+
         foreach ($dbResult as $v) {
 
             $r = new \report\result\ActivityReportTypeUserTotal();
@@ -369,6 +375,7 @@ class ActivityReportDAO extends BasicDAO {
                                  left join user_work_day w on w."date" = dates.dt
                                  left join users u on u.id = w.user_id and u.active = true
                                      where extract (DOW from dates.dt) in (1,2,3,4,5)
+                                       and dates.dt not in (select h.date from holiday h where h.active = true)
                                   group by dates.dt
                                ) as tmp
                         ) as tmp2';

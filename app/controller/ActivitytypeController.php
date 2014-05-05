@@ -35,9 +35,9 @@ class ActivitytypeController extends CrudBase {
 
     /**
      * 
-     * @param ActivityType $user
+     * @param ActivityType $activityType
      */
-    protected function isValid($user) {
+    protected function isValid($activityType) {
         return TRUE;
     }
 

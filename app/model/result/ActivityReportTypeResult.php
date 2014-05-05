@@ -23,6 +23,11 @@ class ActivityReportTypeTotal{
      */
     private $typesDetails;
     
+    /**
+     * @var Holiday[]
+     */
+    private $holidays;
+    
     
     /**
      * 
@@ -76,6 +81,21 @@ class ActivityReportTypeTotal{
      */
     public function setTypeIndicators($typeIndicators) {
         $this->typeIndicators = $typeIndicators;
+    }
+    
+    /**
+     * @return Holiday[]
+     */
+    public function getHolidays() {
+        return $this->holidays;
+    }
+
+    /**
+     * 
+     * @param Holiday[] $holidays
+     */
+    public function setHolidays($holidays) {
+        $this->holidays = $holidays;
     }
 }
 

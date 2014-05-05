@@ -1,17 +1,17 @@
 <?php
 
 require_once 'BasicDAO.php';
-require_once APP_DIR . 'entity/ActivityType.php';
+require_once APP_DIR . 'entity/Holiday.php';
 
 /**
+ * Description of HolidayDAO
  *
  * @author luis
- * @since Jan 7, 2014
  */
-class ActivityTypeDAO extends BasicDAO {
+class HolidayDAO extends BasicDAO {
 
     public function __construct() {
-        parent::__construct("ActivityType");
+        parent::__construct("Holiday");
     }
 
     public function search($filters = array(), $activeOnly = NULL, $limit = NULL, $offset = NULL) {
@@ -24,11 +24,19 @@ class ActivityTypeDAO extends BasicDAO {
             $dql .= "where $where ";
         }
 
-        $dql .= "order by x.name";
+        $dql .= "order by x.description";
 
         $q = $this->em->createQuery($dql);
 
-        $this->setParams($q, $filters);
+        foreach ($filters as $k => $v) {
+            if ($k == "active") {
+                $q->setParameter($k, $v, \Doctrine\DBAL\Types\Type::BOOLEAN);
+            } else if ($k == "date") {
+                $q->setParameter($k, $v, \Doctrine\DBAL\Types\Type::DATE);
+            } else {
+                $q->setParameter($k, $v);
+            }
+        }
 
         if ($limit != NULL) {
             $q->setMaxResults($limit);
@@ -51,7 +59,7 @@ class ActivityTypeDAO extends BasicDAO {
 
         $where = $this->buildWhere($filters, $activeOnly);
 
-        $dql = "select count(x.id) as qtd from ActivityType x ";
+        $dql = "select count(x.id) as qtd from Holiday x ";
 
         if ($where != '') {
             $dql .= "where $where ";
@@ -59,7 +67,15 @@ class ActivityTypeDAO extends BasicDAO {
 
         $q = $this->em->createQuery($dql);
 
-        $this->setParams($q, $filters);
+        foreach ($filters as $k => $v) {
+            if ($k == "active") {
+                $q->setParameter($k, $v, \Doctrine\DBAL\Types\Type::BOOLEAN);
+            } else if ($k == "date") {
+                $q->setParameter($k, $v, \Doctrine\DBAL\Types\Type::DATE);
+            } else {
+                $q->setParameter($k, $v);
+            }
+        }
 
         return $q->getSingleScalarResult();
     }
@@ -75,7 +91,7 @@ class ActivityTypeDAO extends BasicDAO {
             $whereEmpty = true;
             if (isset($filters["search"])) {
                 if ($filters["search"] != '') {
-                    $where .= "lower(x.name) like :search\n";
+                    $where .= "lower(x.description) like :search\n";
                     $whereEmpty = false;
                     $filters['search'] = '%' . mb_convert_case(str_replace(' ', '%', $filters['search']), MB_CASE_LOWER, "UTF-8") . '%';
                 } else {
@@ -84,28 +100,28 @@ class ActivityTypeDAO extends BasicDAO {
             } else {
                 $i = 0;
 
-                if (isset($filters['name']) && $filters['name'] != '') {
+                if (isset($filters['description']) && $filters['description'] != '') {
 
                     if ($i != 0) {
                         $where .= 'and ';
                     }
 
-                    $where .= 'lower(x.name) like :name ';
+                    $where .= 'lower(x.description) like :description ';
 
-                    $filters['name'] = '%' . strtolower(str_replace(' ', '%', $filters['name'])) . '%';
+                    $filters['description'] = '%' . strtolower(str_replace(' ', '%', $filters['description'])) . '%';
                     $i++;
                 } else {
-                    unset($filters['name']);
+                    unset($filters['description']);
                 }
 
-                if (isset($filters['id']) && $filters['id'] != '') {
+                if (isset($filters['date']) && $filters['date'] != '') {
                     if ($i != 0) {
                         $where .= 'and ';
                     }
-                    $where .= 'id = :id ';
+                    $where .= 'date = :date ';
                     $i++;
                 } else {
-                    unset($filters['id']);
+                    unset($filters['date']);
                 }
 
                 if ($i > 0) {
@@ -133,6 +149,35 @@ class ActivityTypeDAO extends BasicDAO {
             $whereEmpty = false;
         }
         return $where;
+    }
+
+    /**
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @throws InvalidArgumentException
+     * @return Holiday[] holidays
+     */
+    public function getHolidays($startDate, $endDate) {
+        if ($startDate == '') {
+            throw new InvalidArgumentException("Start date can't be null");
+        }
+
+        if ($endDate == '') {
+            $endDate = new DateTime();
+        }
+
+        $dql = ""
+                . "select h "
+                . "  from Holiday h "
+                . " where h.date between :start and :end"
+                . "   and h.active = true";
+
+
+        $q = $this->getEntityManager()->createQuery($dql);
+        $q->setParameter("start", $startDate, \Doctrine\DBAL\Types\Type::DATE);
+        $q->setParameter("end", $endDate, \Doctrine\DBAL\Types\Type::DATE);
+
+        return $q->getResult();
     }
 
 }

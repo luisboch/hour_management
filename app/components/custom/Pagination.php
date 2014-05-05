@@ -120,8 +120,6 @@ class Pagination {
                     $extraClass = 'disabled';
                 }
                 $html .= '<li class="' . $extraClass . '"><a href="' . $this->getUrl(1) . '" >&laquo;</a></li>';
-                //  $html .= '
-                //<a class="ui-button ' . $extraClass . '" href="' . $this->targetUrl . $this->prev . '">anterior</a>';
 
                 for ($i = $this->first; $i <= $this->last; $i++) {
 
@@ -135,10 +133,7 @@ class Pagination {
                 }
 
                 $html .= '<li class="' . $extraClass . '"><a href="' . $this->getUrl($this->pageNumber) . '">&raquo;</a></li>';
-                //    '<a class="ui-button ' . $extraClass . '" href="' . $this->targetUrl . $this->next . '">pr&oacute;xima</a>';
-                //    $html .= '
-                //    <a class="ui-button ' . $extraClass . '" href="' . $this->targetUrl . $this->pageNumber . '">&uacute;ltima</a>';
-
+                
                 $html .= '</ul></div>';
                 return $html;
             }

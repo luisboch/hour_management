@@ -35,8 +35,7 @@ class SecurityController extends ControllerBase {
                     $work = $this->service->getCurrentWorkDay($user);
                     if($work == null || $work->getStartWork() == null){
                         $this->session->setCanStartWork(true);
-                    }
-                    
+                    } 
                     if($work != null && $work->getStartWork() != null && $work->getEndWork() == null){
                         $this->session->setCanEndWork(true);
                     }

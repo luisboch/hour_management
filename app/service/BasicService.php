@@ -1,5 +1,8 @@
 <?php
+
 require_once 'SessionManager.php';
+require_once SERVICE_DIR . 'exceptions/ValidationException.php';
+
 /**
  * Description of BasicService
  *
@@ -12,11 +15,12 @@ abstract class BasicService {
      * @var BasicDAO
      */
     protected $dao;
-    
+
     /**
      * @var SessionManager
      */
     protected $session;
+
     function __construct(BasicDAO $dao) {
         $this->dao = $dao;
         $this->session = SessionManager::getInstance();
@@ -29,12 +33,12 @@ abstract class BasicService {
      */
     function save(BasicEntity $entity) {
         $this->validate($entity);
-        
+
         // Set creation date and last upadte values
         $date = new DateTime();
         $entity->setCreationDate($date);
         $entity->setLastUpdate($date);
-        
+
         try {
             // Begin Transaction
             $this->saveRelations($entity);
@@ -44,7 +48,7 @@ abstract class BasicService {
             throw $ex;
         }
     }
-    
+
     protected function saveRelations(BasicEntity $entity) {
         // nothing to do at default ( @see ActivityService )
     }
@@ -55,11 +59,11 @@ abstract class BasicService {
      * @throws Exception
      */
     function update(BasicEntity $entity) {
-        
+
         $this->validate($entity, false);
-        
+
         $entity->setLastUpdate(new DateTime());
-        
+
         try {
             // Begin Transaction
             $this->saveRelations($entity);
@@ -70,9 +74,8 @@ abstract class BasicService {
         }
     }
 
-    
     public abstract function validate($entity, $newObject = true);
-    
+
     /**
      * 
      * @param integer $id
@@ -118,7 +121,7 @@ abstract class BasicService {
     public function search($filters = array(), $activeOnly = NULL, $limit = NULL, $offset = NULL) {
         return $this->dao->search($filters, $activeOnly, $limit, $offset);
     }
-    
+
     /**
      * @param array $filters
      * Can user to search for all properties
