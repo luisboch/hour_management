@@ -107,13 +107,30 @@ class ActivitiesController extends CrudBase {
         }
     }
 
-    public function finishAction($activityId, $actionId) {
+    public function finishAction($activityId) {
         try {
+
+            $actionId = $this->request->getPost('action_id');
+
+            if ($actionId == null) {
+                $this->warn("Não é possível finalizar a atividade sem referencia!");
+                $this->response->redirect('activities/view/' . $activityId);
+                return;
+            }
+            
             $activity = $this->service->findById($activityId);
+            
+            $endDate = $this->request->getPost('finish_end_time');
+            if($endDate == ''){
+                $endDate = new DateTime();
+            } else {
+                $endDate = new DateTime($endDate);
+            }
+            
             /* @var Activity $activity */
             $action = $activity->getInteractionById($actionId);
             if ($action->getUser()->getId() === $this->session->getUser()->getId()) {
-                $action->setEndDate(new DateTime());
+                $action->setEndDate($endDate);
                 $this->service->save($activity);
 
                 $this->success("Ação concluída");
@@ -227,7 +244,7 @@ class ActivitiesController extends CrudBase {
         $endTime = $this->request->getPost('action_end_time');
 
         if (trim($startTime) != '' && trim($date) != '') {
-            
+
             if (!$instance->isFinished()) {
                 /* @var DateTime $today */
                 $startDate = DateTime::createFromFormat('d/m/y', $date);

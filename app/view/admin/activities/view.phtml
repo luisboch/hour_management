@@ -80,11 +80,11 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Usuário</th>
-                                            <th>Inicio</th>
-                                            <th>Fim</th>
-                                            <th class="hidden-xs">Total</th>
-                                            <th></th>
+                                            <th class="col-lg-4 col-xs-4">Usuário</th>
+                                            <th class="col-lg-2 col-xs-2">Inicio</th>
+                                            <th class="col-lg-2 col-xs-4">Fim</th>
+                                            <th class="hidden-xs col-lg-2 ">Total</th>
+                                            <th class="col-lg-2  col-xs-1"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -94,9 +94,15 @@
                                             <td>{{formatDate(a.getStartDate())}}</td>
                                             {% if a.getEndDate() == null %}
                                             <td>
-                                                <a href="{{ url('activities/finish/'~ instance.getId() ~ '/' ~ a.getId()) }}">
-                                                    <span class=" glyphicon glyphicon-thumbs-up" title="Concluir ação"></span>
-                                                </a>
+                                                <div class="input-group form-group col-lg-4 col-md-4">
+                                                    <input class="input-sm form-control col-lg-2 col-md-2 col-xs-6 "  
+                                                           type="time" id="ui-time-input" value="{{date('H:i')}}" />
+                                                    <span class="input-group-btn " onclick="return finishAction({{ a.getId() }}, $('#ui-time-input').val());">
+                                                        <button class="btn btn-sm btn-success">
+                                                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </td>
                                             {% endif %}
                                             {% if a.getEndDate() != null %}
@@ -145,44 +151,63 @@
                                 <a class="btn btn-danger" href="{{url('activities')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
                                 <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>
                             </div>
+                        </div>
                     </form>
+
+                    <form id="action_submit" action="{{ url('activities/finish/' ~ instance.getId()) }}" method="post">
+                        <input type="hidden" name="finish_end_time" id="finish_end_time" value="" />
+                        <input type="hidden" name="action_id" id="action_id" value="" />
+                    </form>
+
                 </fieldset>
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript">
+
+            function finishAction(a, t) {
+            alert(a + '' + t)
+                    try {
+                    $('#finish_end_time').val(t);
+                            $('#action_id').val(a);
+                            $('#action_submit').submit();
+                    } catch (e) {
+            alert(e);
+            }
+            return false;
+            }
+
     var opts = {
-        'minTime': '06:00am',
-        'maxTime': '08:00pm',
-        'timeFormat': 'H:i:s'
+    'minTime': '06:00am',
+            'maxTime': '08:00pm',
+            'timeFormat': 'H:i:s'
     };
-    $('#action_end_time').timepicker(opts);
-    $('#action_start_time').timepicker(opts);
-
-    $('#status').change(function() {
-        var chkActive = $('#active').is(':checked');
-        var newval = $('#status').val();
-        if (newval === '0' && chkActive) {
-            $('#newActionPanel').slideDown('fast');
-        } else {
-            $('input[name=action_start_time]').val('');
+            $('#action_end_time').timepicker(opts);
+            $('#action_start_time').timepicker(opts);
+            $('#ui-time-input').timepicker(opts);
+            $('#status').change(function() {
+    var chkActive = $('#active').is(':checked');
+            var newval = $('#status').val();
+            if (newval === '0' && chkActive) {
+    $('#newActionPanel').slideDown('fast');
+    } else {
+    $('input[name=action_start_time]').val('');
             $('input[name=action_end_time]').val('');
             $('#newActionPanel').slideUp('fast');
-        }
+    }
     });
-
-    $('#active').change(function() {
-        console.log("aaaa...");
-        var chkActive = $('#active').is(':checked');
-        var newval = $('#status').val();
-        if (newval === '0' && chkActive) {
-            $('#newActionPanel').slideDown('fast');
-        } else {
-            $('input[name=action_start_time]').val('');
+            $('#active').change(function() {
+    console.log("aaaa...");
+            var chkActive = $('#active').is(':checked');
+            var newval = $('#status').val();
+            if (newval === '0' && chkActive) {
+    $('#newActionPanel').slideDown('fast');
+    } else {
+    $('input[name=action_start_time]').val('');
             $('input[name=action_end_time]').val('');
             $('#newActionPanel').slideUp('fast');
-        }
+    }
 
     });
 </script>
