@@ -94,22 +94,30 @@
                                             <td>{{formatDate(a.getStartDate())}}</td>
                                             {% if a.getEndDate() == null %}
                                             <td>
+                                                {% if _session.getUser().getId() === a.getUser().getId() %}
                                                 <div class="input-group form-group col-lg-4 col-md-4">
-                                                    <input class="input-sm form-control col-lg-2 col-md-2 col-xs-6 "  
-                                                           type="time" id="ui-time-input" value="{{date('H:i')}}" />
-                                                    <span class="input-group-btn " onclick="return finishAction({{ a.getId() }}, $('#ui-time-input').val());">
+                                                    <input class="input-sm form-control col-lg-2 col-md-2 col-xs-6 action-input-time"  
+                                                           type="time" id="ui-time-input-{{ a.getId() }}"  value="{{date('H:i')}}" />
+                                                    <span class="input-group-btn " onclick="return finishAction({{ a.getId() }}, $('#ui-time-input-{{ a.getId() }}').val());">
                                                         <button class="btn btn-sm btn-success">
                                                             <span class="glyphicon glyphicon-floppy-disk"></span>
                                                         </button>
                                                     </span>
                                                 </div>
+                                                {% endif %}
                                             </td>
                                             {% endif %}
                                             {% if a.getEndDate() != null %}
                                             <td>{{formatDate(a.getEndDate())}}</td>
                                             {% endif %}
                                             <td class="hidden-xs">{{a.getAllocatedTime()}}</td>
-                                            <td><a href="{{ url('activities/remove/'~ instance.getId() ~ '/' ~ a.getId()) }}" onclick="return confirm('Deseja realmente remover esta ação?')"><span class=" glyphicon glyphicon-ban-circle"></span></a></td>
+                                            <td>
+                                                {% if _session.getUser().getId() === a.getUser().getId() %}
+                                                <a href="{{ url('activities/remove/'~ instance.getId() ~ '/' ~ a.getId()) }}" onclick="return confirm('Deseja realmente remover esta ação?')">
+                                                    <span class=" glyphicon glyphicon-ban-circle"></span>
+                                                </a>
+                                                {% endif %}
+                                            </td>
 
                                         </tr>
                                         {% endfor %}
@@ -164,51 +172,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-
-            function finishAction(a, t) {
-            alert(a + '' + t)
-                    try {
-                    $('#finish_end_time').val(t);
-                            $('#action_id').val(a);
-                            $('#action_submit').submit();
-                    } catch (e) {
-            alert(e);
-            }
-            return false;
-            }
-
-    var opts = {
-    'minTime': '06:00am',
-            'maxTime': '08:00pm',
-            'timeFormat': 'H:i:s'
-    };
-            $('#action_end_time').timepicker(opts);
-            $('#action_start_time').timepicker(opts);
-            $('#ui-time-input').timepicker(opts);
-            $('#status').change(function() {
-    var chkActive = $('#active').is(':checked');
-            var newval = $('#status').val();
-            if (newval === '0' && chkActive) {
-    $('#newActionPanel').slideDown('fast');
-    } else {
-    $('input[name=action_start_time]').val('');
-            $('input[name=action_end_time]').val('');
-            $('#newActionPanel').slideUp('fast');
-    }
-    });
-            $('#active').change(function() {
-    console.log("aaaa...");
-            var chkActive = $('#active').is(':checked');
-            var newval = $('#status').val();
-            if (newval === '0' && chkActive) {
-    $('#newActionPanel').slideDown('fast');
-    } else {
-    $('input[name=action_start_time]').val('');
-            $('input[name=action_end_time]').val('');
-            $('#newActionPanel').slideUp('fast');
-    }
-
-    });
-</script>
+<script type="text/javascript" src="{{url('js/activities/script.js')}}" />
 {% endblock %}

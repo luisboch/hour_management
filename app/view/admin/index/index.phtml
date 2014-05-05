@@ -35,8 +35,8 @@
                                 <td class="text-left">
                                     <form id="{{ 'formReportUser' ~ t.getUserId() }}" action="{{ url('report/work_detail/') }}">
                                         <a type="submit" href="#" onclick="$('#{{'formReportUser' ~ t.getUserId() }}').submit();">{{ t.getUserName() }}</a>
-                                        <input type="hidden" value="{{ date('d/m/y') }}" name="endDate" id="endDate" />
-                                        <input type="hidden" value="{{ date('d/m/y') }}" name="startDate" name="startDate" />
+                                        <input type="hidden" value="{{ formatDate(currentDate,'day-only') }}" name="endDate" id="endDate" />
+                                        <input type="hidden" value="{{ formatDate(currentDate,'day-only') }}" name="startDate" name="startDate" />
                                         <input type="hidden" value="{{ t.getUserId() }}" name="user_id" />
                                     </form>
                                 </td>
