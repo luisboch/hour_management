@@ -107,26 +107,27 @@ class ActivitiesController extends CrudBase {
         }
     }
 
-    public function finishAction($activityId) {
+    public function finishAction($activityId, $actionId) {
         try {
-
-            $actionId = $this->request->getPost('action_id');
-
+            if ($actionId == '') {
+                $actionId = $this->request->getPost('action_id');
+            }
+            
             if ($actionId == null) {
                 $this->warn("Não é possível finalizar a atividade sem referencia!");
                 $this->response->redirect('activities/view/' . $activityId);
                 return;
             }
-            
+
             $activity = $this->service->findById($activityId);
-            
+
             $endDate = $this->request->getPost('finish_end_time');
-            if($endDate == ''){
+            if ($endDate == '') {
                 $endDate = new DateTime();
             } else {
                 $endDate = new DateTime($endDate);
             }
-            
+
             /* @var Activity $activity */
             $action = $activity->getInteractionById($actionId);
             if ($action->getUser()->getId() === $this->session->getUser()->getId()) {
