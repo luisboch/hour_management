@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="col-md-9" role="main">
-            <p>{{ _session.getMessage() }}</ p>
+            <p>{{ _session.getMessage() }}</p>
             <div class="well">
                 <fieldset >
                     <legend>Atividades | Dados</legend>
@@ -95,7 +95,7 @@
                                             {% if a.getEndDate() == null %}
                                             <td>
                                                 {% if _session.getUser().getId() === a.getUser().getId() %}
-                                                <div class="input-group form-group col-lg-4 col-md-4">
+                                                <div class="input-group form-group col-lg-12 col-md-12">
                                                     <input class="input-sm form-control col-lg-2 col-md-2 col-xs-6 action-input-time"  
                                                            type="time" id="ui-time-input-{{ a.getId() }}"  value="{{date('H:i')}}" />
                                                     <span class="input-group-btn " onclick="return finishAction({{ a.getId() }}, $('#ui-time-input-{{ a.getId() }}').val());">
@@ -172,5 +172,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="{{url('js/activities/script.js')}}" />
+<script type="text/javascript" src="{{url('js/activities/script.js')}}" ></script>
 {% endblock %}
