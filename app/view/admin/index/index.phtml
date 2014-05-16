@@ -99,7 +99,9 @@
                         </thead>
                         <tbody>
                             {% for r in openActivities %}
-                            <tr>
+                            
+                            <tr {{ trim(r.getDescription()) != "" ? 'title="'~r.getDescription()~'"' : '' }} >
+                                
                                 <td class="text-left"><a href="{{ url('activities/view/' ~ r.getId() ) }}">{{ r.getName() }}</a></td>
                                 <td class="hidden-xs">{{ r.getPriority() }}</td>
 

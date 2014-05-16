@@ -46,6 +46,7 @@ try {
 
             $compiler->addFunction('formatDate', 'formatDate');
             $compiler->addFunction('count', 'count');
+            $compiler->addFunction('trim', 'trim');
 
             return $volt;
         };

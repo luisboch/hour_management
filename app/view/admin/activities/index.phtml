@@ -29,7 +29,7 @@
                         </thead>
                         <tbody>
                             {% for u in results1 %}
-                            <tr>
+                            <tr {{ trim(u.getDescription()) != "" ? 'title="'~u.getDescription()~'"' : '' }} >
                                 <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
                                 <td>{{ u.getName() }}</td>
                                 <td class="hidden-xs">{{ u.getPriority()}}</td>
@@ -62,7 +62,7 @@
                         </thead>
                         <tbody>
                             {% for u in results2 %}
-                            <tr>
+                            <tr {{ trim(u.getDescription()) != "" ? 'title="'~u.getDescription()~'"' : '' }} >
                                 <td><a href="{{ url('activities/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
                                 <td>{{ u.getName() }}</td>
                                 <td class="hidden-xs">{{ u.getPriority()}}</td>
