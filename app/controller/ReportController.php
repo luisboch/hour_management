@@ -62,7 +62,8 @@ class ReportController extends AdminBase {
             return false;
         } else {
             $results = $this->service->getWorkReport($this->getParams());
-            $this->view->results = $results;
+            $this->view->results = $results['results'];
+            $this->view->total = $results['total'];
             $this->view->user = $params['user'];
         }
     }

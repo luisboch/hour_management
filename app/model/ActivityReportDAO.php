@@ -49,8 +49,8 @@ class ActivityReportDAO extends BasicDAO {
         if ($endDate === null) {
             $endDate = new DateTime('23:59:59');
         }
-        
-        
+
+
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
 
         $rsm->addScalarResult('id', 'userId', 'integer');
@@ -202,7 +202,7 @@ class ActivityReportDAO extends BasicDAO {
 
         require_once APP_DIR . 'model/HolidayDAO.php';
         $holidayDAO = new HolidayDAO();
-        
+
         $report->setHolidays($holidayDAO->getHolidays($startDate, $endDate));
 
         return $report;
@@ -395,6 +395,12 @@ class ActivityReportDAO extends BasicDAO {
         return $result;
     }
 
+    /**
+     * @param type $filters
+     * @param type $limit
+     * @param type $offset
+     * @return array
+     */
     public function getWorkReport($filters = array(), $limit = NULL, $offset = NULL) {
 
         $startDate = $filters['startDate'];
@@ -417,22 +423,40 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('end_work', 'endWork', 'datetime');
         $rsm->addScalarResult('active_hour', 'activeHour', 'string');
         $rsm->addScalarResult('wday', 'day', 'date');
+        $rsm->addScalarResult('total', 'total', 'string');
+        $rsm->addScalarResult('discount', 'discount', 'string');
+        $rsm->addScalarResult('balance', 'balance', 'string');
 
-        $sql = "select u.name as username,
-                       u.id as userid, 
-                       w.start_work,
-                       w.end_work,
-                       w.day_active_hour as active_hour,
-                       to_char(w.\"date\", 'YYYY-MM-DD') as wday
-                  from user_work_day w
-                  join users u on w.user_id = u.id
-                 where w.\"date\" between :startDate and :endDate\n";
+        $sql = "select tb.*, (total - discount) as balance  from (
+                          select u.name as username,
+                                 u.id as userid,
+                                 w.start_work,
+                                 w.end_work,
+                                 w.day_active_hour as active_hour,
+                                 to_char(dates.dt, 'YYYY-MM-DD') as wday,
 
-        if ($user != null) {
-            $sql .= "and u.id = :user\n";
-        }
+                                  case 
+                                   when (w.end_work - w.start_work)::time(0) >  (w.day_active_hour + interval '01 hours')::time(0) then ((w.end_work - w.start_work)::time(0) - (w.day_active_hour +  interval '01 hours' )::time(0))::time(0)
+                                   else '00:00:00'::time(0) 
+                                    end  as total,
+
+                                     case
+                                   when w.start_work is null or ((w.end_work - w.start_work)::time(0) <  (w.day_active_hour + interval '01 hours')::time(0))
+                                   then (((coalesce(w.end_work,dates.dt::timestamp(0)) - coalesce(w.start_work,dates.dt::timestamp(0)) )::time(0) - (coalesce(w.day_active_hour, u.day_active_hour) +  ( case when w.start_work is null then interval '0 hours' else interval '01 hours' end) )::time(0)) * -1 )::time(0)
+                                   else '00:00:00'::time(0)
+                                    end  as discount
+
+                            from (select CURRENT_DATE + i as dt from generate_series(date '" . DateUtils::toDataBaseDate($startDate) . "' - CURRENT_DATE, date '" . DateUtils::toDataBaseDate($endDate) . "' - CURRENT_DATE ) i) as dates\n
+                            left join users u on u.id = :user\n
+                            left join user_work_day w on w.\"date\" = dates.dt and w.user_id = u.id\n
+                           where extract (DOW from dates.dt) in (1,2,3,4,5)\n
+                             and dates.dt not in (select h.date from holiday h where h.active = true)\n
+                        order by wday, userName\n
+                ) as tb \n";
+
 
         $sql .= "order by wday, userName";
+
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
@@ -446,16 +470,43 @@ class ActivityReportDAO extends BasicDAO {
         $dbResult = $q->getResult();
         $results = array();
 
+        $rsm->addScalarResult('username', 'userName', 'string');
+        $rsm->addScalarResult('userid', 'userId', 'integer');
+        $rsm->addScalarResult('start_work', 'startWork', 'datetime');
+        $rsm->addScalarResult('end_work', 'endWork', 'datetime');
+        $rsm->addScalarResult('active_hour', 'activeHour', 'string');
+        $rsm->addScalarResult('wday', 'day', 'date');
+        $rsm->addScalarResult('total', 'total', 'string');
+        $rsm->addScalarResult('discount', 'discount', 'string');
+        $rsm->addScalarResult('balance', 'balance', 'string');
+
         foreach ($dbResult as $v) {
             $r = new \report\result\WorkReportResult(
-                    $v['userName'], $v['userId'], $v['startWork'], $v['endWork'], $v['day'], $v['activeHour']);
-
-            $r->calculateExtra();
+                    $v['userName'], $v['userId'], $v['startWork'], $v['endWork'], $v['day'], $v['activeHour'], $v['total'], $v['discount'], $v['balance']);
 
             $results[] = $r;
         }
+        $result = array();
+        $result['results'] = $results;
+        $result['total'] = $this->calculateTotal($results);
+        return $result;
+    }
 
-        return $results;
+    private function calculateTotal($rs = array()) {
+        if ($rs != '' && is_array($rs) && count($rs) > 0) {
+
+            $total = 0;
+            foreach ($rs as $v) {
+                /* $v \report\result\WorkReportResult */
+                $float = DateUtils::getFloat($v->getBalance());
+
+                $total += $float;
+            }
+
+            return DateUtils::getHour($total);
+        }
+
+        return '';
     }
 
 }

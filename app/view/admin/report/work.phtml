@@ -24,7 +24,7 @@
                                 <th class="col-lg-2 col-md-2">Início</th>
                                 <th class="col-lg-2 col-md-2">Fim</th>
                                 <th class="col-lg-2 col-md-2">Disp.</th>
-                                <th class="col-lg-2 col-md-2">Extra</th>
+                                <th class="col-lg-2 col-md-2 text-center">Saldo</th>
                             </tr>
                         </thead>
 
@@ -35,10 +35,16 @@
                                 <td>{{ formatDate(r.getStartWork(), 'HM-only') }}</td>
                                 <td>{{ formatDate(r.getEndWork(),'HM-only') }}</td>
                                 <td>{{ r.getUserAvaliable() }}</td>
-                                <td>{{ (r.isNegativeExtra()?'-':'') ~ formatDate(r.getExtra(),'HM-only') }}</td>
+                                <td class="text-center " style="{{r.getDiscount() != '00:00:00' ? 'color:red;':'' }}">{{ r.getBalance() }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-right">Total:</td>
+                                <td class="text-center"><span style="font-weight: bold">{{total}}</span></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </fieldset>
             </div>

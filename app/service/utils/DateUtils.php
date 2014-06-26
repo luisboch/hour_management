@@ -80,42 +80,99 @@ class DateUtils {
      */
     public function getNextDate(DateTime $date = null) {
 
-        if($date == null){
+        if ($date == null) {
             $date = new DateTime();
         }
-        
+
         // Get current date
         $month = $date->format('m');
         $day = $date->format('d');
         $year = $date->format('Y');
 
         $str = date('Y-m-d', mktime(0, 0, 0, $month, ($day + 1), $year));
-        
+
         $next = DateTime::createFromFormat('Y-m-d', $str);
-        
+
         return $next;
     }
-    
+
     /**
      * @param DateTime $date
      * @return DateTime
      */
     public function getPreviousDate(DateTime $date = null) {
 
-        if($date == null){
+        if ($date == null) {
             $date = new DateTime();
         }
-        
+
         // Get current date
         $month = $date->format('m');
         $day = $date->format('d');
         $year = $date->format('Y');
 
         $str = date('Y-m-d', mktime(0, 0, 0, $month, ($day - 1), $year));
-        
+
         $previous = DateTime::createFromFormat('Y-m-d', $str);
-        
+
         return $previous;
+    }
+
+    /**
+     * 
+     * @param {string|object} $value
+     * @return float
+     */
+    public static function getFloat($value) {
+
+        if (is_object($value) && $value instanceof DateTime) {
+            $value = $value->format("H:i:s");
+        }
+
+        $isNegative = false;
+
+        if (substr($value, 0, 1) == '-') {
+            $isNegative = true;
+            $value = substr($value, 1);
+        }
+
+        $timestamp = strtotime($value);
+
+        $hour = date('H', $timestamp);
+        $minute = date('i', $timestamp);
+        $second = date('s', $timestamp);
+
+        $float = $hour + ($minute / 60) + ($second / 60 / 60);
+
+        if ($isNegative) {
+            $float = $float * -1;
+        }
+
+        return $float;
+    }
+
+    /**
+     * @param float $float
+     * @return string
+     */
+    public static function getHour($float) {
+        
+        $isNegative = false;
+        
+        if ($float < 0) {
+            $float = $float * -1;
+            $isNegative = true;
+        }
+
+        $hour = (int) $float;
+        $min = ($float - $hour) * 60;
+        
+        $str = str_pad($hour, 2, 0, STR_PAD_LEFT) . ':' . str_pad(round($min, 0), 2, 0, STR_PAD_LEFT);
+        
+        if ($isNegative) {
+            $str = '-' . $str;
+        }
+        return $str;
     }
 
 }
