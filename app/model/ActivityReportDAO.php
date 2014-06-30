@@ -56,12 +56,16 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('id', 'userId', 'integer');
         $rsm->addScalarResult('name', 'userName', 'string');
         $rsm->addScalarResult('wd', 'day_active_hour', 'time');
+        $rsm->addScalarResult('start_work', 'start_work', 'datetime');
+        $rsm->addScalarResult('end_work', 'end_work', 'datetime');
         $rsm->addScalarResult('allocated', 'allocated', 'string');
         $rsm->addScalarResult('wday', 'day', 'date');
 
         $sql = 'select u.id, 
                        u.name, 
                        uw.day_active_hour as wd,
+                       uw.start_work,
+                       uw.end_work,
                        to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
                        to_char(ai.start_date, \'YYYY-MM-DD\') as wday
                   from users u
@@ -92,6 +96,8 @@ class ActivityReportDAO extends BasicDAO {
             $val->setUserAllocatedHours(new DateTime($v['allocated']));
             $val->setUserTotalHours($v['day_active_hour']);
             $val->setDate($v['day']);
+            $val->setStartWork($v['start_work']);
+            $val->setEndWork($v['end_work']);
 
             if ($val->getUserTotalHours()->getTimestamp() < $val->getUserAllocatedHours()->getTimestamp()) {
                 $diff = $val->getUserTotalHours()->diff($val->getUserAllocatedHours());

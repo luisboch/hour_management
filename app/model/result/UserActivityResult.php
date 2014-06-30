@@ -14,6 +14,8 @@ class UserActivityResult {
     private $userTotalHours;
     private $date;
     private $percentFinished;
+    private $startWork;
+    private $endWork;
     /**
      *
      * @var DateTime
@@ -105,6 +107,22 @@ class UserActivityResult {
      */
     public function setExtra($extra) {
         $this->extra = $extra;
+    }
+
+    public function getStartWork() {
+        return $this->startWork;
+    }
+
+    public function getEndWork() {
+        return $this->endWork;
+    }
+
+    public function setStartWork($startWork) {
+        $this->startWork = $startWork;
+    }
+
+    public function setEndWork($endWork) {
+        $this->endWork = $endWork;
     }
 
 
