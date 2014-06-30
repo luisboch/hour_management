@@ -1,0 +1,66 @@
+{% extends '../template/adm.phtml' %}
+{% block content %}
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li><a href="{{ url('customer') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-play"></span>Inicio</a>
+                        <a href="{{ url('customer/new') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Novo</a>
+                        <a href="{{ url('customer') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-search"></span>Pesquisar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9 " role="main">
+            <div class="well">
+                <fieldset>
+                    <legend>Clientes | Pesquisar</legend>
+                    <form action="{{url('customer/search')}}" method="get" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-lg-11 col-lg-offset-1">
+                                <input type="text" class="form-control " name="search" value="<?= array_key_exists('search', $_GET) ? $_GET['search'] :''; ?>" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-1 col-md-2 col-xs-12 col-lg-offset-9 col-md-offset-8">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="active" {{active?'checked="checked"':''}} />Ativos
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-1 col-xs-12 text-right">
+                                <button class="btn btn-primary" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Clientes | Resultado</legend>
+                    <table class="table table-responsive table-striped table-hover">
+                        <thead class="fixedthead" >
+                            <tr>
+                                <th class="col-xs-2 col-sm-1" >#</th>
+                                <th class="col-xs-5 col-sm-5" >Nome</th>
+                                <th class="col-xs-6 col-sm-7">Último update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in results %}
+                            <tr>
+                                <td><a href="{{ url('customer/view/' ~ u.getId()) }}"><span class=" glyphicon glyphicon-edit "></span></a></td>
+                                <td>{{ u.getName() }}</td>
+                                <td>{{ formatDate(u.getLastUpdate())}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {{ pagination }}
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

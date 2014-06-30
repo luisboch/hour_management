@@ -64,3 +64,13 @@ CREATE TABLE activity_type
 alter table activity add
   constraint fk_type foreign key (type_id)
 	references activity_type(id);
+
+
+CREATE TABLE customer
+(
+  id serial primary key,
+  name character varying(255) NOT NULL,
+  creation_date timestamp(0) without time zone NOT NULL DEFAULT now(),
+  last_update timestamp(0) without time zone NOT NULL DEFAULT now(),
+  active boolean NOT NULL
+);

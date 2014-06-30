@@ -1,0 +1,44 @@
+{% extends '../template/adm.phtml' %}
+{% block content %}
+<div class="container bs-docs-container">
+    <div class="row">
+        <div class="col-md-3 ">
+            <div class="bs-sidebar hidden-print"  data-spy="affix" data-offset-bottom="180" role="complementary">
+                <ul class="nav bs-sidenav">
+                    <li>
+                    <li><a href="{{ url('customer') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-play"></span>Inicio</a>
+                        <a href="{{ url('customer/new') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-edit"></span>Novo</a>
+                        <a href="{{ url('customer') }}" class="list-group-item" ><span class="menu-icon glyphicon glyphicon-search"></span>Pesquisar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-9 " role="main">
+            <p>{{ _session.getMessage() }}</ p>
+            <div class="well">
+                <fieldset>
+                    <legend>Cliente | Dados</legend>
+                    <form action="{{ url('customer/save/') }}" method="post">
+                        <input type="hidden" name="id" value="{{instance.getId()}}">
+                        <div class="form-group">
+                            <label for="name" >Nome</label>
+                            <input type="text" class="form-control" name="name" placeholder="Nome do cliente" value="{{instance.getName()}}"/>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="active" {{instance.getActive()?'checked="checked"':''}} />Ativo?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group text-right" >
+                            <a class="btn btn-danger" href="{{url('customer')}}"  >Cancelar<span class="menu-icon glyphicon glyphicon-ban-circle"></span></a>
+                            <button type="submit" class="btn btn-success"  >Salvar<span class="menu-icon glyphicon glyphicon-ok"></span></button>
+                        </div>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+    </div> 
+</div>
+{% endblock %}
