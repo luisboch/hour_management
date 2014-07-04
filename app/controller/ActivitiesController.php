@@ -45,7 +45,7 @@ class ActivitiesController extends CrudBase {
         $this->userService = new UserService();
         $this->customerService = new CustomerService();
 
-        $this->customers = $this->customerService->search();
+        $this->customers = $this->customerService->search(array(), true);
         $this->view->customers = $this->customers;
         $status = 'open';
         $this->setTitle('Atividades');

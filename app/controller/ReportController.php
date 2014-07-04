@@ -2,7 +2,9 @@
 
 require_once SERVICE_DIR . 'report/ActivityReportService.php';
 require_once SERVICE_DIR . 'report/UserReport.php';
-require_once APP_DIR . 'service/UserService.php';
+require_once SERVICE_DIR . 'UserService.php';
+require_once SERVICE_DIR . 'CustomerService.php';
+require_once SERVICE_DIR . 'ActivityTypeService.php';
 
 /**
  * Description of ReportController
@@ -24,15 +26,32 @@ class ReportController extends AdminBase {
      */
     private $userService;
 
+    /**
+     *
+     * @var CustomerService
+     */
+    private $customerService;
+
+    /**
+     *
+     * @var ActivityTypeService
+     */
+    private $activityTypeService;
+
     public function initialize() {
         parent::initialize();
         $this->service = new ActivityReportService();
         $this->userService = new UserService();
+        $this->customerService = new CustomerService();
+        $this->activityTypeService = new ActivityTypeService();
+
         $this->setTitle('Relatórios');
     }
 
     public function indexAction() {
         $this->view->users = $this->userService->search(array(), true);
+        $this->view->types = $this->activityTypeService->search(array(), true);
+        $this->view->customers = $this->customerService->search(array(), true);
     }
 
     public function userAction() {
@@ -76,6 +95,8 @@ class ReportController extends AdminBase {
         $endDate = $this->request->getQuery('endDate');
 
         $userId = $this->request->getQuery('user_id');
+        $customerId = $this->request->getQuery('customer_id');
+        $typeId = $this->request->getQuery('type_id');
 
         if ($startDate != '') {
             $startDate = DateTime::createFromFormat('d/m/y', $startDate);
@@ -91,15 +112,32 @@ class ReportController extends AdminBase {
         } else {
             $endDate = new DateTime('23:59:59');
         }
+
         $user = null;
+        $customer = null;
+        $type = null;
 
         if ($userId != '') {
             $user = $this->userService->findById($userId);
         }
-        return array('startDate' => $startDate, 'endDate' => $endDate, 'user' => $user);
+
+        if ($customerId != '') {
+            $customer = $this->customerService->findById($customerId);
+        }
+
+        if ($typeId != '') {
+            $type = $this->activityTypeService->findById($typeId);
+        }
+
+        return array(
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'user' => $user,
+            'type' => $type,
+            'customer' => $customer);
     }
-    
-    public function work_detailAction(){
+
+    public function work_detailAction() {
         $params = $this->getParams();
         $service = new UserReport();
         $this->view->userResult = $params['user'];

@@ -21,7 +21,7 @@
                             <div class="form-group">
                                 <label for="report_selection">Selecione o relatório</label>
                                 <select name="report_selection" id="report_selection" class="form-control">
-                                    <option value="">---Selecione---</option>
+                                    <option value="" selected="selected">---Selecione---</option>
                                     <option value="1">Usuários</option>
                                     <option value="2">Atividades</option>
                                     <option value="3">Tipos de atividade</option>
@@ -72,6 +72,28 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row" id="customer" style="margin: 10px 0px;">
+                                    <div class="">
+                                        <label>Cliente</label>
+                                        <select name="customer_id" id="customer_id" class="form-control"  style="width: 100%">
+                                            <option value="">---Selecione---</option>
+                                            {% for c in customers %}
+                                            <option value="{{c.getId()}}">{{c.getName()}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row" id="type" style="margin: 10px 0px;">
+                                    <div class="">
+                                        <label>Tipo de atividade</label>
+                                        <select name="type_id" id="type_id" class="form-control"  style="width: 100%">
+                                            <option value="">---Selecione---</option>
+                                            {% for t in types %}
+                                            <option value="{{t.getId()}}">{{t.getName()}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="" style="margin-top: 20px">
                                         <button class="btn btn-primary pull-right" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
@@ -89,20 +111,28 @@
     $('#report_selection').change(function() {
         var newval = $('#report_selection').val();
         $('div#user').css('display', 'none');
+        $('div#user').find('span.text-danger').css('display', 'inline');
+        $('div#customer').css('display', 'none');
+        $('div#type').css('display', 'none');
         if (newval === '') {
             $('#paramsPanel').slideUp();
         } else {
             $('#paramsPanel').slideDown();
-            if (newval === '1') {
+            if (newval === '1') { // Users
                 $('#paramsForm').attr('action', '{{ url("report/user")}}');
-            } else if (newval === '2') {
+            } else if (newval === '2') { // Activity
                 $('#paramsForm').attr('action', '{{ url("report/activity")}}');
-            } else if (newval === '3') {
+            } else if (newval === '3') { // Activity type
                 $('#paramsForm').attr('action', '{{ url("report/type")}}');
-            } else if (newval === '4') {
+
+                $('div#user').css('display', 'block');
+                $('div#customer').css('display', 'block');
+                $('div#type').css('display', 'block');
+                $('div#user').find('span.text-danger').css('display', 'none');
+            } else if (newval === '4') { // Work
                 $('#paramsForm').attr('action', '{{ url("report/work")}}');
                 $('div#user').css('display', 'block');
-            } else if (newval === '5') {
+            } else if (newval === '5') { // Activity by day
                 $('#paramsForm').attr('action', '{{ url("report/work_detail")}}');
                 $('div#user').css('display', 'block');
             }
@@ -111,19 +141,20 @@
 
     $('#paramsForm').submit(function() {
 
+        var newval = $('#report_selection').val();
         var user = $('div#user');
 
-        if (user.is(':visible')) {
-            try{
+        if (user.is(':visible') && newval !== '3') {
+            try {
                 if (user.find('option:selected').val() === "") {
                     alert("Selecione um usuário!");
                     return false;
                 }
-            } catch (e){
+            } catch (e) {
                 return false;
             }
-        return true;
-    }
+            return true;
+        }
 
     });
 </script>

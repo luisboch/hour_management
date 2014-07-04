@@ -189,22 +189,25 @@ class ActivityReportDAO extends BasicDAO {
             $endDate = new DateTime('23:59:59');
         }
 
+        $customer = $filters['customer'];
+        $user = $filters['user'];
+        $type = $filters['type'];
+
         $report = new report\result\ActivityReportTypeTotal();
 
         // Retrieve details 
         $report->setTypesDetails(
-                $this->getTypeReportDetails($startDate, $endDate));
+                $this->getTypeReportDetails($startDate, $endDate, $customer, $type, $user));
 
         // Retrieve Indicators
         $report->setIndicators(
-                $this->getTypeReportIndicators($startDate, $endDate));
-
+                $this->getTypeReportIndicators($startDate, $endDate, $customer, $type, $user));
         // Retrieve Indicators by Type
         $report->setTypeIndicators(
-                $this->getTypeDetailedReportIndicators($startDate, $endDate));
+                $this->getTypeDetailedReportIndicators($startDate, $endDate, $customer, $type, $user));
 
         // Retrieve Indicators by User
-        $report->setUserIndicators($this->getTypeUserReportIndicators($startDate, $endDate));
+        $report->setUserIndicators($this->getTypeUserReportIndicators($startDate, $endDate, $customer, $type, $user));
 
         require_once APP_DIR . 'model/HolidayDAO.php';
         $holidayDAO = new HolidayDAO();
@@ -215,10 +218,14 @@ class ActivityReportDAO extends BasicDAO {
     }
 
     /**
-     * 
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @param Customer $customer
+     * @param ActivityType $type
+     * @param User $user
      * @return \report\result\ActivityReportTypeResult[]
      */
-    private function getTypeUserReportIndicators(DateTime $startDate, DateTime $endDate) {
+    private function getTypeUserReportIndicators(DateTime $startDate, DateTime $endDate, $customer, $type, $user) {
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
 
@@ -236,6 +243,21 @@ class ActivityReportDAO extends BasicDAO {
                              left join activity a on (ai.activity_id = a.id and a.active = true)
                                  where extract (DOW from dates.dt) in (1,2,3,4,5)
                                    and dates.dt not in (select h.date from holiday h where h.active = true)
+                                   ";
+
+        if ($customer != null) {
+            $sql .= 'and a.customer_id = ' . $customer->getId() . "\n";
+        }
+
+        if ($type != null) {
+            $sql .= 'and a.type_id = ' . $type->getId() . "\n";
+        }
+
+        if ($user != null) {
+            $sql .= 'and ai.user_id = ' . $user->getId() . "\n";
+        }
+
+        $sql .= "
                               group by u.id , dates.dt)
                             as tmp
                       group by tmp.user_name) as tmp2
@@ -266,10 +288,14 @@ class ActivityReportDAO extends BasicDAO {
     }
 
     /**
-     * 
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @param Customer $customer
+     * @param ActivityType $type
+     * @param User $user
      * @return \report\result\ActivityReportTypeResult[]
      */
-    private function getTypeDetailedReportIndicators(DateTime $startDate, DateTime $endDate) {
+    private function getTypeDetailedReportIndicators(DateTime $startDate, DateTime $endDate, $customer, $type, $user) {
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
 
@@ -284,9 +310,22 @@ class ActivityReportDAO extends BasicDAO {
                   join users u on u.id = ai.user_id and u.active = true
                  where ai.start_date between :startDate and :endDate
                    and a.active = true
-                   and ai.end_date is not null
-              group by activityType
-              order by activityType";
+                   and ai.end_date is not null\n";
+
+        if ($customer != null) {
+            $sql .= "and a.customer_id = " . $customer->getId() . "\n";
+        }
+
+        if ($user != null) {
+            $sql .= "and ai.user_id = " . $user->getId() . "\n";
+        }
+
+        if ($type != null) {
+            $sql .= "and a.type_id = " . $type->getId() . "\n";
+        }
+
+        $sql .= "group by activityType
+                 order by activityType";
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
@@ -307,10 +346,14 @@ class ActivityReportDAO extends BasicDAO {
     }
 
     /**
-     * 
-     * @return \report\result\ActivityReportTypeResult[]
+     * @param DateTime $startDate
+     * @param DateTime $endDate
+     * @param Customer $customer
+     * @param ActivityType $type
+     * @param User $user
+     * @return \report\result\ActivityReportTypeDetailResult[]
      */
-    private function getTypeReportDetails(DateTime $startDate, DateTime $endDate) {
+    private function getTypeReportDetails(DateTime $startDate, DateTime $endDate, $customer, $type, $user) {
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
 
@@ -328,12 +371,26 @@ class ActivityReportDAO extends BasicDAO {
                   join activity_type t on a.type_id = t.id
                   join users u on u.id = ai.user_id and u.active = true
                  where ai.start_date::date between 
-                         '" . DateUtils::toDataBaseDate($startDate) . "' and '" . DateUtils::toDataBaseDate($endDate) . "'
+                         '" . DateUtils::toDataBaseDate($startDate) . "' and '" . DateUtils::toDataBaseDate($endDate) . "'\n";
+
+        if ($customer != null) {
+            $sql .= "and a.customer_id = " . $customer->getId() . "\n";
+        }
+
+        if ($type != null) {
+            $sql .= "and a.type_id = " . $type->getId() . "\n";
+        }
+
+        if ($user != null) {
+            $sql .= "and ai.user_id = " . $user->getId() . "\n";
+        }
+
+        $sql .="
                    and a.active = true
                    and ai.end_date is not null
               group by userName, activityType, wday
               order by wday, userName, activityType";
-
+        
         $q = $this->em->createNativeQuery($sql, $rsm);
 
         $q->setParameter('startDate', $startDate, 'datetime');
@@ -353,9 +410,12 @@ class ActivityReportDAO extends BasicDAO {
     /**
      * @param DateTime $startDate
      * @param DateTime $endDate
+     * @param Customer $customer
+     * @param ActivityType $type
+     * @param User $user
      * @return \report\result\ActivityReportTypeIndicator
      */
-    private function getTypeReportIndicators(DateTime $startDate, DateTime $endDate) {
+    private function getTypeReportIndicators(DateTime $startDate, DateTime $endDate, $customer, $type, $user) {
 
         $rsm = new \Doctrine\ORM\Query\ResultSetMappingBuilder($this->em);
 
@@ -363,24 +423,41 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('allocated_time', 'allocated_time', 'string');
         $rsm->addScalarResult('remaining_time', 'remaining_time', 'string');
 
-        $sql = 'select avaliable_time, allocated_time, avaliable_time - allocated_time as remaining_time 
-                  from (select sum(avaliable_time) as avaliable_time, sum(allocated_time) as allocated_time
-                          from (
-                                    select dates.dt,getAvaliableTime(dates.dt) as avaliable_time ,
-                                           sum( 
-                                               case when w.id is null 
-                                                    then \'00:00:00\'::interval
-                                                    else (select COALESCE(sum(ai_inner.end_date - ai_inner.start_date), \'00:00:00\'::interval) as allocated_time
+        $sql = 'select avaliable_time, allocated_time, avaliable_time - allocated_time as remaining_time
+                       from (select sum(avaliable_time) as avaliable_time, sum(allocated_time) as allocated_time
+                                     from (
+                                     select dates.dt,getAvaliableTime(dates.dt) as avaliable_time ,
+                                                 sum(
+                                                 case when w.id is null
+                                                            then \'00:00:00\'::interval
+                                                  else (select COALESCE(sum(ai_inner.end_date - ai_inner.start_date), \'00:00:00\'::interval) as allocated_time
                                                             from activity_interaction ai_inner 
                                                             join activity a_inner on (a_inner.id = ai_inner.activity_id and a_inner.active = true)
                                                            where ai_inner.user_id = u.id 
                                                              and ai_inner.start_date::date = dates.dt               
-                                                             and ai_inner.end_date is not null) 
+                                                             and ai_inner.end_date is not null
+                                                             ';
+
+        if ($type != null) {
+            $sql .= '                                       and a_inner.type_id = ' . $type->getId();
+        }
+
+        if ($customer != null) {
+            $sql .= '                                       and a_inner.customer_id = ' . $customer->getId();
+        }
+
+        if ($user != null) {
+            $sql .= '                                       and ai_inner.user_id = ' . $user->getId();
+        }
+
+        $sql .= ') 
+                                                             
+                
                                                      end
                                              ) as allocated_time
                                       from (select CURRENT_DATE + i as dt from generate_series(date \'' . DateUtils::toDataBaseDate($startDate) . '\' - CURRENT_DATE, date \'' . DateUtils::toDataBaseDate($endDate) . '\' - CURRENT_DATE ) i) as dates
                                  left join user_work_day w on w."date" = dates.dt
-                                 left join users u on u.id = w.user_id and u.active = true
+                                 left join users u on u.id = w.user_id and u.active = true ' . ($user != null ? 'and u.id = ' . $user->getId() : '') . '
                                      where extract (DOW from dates.dt) in (1,2,3,4,5)
                                        and dates.dt not in (select h.date from holiday h where h.active = true)
                                   group by dates.dt
@@ -433,31 +510,27 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('discount', 'discount', 'string');
         $rsm->addScalarResult('balance', 'balance', 'string');
 
-        $sql = "select tb.*, (total - discount) as balance  from (
-                          select u.name as username,
-                                 u.id as userid,
-                                 w.start_work,
-                                 w.end_work,
-                                 w.day_active_hour as active_hour,
-                                 to_char(dates.dt, 'YYYY-MM-DD') as wday,
+        $sql = "select tb.*, (total - discount) as balance 
+                  from (select u.name as username,
+                               u.id as userid,
+                               w.start_work,
+                               w.end_work,
+                               w.day_active_hour as active_hour,
+                               to_char(dates.dt, 'YYYY-MM-DD') as wday,
+                               case
+                                    when (w.end_work - w.start_work)::time(0) > (w.day_active_hour + interval '01 hours')::time(0) then ((w.end_work - w.start_work)::time(0) - (w.day_active_hour + interval '01 hours' )::time(0))::time(0) else '00:00:00'::time(0)
+                               end as total,
+                               case
+                                    when w.start_work is null or ((w.end_work - w.start_work)::time(0) < (w.day_active_hour + interval '01 hours')::time(0))
+                               then (((coalesce(w.end_work, dates.dt::timestamp(0)) - coalesce(w.start_work, dates.dt::timestamp(0)) )::time(0) - (coalesce(w.day_active_hour, u.day_active_hour) + ( case when w.start_work is null then interval '0 hours' else interval '01 hours' end) )::time(0)) * -1 )::time(0) else '00:00:00'::time(0)
+                               end as discount
 
-                                  case 
-                                   when (w.end_work - w.start_work)::time(0) >  (w.day_active_hour + interval '01 hours')::time(0) then ((w.end_work - w.start_work)::time(0) - (w.day_active_hour +  interval '01 hours' )::time(0))::time(0)
-                                   else '00:00:00'::time(0) 
-                                    end  as total,
-
-                                     case
-                                   when w.start_work is null or ((w.end_work - w.start_work)::time(0) <  (w.day_active_hour + interval '01 hours')::time(0))
-                                   then (((coalesce(w.end_work,dates.dt::timestamp(0)) - coalesce(w.start_work,dates.dt::timestamp(0)) )::time(0) - (coalesce(w.day_active_hour, u.day_active_hour) +  ( case when w.start_work is null then interval '0 hours' else interval '01 hours' end) )::time(0)) * -1 )::time(0)
-                                   else '00:00:00'::time(0)
-                                    end  as discount
-
-                            from (select CURRENT_DATE + i as dt from generate_series(date '" . DateUtils::toDataBaseDate($startDate) . "' - CURRENT_DATE, date '" . DateUtils::toDataBaseDate($endDate) . "' - CURRENT_DATE ) i) as dates\n
-                            left join users u on u.id = :user\n
-                            left join user_work_day w on w.\"date\" = dates.dt and w.user_id = u.id\n
-                           where extract (DOW from dates.dt) in (1,2,3,4,5)\n
-                             and dates.dt not in (select h.date from holiday h where h.active = true)\n
-                        order by wday, userName\n
+                          from (select CURRENT_DATE + i as dt from generate_series(date '" . DateUtils::toDataBaseDate($startDate) . "' - CURRENT_DATE, date '" . DateUtils::toDataBaseDate($endDate) . "' - CURRENT_DATE ) i) as dates\n
+                     left join users u on u.id = :user\n
+                     left join user_work_day w on w.\"date\" = dates.dt and w.user_id = u.id\n
+                         where extract (DOW from dates.dt) in (1,2,3,4,5)\n
+                           and dates.dt not in (select h.date from holiday h where h.active = true)\n
+                      order by wday, userName\n
                 ) as tb \n";
 
 
