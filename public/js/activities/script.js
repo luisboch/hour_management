@@ -43,4 +43,3 @@ $('#active').change(function() {
     }
 
 });
-

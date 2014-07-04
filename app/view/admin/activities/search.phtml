@@ -20,7 +20,7 @@
                         <legend>Atividades | Pesquisa</legend>
                         <div style="margin-bottom: 10px">
                             <label for="search">Nome</label>
-                            <input type="text" class="form-control " name="search" value="<?= array_key_exists('search', $_GET) ? $_GET['search'] :''; ?>" />
+                            <input type="text" class="form-control " name="search" value="<?= array_key_exists('search', $_GET) ? $_GET['search'] : ''; ?>" />
                         </div>
                         <div style="margin-bottom: 10px">
                             <label for="type" >Tipo de Atividade</label>
@@ -34,7 +34,8 @@
                         <div style="margin-bottom: 10px">
                             <label for="user" >Responsável</label>
                             <select class="form-control" name="user">
-                                <option value="">Não delegado </option>
+                                <option value="none" {{ user_id == 'none' ? 'selected' : '' }}>Não delegado</option>
+                                <option value="all" {{ user_id === 'all' ? 'selected' : '' }} default="true">Todos</option>
                                 {% for t in users %}
                                 <option value="{{t.getId()}}" {{user_id == t.getId() ? 'selected':''}} >{{t.getName()}}</option>
                                 {% endfor %}
@@ -47,6 +48,16 @@
                                 <option value="0"  {{status == 0 ? 'selected':''}}>Aberto</option>
                                 <option value="1" {{status == 1 ? 'selected':''}}>Finalizado</option>
 
+                            </select>
+                        </div>
+
+                        <div style="margin-bottom: 10px">
+                            <label for="type" >Cliente</label>
+                            <select class="form-control" name="customer_id">
+                                <option value="">---Selecione---</option>
+                                {% for c in customers %}
+                                <option value="{{c.getId()}}" {{customer_id == c.getId() ? 'selected':''}} >{{c.getName()}}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="form-group">

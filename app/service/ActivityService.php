@@ -49,6 +49,10 @@ class ActivityService extends BasicService {
             if ($activity->getPriority() == null) {
                 $v->addError("Insira a prioridade", 'priority');
             }
+            
+            if($activity->getCustomer() == null){
+                $v->addError("Selecione o cliente", "customer");
+            }
 
             if ($activity->getInteractions() !== null) {
 

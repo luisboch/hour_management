@@ -3,7 +3,7 @@
 require_once 'ActivityType.php';
 require_once 'ActivityInteraction.php';
 require_once 'User.php';
-require_once 'BasicEntity.php';
+require_once 'Customer.php';
 
 /**
  * Description of Activity
@@ -69,6 +69,14 @@ class Activity implements BasicEntity {
      * @var ActivityInteraction[]
      */
     private $interactions = array();
+    
+    /**
+     *
+     * @ManyToOne(targetEntity="Customer", cascade={}, fetch="LAZY")
+     * @JoinColumn(name="customer_id", referencedColumnName="id")
+     * @var Customer
+     */
+    private $customer;
 
     /**
      * @var boolean
@@ -202,7 +210,23 @@ class Activity implements BasicEntity {
     public function isOpen() {
         return $this->status == 0;
     }
+    
+    /**
+     * 
+     * @return Customer
+     */
+    public function getCustomer() {
+        return $this->customer;
+    }
 
+    /**
+     * 
+     * @param Customer $customer
+     */
+    public function setCustomer($customer) {
+        $this->customer = $customer;
+    }
+    
     public function removeInteraction($id) {
         foreach ($this->interactions as $k => $v) {
             if ($v->getId() == $id) {

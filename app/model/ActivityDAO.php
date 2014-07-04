@@ -33,19 +33,37 @@ class ActivityDAO extends BasicDAO {
         $whereWithoutParam = array();
         if (array_key_exists('user', $filters)) {
 
-            if ($filters['user'] !== NULL) {
+            if ($filters['user'] != NULL) {
+                if ($filters['user'] != 'all') {
+                    $qb->leftJoin('a.user', 'u');
+                    $i++;
+                    $whereArray[$i] = $qb->expr()->eq('u.id', '?' . $i);
 
-                $qb->leftJoin('a.user', 'u');
-                $i++;
-                $whereArray[$i] = $qb->expr()->eq('u.id', '?' . $i);
-                
-                if (is_object($filters['user'])) {
-                    $whereParams[$i] = $filters['user']->getId();
-                } else {
-                    $whereParams[$i] = $filters['user'];
+                    if (is_object($filters['user'])) {
+                        $whereParams[$i] = $filters['user']->getId();
+                    } else {
+                        $whereParams[$i] = $filters['user'];
+                    }
                 }
             } else {
                 $whereWithoutParam[] = $qb->expr()->isNull('a.user');
+            }
+        }
+
+
+        if (array_key_exists('customer', $filters)) {
+
+            if ($filters['customer'] !== NULL) {
+
+                $qb->leftJoin('a.customer', 'c');
+                $i++;
+                $whereArray[$i] = $qb->expr()->eq('c.id', '?' . $i);
+
+                if (is_object($filters['customer'])) {
+                    $whereParams[$i] = $filters['customer']->getId();
+                } else {
+                    $whereParams[$i] = $filters['customer'];
+                }
             }
         }
 
@@ -137,19 +155,37 @@ class ActivityDAO extends BasicDAO {
         $whereWithoutParam = array();
         if (array_key_exists('user', $filters)) {
 
-            if ($filters['user'] !== NULL) {
+            if ($filters['user'] != NULL) {
+                if ($filters['user'] != 'all') {
+                    $qb->leftJoin('a.user', 'u');
+                    $i++;
+                    $whereArray[$i] = $qb->expr()->eq('u.id', '?' . $i);
 
-                $qb->leftJoin('a.user', 'u');
-                $i++;
-                $whereArray[$i] = $qb->expr()->eq('u.id', '?' . $i);
-                
-                if (is_object($filters['user'])) {
-                    $whereParams[$i] = $filters['user']->getId();
-                } else {
-                    $whereParams[$i] = $filters['user'];
+                    if (is_object($filters['user'])) {
+                        $whereParams[$i] = $filters['user']->getId();
+                    } else {
+                        $whereParams[$i] = $filters['user'];
+                    }
                 }
             } else {
                 $whereWithoutParam[] = $qb->expr()->isNull('a.user');
+            }
+        }
+
+
+        if (array_key_exists('customer', $filters)) {
+
+            if ($filters['customer'] !== NULL) {
+
+                $qb->leftJoin('a.customer', 'c');
+                $i++;
+                $whereArray[$i] = $qb->expr()->eq('c.id', '?' . $i);
+
+                if (is_object($filters['customer'])) {
+                    $whereParams[$i] = $filters['customer']->getId();
+                } else {
+                    $whereParams[$i] = $filters['customer'];
+                }
             }
         }
 

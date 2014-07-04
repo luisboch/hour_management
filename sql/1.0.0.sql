@@ -72,5 +72,11 @@ CREATE TABLE customer
   name character varying(255) NOT NULL,
   creation_date timestamp(0) without time zone NOT NULL DEFAULT now(),
   last_update timestamp(0) without time zone NOT NULL DEFAULT now(),
-  active boolean NOT NULL
+  active boolean NOT NULL default true
 );
+
+-- insert into customer (name) values ('Company name');
+
+alter table activity add column customer_id integer;
+update activity set customer_id = 1; 
+alter table activity alter column customer_id set not null;

@@ -53,6 +53,15 @@
                                     {% endfor %}
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="user" >Cliente</label>
+                                <select class="form-control" name="customer_id">
+                                    <option value="">---Selecione---</option>
+                                    {% for c in customers %}
+                                    <option value="{{c.getId()}}" {{ c.equals(instance.getCustomer()) ? 'selected':'' }} >{{c.getName()}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
                             <div class="form-group">
                                 <label for="status" >Status</label>

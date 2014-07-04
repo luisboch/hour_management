@@ -84,4 +84,18 @@ class Customer implements BasicEntity {
         return "Customer:{name: " . $this->name . ", id: " . $this->id . ", active: " . $this->active ? 'true' : 'false' . "}";
     }
 
+    
+    /**
+     * 
+     * @param Customer $customer
+     */
+    public function equals($customer) {
+        if ($customer !== null &&
+                is_object($customer) &&
+                $customer instanceof Customer &&
+                $this->getId() === $customer->getId()) {
+            return true;
+        }
+        return false;
+    }
 }

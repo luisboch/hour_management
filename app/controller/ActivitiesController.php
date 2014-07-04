@@ -1,6 +1,7 @@
 <?php
 
 require_once SERVICE_DIR . 'ActivityService.php';
+require_once SERVICE_DIR . 'CustomerService.php';
 require_once SERVICE_DIR . 'ActivityTypeService.php';
 require_once SERVICE_DIR . 'UserService.php';
 require_once SERVICE_DIR . 'utils/DateUtils.php';
@@ -21,15 +22,32 @@ class ActivitiesController extends CrudBase {
 
     /**
      *
+     * @var CustomerService
+     */
+    private $customerService;
+
+    /**
+     *
      * @var UserService
      */
     private $userService;
+
+    /**
+     *
+     * @var Customer[]
+     */
+    private $customers;
+    private $status;
 
     public function initialize() {
         parent::initialize(new ActivityService());
         $this->activityTypeService = new ActivityTypeService();
         $this->userService = new UserService();
+        $this->customerService = new CustomerService();
 
+        $this->customers = $this->customerService->search();
+        $this->view->customers = $this->customers;
+        $status = 'open';
         $this->setTitle('Atividades');
     }
 
@@ -112,7 +130,7 @@ class ActivitiesController extends CrudBase {
             if ($actionId == '') {
                 $actionId = $this->request->getPost('action_id');
             }
-            
+
             if ($actionId == null) {
                 $this->warn("Não é possível finalizar a atividade sem referencia!");
                 $this->response->redirect('activities/view/' . $activityId);
@@ -180,18 +198,30 @@ class ActivitiesController extends CrudBase {
         }
 
         if ($userId != '') {
-            $filters['user'] = $this->userService->findById($userId);
-        } else {
-            $filters['user'] = null;
+            
+            if ($userId === 'none') {
+                $filters['user'] = '';
+            } else if ($userId === 'all') {
+                $filters['user'] = $userId;
+            } else {
+                $filters['user'] = $this->userService->findById($userId);
+            }
+            
+            $this->view->user_id = $userId;
         }
-
-        $this->view->user_id = $userId;
 
         // Type filter
         $typeId = $this->request->getQuery('type');
         if ($typeId != '') {
             $filters['type'] = $typeId;
             $this->view->type = $typeId;
+        }
+
+        $customerId = $this->request->getQuery('customer_id');
+
+        if ($customerId != '') {
+            $filters['customer'] = $customerId;
+            $this->view->customer_id = $customerId;
         }
 
         // Status filter
@@ -238,6 +268,15 @@ class ActivitiesController extends CrudBase {
         } else {
             $instance->setUser(null);
         }
+
+        $customerId = $this->request->getPost('customer_id');
+
+        if ($customerId != null) {
+            $this->instance->setCustomer($this->customerService->findById($customerId));
+        } else {
+            $this->instance->setCustomer(null);
+        }
+
         $instance->setStatus($this->request->getPost('status'));
 
         $date = $this->request->getPost('action_date');
