@@ -32,7 +32,7 @@
                         </form>
                     </div>
                 </fieldset>
-                <div id="paramsPanel" style="display: none;">
+                <div id="paramsPanel">
                     <fieldset>
                         <legend>Filtros</legend>
                         <div class="col-lg-10 col-lg-offset-1">
@@ -64,7 +64,7 @@
                                 <div class="row" id="user" style="margin: 10px 0px;">
                                     <div class="">
                                         <label>Usuário <span class="text-danger">*</span></label>
-                                        <select name="user_id" id="user_id" class="form-control"  style="width: 100%">
+                                        <select disabled="disabled" name="user_id" id="user_id" class="form-control"  style="width: 100%">
                                             <option value="">---Selecione---</option>
                                             {% for u in users %}
                                             <option value="{{u.getId()}}">{{u.getName()}}</option>
@@ -75,7 +75,7 @@
                                 <div class="row" id="customer" style="margin: 10px 0px;">
                                     <div class="">
                                         <label>Cliente</label>
-                                        <select name="customer_id" id="customer_id" class="form-control"  style="width: 100%">
+                                        <select disabled="disabled" name="customer_id" id="customer_id" class="form-control"  style="width: 100%">
                                             <option value="">---Selecione---</option>
                                             {% for c in customers %}
                                             <option value="{{c.getId()}}">{{c.getName()}}</option>
@@ -86,7 +86,7 @@
                                 <div class="row" id="type" style="margin: 10px 0px;">
                                     <div class="">
                                         <label>Tipo de atividade</label>
-                                        <select name="type_id" id="type_id" class="form-control"  style="width: 100%">
+                                        <select disabled="disabled" name="type_id" id="type_id" class="form-control"  style="width: 100%">
                                             <option value="">---Selecione---</option>
                                             {% for t in types %}
                                             <option value="{{t.getId()}}">{{t.getName()}}</option>
@@ -110,10 +110,12 @@
 <script type="text/javascript">
     $('#report_selection').change(function() {
         var newval = $('#report_selection').val();
-        $('div#user').css('display', 'none');
-        $('div#user').find('span.text-danger').css('display', 'inline');
-        $('div#customer').css('display', 'none');
-        $('div#type').css('display', 'none');
+
+        $('#user_id').attr('disabled', 'disabled');
+        $('#user').find('span.text-danger').css('display', 'inline');
+        $('#customer_id').attr('disabled', 'disabled');
+        $('#type_id').attr('disabled', 'disabled');
+
         if (newval === '') {
             $('#paramsPanel').slideUp();
         } else {
@@ -125,26 +127,26 @@
             } else if (newval === '3') { // Activity type
                 $('#paramsForm').attr('action', '{{ url("report/type")}}');
 
-                $('div#user').css('display', 'block');
-                $('div#customer').css('display', 'block');
-                $('div#type').css('display', 'block');
+                $('#user_id').removeAttr('disabled');
+                $('#customer_id').removeAttr('disabled');
+                $('#type_id').removeAttr('disabled');
+
                 $('div#user').find('span.text-danger').css('display', 'none');
             } else if (newval === '4') { // Work
                 $('#paramsForm').attr('action', '{{ url("report/work")}}');
-                $('div#user').css('display', 'block');
+                $('#user_id').removeAttr('disabled');
             } else if (newval === '5') { // Activity by day
                 $('#paramsForm').attr('action', '{{ url("report/work_detail")}}');
-                $('div#user').css('display', 'block');
+                $('#user_id').removeAttr('disabled');
             }
         }
     });
-
     $('#paramsForm').submit(function() {
 
         var newval = $('#report_selection').val();
-        var user = $('div#user');
+        var user = $('div#user_id');
 
-        if (user.is(':visible') && newval !== '3') {
+        if (!user.is(':disabled') && newval !== '3') {
             try {
                 if (user.find('option:selected').val() === "") {
                     alert("Selecione um usuário!");
@@ -157,5 +159,104 @@
         }
 
     });
+
+
+//    $(document).ready(function() {
+//        FormManager.init($('#paramsForm'));
+//    });
+//
+//    var FormManager = {};
+//
+//    FormManager.putValue = function(el, v) {
+//        var tagName = el.prop("tagName");
+//        if (tagName === "SELECT") {
+//            el.find("option[selected]").removeAttr("selected");
+//            el.find("option[value=" + v + "]").attr("selected", "selected");
+//        } else {
+//            el.val(v);
+//        }
+//        el.trigger("change");
+//    };
+//
+//    FormManager.init = function(form) {
+//
+//        FormManager.form = $(form);
+//
+//        if ($('input[name=fmaux]').length === 0) {
+//            $(form).append('<input type="hidden" value="#" name="fmaux" />');
+//        }
+//
+//        var url = $('input[name=fmaux]').val().substr(1);
+//        console.log(url);
+//        var params = url.split("&");
+//
+//        var map = FormManager.params;
+//
+//        $(params).each(function(a) {
+//            if (this.indexOf("=") !== -1) {
+//                var arr = this.split("=");
+//                map[arr[0]] = arr[1];
+//            }
+//        });
+//
+//        $.each(map, function(k, v) {
+//            if (isNaN(k)) {
+//                $('[name=' + k + ']').each(function() {
+//                    FormManager.putValue($(this), v);
+//                });
+//            }
+//        });
+//
+//        FormManager.bindElementsEvent();
+//    };
+
+//    FormManager.bindElementsEvent = function() {
+//        $('input, select, textarea').each(function() {
+//            FormManager.bindEvent($(this));
+//        });
+//    };
+//
+//    FormManager.getValue = function(el) {
+//        var tagName = el.prop("tagName");
+//        if (tagName === "SELECT") {
+//            return el.find(":selected").attr('value');
+//        } else if (tagName === "TEXTAREA") {
+//            return el.text();
+//        } else {
+//            return el.val();
+//        }
+//    };
+//
+//    FormManager.bindEvent = function(el) {
+//
+//        el.change(function() {
+//            var val = FormManager.getValue($(this));
+//            console.log($(this));
+//            FormManager.params[$(this).attr("name")] = val;
+//            FormManager.updateURL();
+//
+//        });
+//
+//        console.log($(this));
+//    };
+//
+//    FormManager.updateURL = function() {
+//
+//        var realURL = "#";
+//
+//        $.each(FormManager.params, function(k, v) {
+//            realURL = realURL + k + "=" + v + "&";
+//        });
+//
+//        realURL = realURL.substr(0, realURL.length - 1);
+//
+//        if ($('input[name=fmaux]').length === 0) {
+//            $(form).append('<input type="hidden" value="#" name="fmaux" />');
+//        }
+//
+//        $('input[name=fmaux]').val(realURL);
+//    };
+//    FormManager.params = {};
+
 </script>
 {% endblock %}
