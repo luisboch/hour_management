@@ -14,50 +14,51 @@
         <div class="col-md-9" role="main">
             <p>{{ _session.getMessage() }}</ p>
             <div class="well">
-                <fieldset>
-                    <legend>Relatório</legend>
-                    <div class="col-lg-10 col-lg-offset-1">
-                        <form class="form-horizontal" action="#" method="get">
-                            <div class="form-group">
-                                <label for="report_selection">Selecione o relatório</label>
-                                <select name="report_selection" id="report_selection" class="form-control">
+                <form action="#" id="paramsForm" method="get" class="form-inline">
+                    <fieldset>
+                        <legend>Relatório</legend>
+                        <div class="col-lg-10 col-lg-offset-1">
+                            <div class="row" style=" margin: 10px 0px;">
+                                <label for="report_selection" 
+                                       class="control-label" style="display: block">Selecione o relatório</label>
+                                <select name="report_selection" id="report_selection" 
+                                        class="form-control"
+                                        style="width: 100%;">
                                     <option value="" selected="selected">---Selecione---</option>
-                                    <option value="1">Usuários</option>
-                                    <option value="2">Atividades</option>
-                                    <option value="3">Tipos de atividade</option>
-                                    <option value="4">Ponto</option>
-                                    <option value="5">Atividades Dia</option>
+                                    <option value="1" {{ params['report'] == 1 ? 'selected' : ''}} >Usuários</option>
+                                    <option value="2" {{ params['report'] == 2 ? 'selected' : ''}} >Atividades</option>
+                                    <option value="3" {{ params['report'] == 3 ? 'selected' : ''}} >Tipos de atividade</option>
+                                    <option value="4" {{ params['report'] == 4 ? 'selected' : ''}} >Ponto</option>
+                                    <option value="5" {{ params['report'] == 5 ? 'selected' : ''}} >Atividades Dia</option>
                                 </select>
                             </div>
-                        </form>
-                    </div>
-                </fieldset>
-                <div id="paramsPanel">
-                    <fieldset>
-                        <legend>Filtros</legend>
-                        <div class="col-lg-10 col-lg-offset-1">
-                            <form action="#" id="paramsForm" method="get" class="form-inline">
+                        </div>
+                    </fieldset>
+                    <div id="paramsPanel">
+                        <fieldset>
+                            <legend>Filtros</legend>
+                            <div class="col-lg-10 col-lg-offset-1">
                                 <div class="row">
                                     <div class="form-group col-lg-6 col-md-6 col-xs-12 col-sm-6">
                                         <label class="control-label">Data inicial</label>
-                                        <div class="input-date input-group date" data-date-format="dd/mm/yy" data-date="{{ date('d/m/y') }}">
+                                        <div class="input-date input-group date" data-date-format="dd/mm/yy" data-date="{{ params['startDate'] == '' ? date('d/m/y') : params['startDate'] }}">
                                             <span class="input-group-btn add-on">
                                                 <button class="btn btn-primary">
                                                     <span class="glyphicon glyphicon-calendar icon-calendar"></span>
                                                 </button>
                                             </span>
-                                            <input type="text" class="form-control" name="startDate" value="{{ date('d/m/y') }}"  />
+                                            <input type="text" class="form-control" name="startDate" value="{{ params['startDate'] == '' ? date('d/m/y') : params['startDate'] }}"  />
                                         </div>
                                     </div>
                                     <div class=" col-lg-6 col-md-6 col-xs-12 col-sm-6">
                                         <label class="control-label">Data final</label>
-                                        <div class="input-date input-group date" data-date-format="dd/mm/yy" data-date="{{ date('d/m/y') }}">
+                                        <div class="input-date input-group date" data-date-format="dd/mm/yy" data-date="{{ params['endDate'] == '' ? date('d/m/y') : params['endDate'] }}">
                                             <span class="input-group-btn add-on">
                                                 <button class="btn btn-primary">
                                                     <span class="glyphicon glyphicon-calendar icon-calendar"></span>
                                                 </button>
                                             </span>
-                                            <input type="text" class="form-control" name="endDate" value="{{ date('d/m/y') }}"  />
+                                            <input type="text" class="form-control" name="endDate" value="{{ params['endDate'] == '' ? date('d/m/y') : params['endDate'] }}"  />
                                         </div>
                                     </div>
                                 </div>
@@ -67,7 +68,7 @@
                                         <select disabled="disabled" name="user_id" id="user_id" class="form-control"  style="width: 100%">
                                             <option value="">---Selecione---</option>
                                             {% for u in users %}
-                                            <option value="{{u.getId()}}">{{u.getName()}}</option>
+                                            <option value="{{u.getId()}}" {{params['user'] == u.getId() ? 'selected' : ''}}>{{u.getName()}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -78,7 +79,7 @@
                                         <select disabled="disabled" name="customer_id" id="customer_id" class="form-control"  style="width: 100%">
                                             <option value="">---Selecione---</option>
                                             {% for c in customers %}
-                                            <option value="{{c.getId()}}">{{c.getName()}}</option>
+                                            <option value="{{c.getId()}}" {{params['customer'] == c.getId() ? 'selected' : ''}}>{{c.getName()}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -89,174 +90,66 @@
                                         <select disabled="disabled" name="type_id" id="type_id" class="form-control"  style="width: 100%">
                                             <option value="">---Selecione---</option>
                                             {% for t in types %}
-                                            <option value="{{t.getId()}}">{{t.getName()}}</option>
+                                            <option value="{{t.getId()}}" {{params['type'] == t.getId() ? 'selected' : ''}}>{{t.getName()}}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="" style="margin-top: 20px">
-                                        <button class="btn btn-primary pull-right" type="submit"><span class="menu-icon glyphicon glyphicon-search"></span></button>
+                                        <button class="btn btn-primary pull-right"
+                                                type="submit" title="Pesquisar">
+                                            <span class="menu-icon glyphicon glyphicon-search"></span>
+                                        </button>
+                                        <button class="btn btn-primary pull-right"
+                                                type="button" title="Limpar" style="margin-right: 10px "
+                                                onclick="try {
+                                                            clearParams();
+                                                        } catch (e) {
+                                                        }
+                                                        ;
+                                                        return false;">
+                                            <span class="menu-icon glyphicon glyphicon glyphicon-ban-circle"></span>
+                                        </button>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </fieldset>
-                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $('#report_selection').change(function() {
-        var newval = $('#report_selection').val();
-
-        $('#user_id').attr('disabled', 'disabled');
-        $('#user').find('span.text-danger').css('display', 'inline');
-        $('#customer_id').attr('disabled', 'disabled');
-        $('#type_id').attr('disabled', 'disabled');
-
-        if (newval === '') {
-            $('#paramsPanel').slideUp();
-        } else {
-            $('#paramsPanel').slideDown();
-            if (newval === '1') { // Users
-                $('#paramsForm').attr('action', '{{ url("report/user")}}');
-            } else if (newval === '2') { // Activity
-                $('#paramsForm').attr('action', '{{ url("report/activity")}}');
-            } else if (newval === '3') { // Activity type
-                $('#paramsForm').attr('action', '{{ url("report/type")}}');
-
-                $('#user_id').removeAttr('disabled');
-                $('#customer_id').removeAttr('disabled');
-                $('#type_id').removeAttr('disabled');
-
-                $('div#user').find('span.text-danger').css('display', 'none');
-            } else if (newval === '4') { // Work
-                $('#paramsForm').attr('action', '{{ url("report/work")}}');
-                $('#user_id').removeAttr('disabled');
-            } else if (newval === '5') { // Activity by day
-                $('#paramsForm').attr('action', '{{ url("report/work_detail")}}');
-                $('#user_id').removeAttr('disabled');
-            }
-        }
-    });
-    $('#paramsForm').submit(function() {
-
-        var newval = $('#report_selection').val();
-        var user = $('div#user_id');
-
-        if (!user.is(':disabled') && newval !== '3') {
-            try {
-                if (user.find('option:selected').val() === "") {
-                    alert("Selecione um usuário!");
-                    return false;
-                }
-            } catch (e) {
-                return false;
-            }
-            return true;
-        }
-
-    });
-
-
-//    $(document).ready(function() {
-//        FormManager.init($('#paramsForm'));
-//    });
-//
-//    var FormManager = {};
-//
-//    FormManager.putValue = function(el, v) {
-//        var tagName = el.prop("tagName");
-//        if (tagName === "SELECT") {
-//            el.find("option[selected]").removeAttr("selected");
-//            el.find("option[value=" + v + "]").attr("selected", "selected");
-//        } else {
-//            el.val(v);
-//        }
-//        el.trigger("change");
-//    };
-//
-//    FormManager.init = function(form) {
-//
-//        FormManager.form = $(form);
-//
-//        if ($('input[name=fmaux]').length === 0) {
-//            $(form).append('<input type="hidden" value="#" name="fmaux" />');
-//        }
-//
-//        var url = $('input[name=fmaux]').val().substr(1);
-//        console.log(url);
-//        var params = url.split("&");
-//
-//        var map = FormManager.params;
-//
-//        $(params).each(function(a) {
-//            if (this.indexOf("=") !== -1) {
-//                var arr = this.split("=");
-//                map[arr[0]] = arr[1];
-//            }
-//        });
-//
-//        $.each(map, function(k, v) {
-//            if (isNaN(k)) {
-//                $('[name=' + k + ']').each(function() {
-//                    FormManager.putValue($(this), v);
-//                });
-//            }
-//        });
-//
-//        FormManager.bindElementsEvent();
-//    };
-
-//    FormManager.bindElementsEvent = function() {
-//        $('input, select, textarea').each(function() {
-//            FormManager.bindEvent($(this));
-//        });
-//    };
-//
-//    FormManager.getValue = function(el) {
-//        var tagName = el.prop("tagName");
-//        if (tagName === "SELECT") {
-//            return el.find(":selected").attr('value');
-//        } else if (tagName === "TEXTAREA") {
-//            return el.text();
-//        } else {
-//            return el.val();
-//        }
-//    };
-//
-//    FormManager.bindEvent = function(el) {
-//
-//        el.change(function() {
-//            var val = FormManager.getValue($(this));
-//            console.log($(this));
-//            FormManager.params[$(this).attr("name")] = val;
-//            FormManager.updateURL();
-//
-//        });
-//
-//        console.log($(this));
-//    };
-//
-//    FormManager.updateURL = function() {
-//
-//        var realURL = "#";
-//
-//        $.each(FormManager.params, function(k, v) {
-//            realURL = realURL + k + "=" + v + "&";
-//        });
-//
-//        realURL = realURL.substr(0, realURL.length - 1);
-//
-//        if ($('input[name=fmaux]').length === 0) {
-//            $(form).append('<input type="hidden" value="#" name="fmaux" />');
-//        }
-//
-//        $('input[name=fmaux]').val(realURL);
-//    };
-//    FormManager.params = {};
-
+<script type="text/javascript" src="{{url('js/report/script.js')}}"></script>
+<script type="text/javascript" >
+                                                    $('#report_selection').change(function() {
+                                                        var newval = $('#report_selection').val();
+                                                        $('#user_id').attr('disabled', 'disabled');
+                                                        $('#user').find('span.text-danger').css('display', 'inline');
+                                                        $('#customer_id').attr('disabled', 'disabled');
+                                                        $('#type_id').attr('disabled', 'disabled');
+                                                        if (newval !== '') {
+                                                            if (newval === '1') { // Users
+                                                                $('#paramsForm').attr('action', '{{ url("report/user")}}');
+                                                            } else if (newval === '2') { // Activity
+                                                                $('#paramsForm').attr('action', '{{ url("report/activity")}}');
+                                                            } else if (newval === '3') { // Activity type
+                                                                $('#paramsForm').attr('action', '{{ url("report/type")}}');
+                                                                $('#user_id').removeAttr('disabled');
+                                                                $('#customer_id').removeAttr('disabled');
+                                                                $('#type_id').removeAttr('disabled');
+                                                                $('div#user').find('span.text-danger').css('display', 'none');
+                                                            } else if (newval === '4') { // Work
+                                                                $('#paramsForm').attr('action', '{{ url("report/work")}}');
+                                                                $('#user_id').removeAttr('disabled');
+                                                            } else if (newval === '5') { // Activity by day
+                                                                $('#paramsForm').attr('action', '{{ url("report/work_detail")}}');
+                                                                $('#user_id').removeAttr('disabled');
+                                                            }
+                                                        } else {
+                                                                $('#paramsForm').attr('action', '#');
+                                                        }
+                                                    });
 </script>
 {% endblock %}

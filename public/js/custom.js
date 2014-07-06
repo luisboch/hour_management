@@ -10,6 +10,5 @@ $(document).ready(function() {
                df.attr("selected", "selected")
             }
         }
-
     })
 })

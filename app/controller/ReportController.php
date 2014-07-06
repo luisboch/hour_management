@@ -52,6 +52,8 @@ class ReportController extends AdminBase {
         $this->view->users = $this->userService->search(array(), true);
         $this->view->types = $this->activityTypeService->search(array(), true);
         $this->view->customers = $this->customerService->search(array(), true);
+        
+        $this->view->params = $this->session->getReportFilters();
     }
 
     public function userAction() {
@@ -91,22 +93,23 @@ class ReportController extends AdminBase {
      * @return array
      */
     private function getParams() {
-        $startDate = $this->request->getQuery('startDate');
-        $endDate = $this->request->getQuery('endDate');
+        $report = $this->request->getQuery('report_selection');
+        $startDateParam = $this->request->getQuery('startDate');
+        $endDateParam = $this->request->getQuery('endDate');
 
         $userId = $this->request->getQuery('user_id');
         $customerId = $this->request->getQuery('customer_id');
         $typeId = $this->request->getQuery('type_id');
 
-        if ($startDate != '') {
-            $startDate = DateTime::createFromFormat('d/m/y', $startDate);
+        if ($startDateParam != '') {
+            $startDate = DateTime::createFromFormat('d/m/y', $startDateParam);
 
             $startDate->setTime(00, 00, 00);
         } else {
             $startDate = new DateTime('00:00:00');
         }
-        if ($endDate != '') {
-            $endDate = DateTime::createFromFormat('d/m/y', $endDate);
+        if ($endDateParam != '') {
+            $endDate = DateTime::createFromFormat('d/m/y', $endDateParam);
             /* @var DateTime $endDate */
             $endDate->setTime(23, 59, 59);
         } else {
@@ -128,13 +131,25 @@ class ReportController extends AdminBase {
         if ($typeId != '') {
             $type = $this->activityTypeService->findById($typeId);
         }
-
-        return array(
+        
+        $params = array(
             'startDate' => $startDate,
             'endDate' => $endDate,
             'user' => $user,
             'type' => $type,
             'customer' => $customer);
+        
+        $sessionParams = array(
+            'startDate' => $startDateParam,
+            'endDate' => $endDateParam,
+            'user' => $userId,
+            'type' => $typeId,
+            'customer' => $customerId,
+            'report' => $report);
+        
+        $this->session->setReportFilters($sessionParams);
+        
+        return $params;
     }
 
     public function work_detailAction() {
@@ -143,5 +158,6 @@ class ReportController extends AdminBase {
         $this->view->userResult = $params['user'];
         $this->view->results = $service->getUserActivityReport($params);
     }
+
 
 }

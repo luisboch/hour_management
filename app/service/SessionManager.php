@@ -23,9 +23,12 @@ class SessionManager {
      * @var MessageSession
      */
     private $message;
+    
     private $canStartWork = false;
     private $canEndWork = false;
-
+    
+    private $reportFilters = array();
+    
     private function __construct() {
         $this->message = new MessageSession();
     }
@@ -104,6 +107,22 @@ class SessionManager {
 
     public function setCanEndWork($canEndWork) {
         $this->canEndWork = $canEndWork;
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getReportFilters() {
+        return $this->reportFilters;
+    }
+
+    /**
+     * 
+     * @param array $reportFilters
+     */
+    public function setReportFilters($reportFilters) {
+        $this->reportFilters = $reportFilters;
     }
 
 }
