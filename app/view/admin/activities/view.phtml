@@ -36,15 +36,6 @@
                                 <input type="number" max="100" min="0" class="form-control" name="priority" required value="{{instance.getPriority()}}"/>
                             </div>
                             <div class="form-group">
-                                <label for="cpf" >Tipo de Atividade</label>
-                                <select class="form-control" name="type">
-                                    <option value="">---Selecione---</option>
-                                    {% for t in types %}
-                                    <option value="{{t.getId()}}" {{ t.equals(instance.getActivityType()) ? 'selected':'' }} >{{t.getName()}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="user" >Responsável</label>
                                 <select class="form-control" name="user">
                                     <option value="">---Selecione---</option>
@@ -59,6 +50,16 @@
                                     <option value="">---Selecione---</option>
                                     {% for c in customers %}
                                     <option value="{{c.getId()}}" {{ c.equals(instance.getCustomer()) ? 'selected':'' }} >{{c.getName()}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cpf" >Tipo de Atividade</label>
+                                <select class="form-control" name="type">
+                                    <option value="">---Selecione---</option>
+                                    {% for t in types %}
+                                    <option value="{{t.getId()}}" {{ t.equals(instance.getActivityType()) ? 'selected':'' }} >{{t.getName()}}</option>
                                     {% endfor %}
                                 </select>
                             </div>

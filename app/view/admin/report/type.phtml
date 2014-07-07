@@ -132,7 +132,8 @@
                                     <tr>
                                         <th class="col-lg-3 col-md-3">Data</th>
                                         <th class="col-lg-3 col-md-3">Usuário</th>
-                                        <th class="col-lg-5 col-md-5">Tipo</th>
+                                        <th class="col-lg-2 col-md-2">Cliente</th>
+                                        <th class="col-lg-3 col-md-3">Tipo</th>
                                         <th class="col-lg-2 col-md-2">Total</th>
                                     </tr>
                                 </thead>
@@ -142,6 +143,7 @@
                                     <tr>
                                         <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
                                         <td>{{ r.getActivityUser() }}</td>
+                                        <td>{{ r.getCustomerName() }}</td>
                                         <td>{{ r.getActivityType() }}</td>
                                         <td class="text-right">{{ r.getAllocated() }}</td>
                                     </tr>

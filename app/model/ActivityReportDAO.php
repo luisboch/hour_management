@@ -361,14 +361,17 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('activitytype', 'activityType', 'string');
         $rsm->addScalarResult('allocated', 'allocated', 'string');
         $rsm->addScalarResult('wday', 'day', 'date');
+        $rsm->addScalarResult('customer', 'customer', 'string');
 
         $sql = "select u.name as username,
                        t.name as activitytype, 
+                       c.name as customer,
                        coalesce(sum(ai.end_date - ai.start_date),'00:00:00'::interval) as allocated,
                        to_char(ai.start_date, 'YYYY-MM-DD') as wday
                   from activity a
                   join activity_interaction ai on ai.activity_id = a.id
                   join activity_type t on a.type_id = t.id
+                  join customer c on c.id = a.customer_id
                   join users u on u.id = ai.user_id and u.active = true
                  where ai.start_date::date between 
                          '" . DateUtils::toDataBaseDate($startDate) . "' and '" . DateUtils::toDataBaseDate($endDate) . "'\n";
@@ -388,7 +391,7 @@ class ActivityReportDAO extends BasicDAO {
         $sql .="
                    and a.active = true
                    and ai.end_date is not null
-              group by userName, activityType, wday
+              group by userName, activityType, wday, c.id
               order by wday, userName, activityType";
         
         $q = $this->em->createNativeQuery($sql, $rsm);
@@ -401,7 +404,7 @@ class ActivityReportDAO extends BasicDAO {
 
         foreach ($dbResult as $v) {
             $results[] = new \report\result\ActivityReportTypeDetailResult(
-                    $v['activityType'], $v['userName'], $v['allocated'], $v['day']);
+                    $v['activityType'], $v['userName'], $v['allocated'], $v['day'], $v['customer']);
         }
 
         return $results;

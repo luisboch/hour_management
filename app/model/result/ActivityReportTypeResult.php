@@ -111,12 +111,14 @@ class ActivityReportTypeDetailResult {
     private $activityUser;
     private $allocated;
     private $date;
+    private $customerName;
 
-    function __construct($activityType, $activityUser, $allocated, $date) {
+    function __construct($activityType, $activityUser, $allocated, $date, $customerName) {
         $this->activityType = $activityType;
         $this->activityUser = $activityUser;
         $this->allocated = $allocated;
         $this->date = $date;
+        $this->customerName = $customerName;
     }
 
     public function getActivityType() {
@@ -150,7 +152,14 @@ class ActivityReportTypeDetailResult {
     public function setDate($date) {
         $this->date = $date;
     }
+    
+    public function getCustomerName() {
+        return $this->customerName;
+    }
 
+    public function setCustomerName($customerName) {
+        $this->customerName = $customerName;
+    }
 }
 
 

@@ -23,21 +23,21 @@
                             <input type="text" class="form-control " name="search" value="<?= array_key_exists('search', $_GET) ? $_GET['search'] : ''; ?>" />
                         </div>
                         <div style="margin-bottom: 10px">
-                            <label for="type" >Tipo de Atividade</label>
-                            <select class="form-control" name="type">
-                                <option value="">---Selecione---</option>
-                                {% for t in types %}
-                                <option value="{{t.getId()}}" {{type == t.getId() ? 'selected':''}} >{{t.getName()}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 10px">
                             <label for="user" >Responsável</label>
                             <select class="form-control" name="user">
                                 <option value="none" {{ user_id == 'none' ? 'selected' : '' }}>Não delegado</option>
                                 <option value="all" {{ user_id === 'all' ? 'selected' : '' }} default="true">Todos</option>
                                 {% for t in users %}
                                 <option value="{{t.getId()}}" {{user_id == t.getId() ? 'selected':''}} >{{t.getName()}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div style="margin-bottom: 10px">
+                            <label for="type" >Tipo de Atividade</label>
+                            <select class="form-control" name="type">
+                                <option value="">---Selecione---</option>
+                                {% for t in types %}
+                                <option value="{{t.getId()}}" {{type == t.getId() ? 'selected':''}} >{{t.getName()}}</option>
                                 {% endfor %}
                             </select>
                         </div>
