@@ -1,6 +1,7 @@
 <?php
 
 namespace report\result;
+
 /**
  * Description of ActivityReportResult
  *
@@ -13,6 +14,7 @@ class ActivityReportResult {
     private $finished = 0;
     private $idsFinished = array();
     private $idsTotal = array();
+
     /**
      *
      * @var ResultData[] 
@@ -34,19 +36,19 @@ class ActivityReportResult {
     public function getData() {
         return $this->data;
     }
-    
+
     /**
      * @param \report\result\ResultData $data
      */
     public function add(ResultData $data) {
         $this->data[] = $data;
-        if(!in_array($data->getActivityId(), $this->idsTotal)){
+        if (!in_array($data->getActivityId(), $this->idsTotal)) {
             $this->total++;
             $this->idsTotal[] = $data->getActivityId();
         }
-     
+
         if ($data->isFinished()) {
-            if(!in_array($data->getActivityId(), $this->idsFinished)){
+            if (!in_array($data->getActivityId(), $this->idsFinished)) {
                 $this->finished++;
                 $this->idsFinished[] = $data->getActivityId();
             }
@@ -55,7 +57,6 @@ class ActivityReportResult {
 
 }
 
-
 class ResultData {
 
     private $activityId;
@@ -63,15 +64,19 @@ class ResultData {
     private $allocated;
     private $finished;
     private $date;
+    private $customerId;
+    private $customerName;
 
-    function __construct($activityId, $activityName, $allocated, $finished, $date) {
+    function __construct($activityId, $activityName, $allocated, $finished, $date, $customerId, $customerName) {
         $this->activityId = $activityId;
         $this->activityName = $activityName;
         $this->allocated = $allocated;
         $this->finished = $finished;
         $this->date = $date;
+        $this->customerId = $customerId;
+        $this->customerName = $customerName;
     }
-    
+
     public function getActivityId() {
         return $this->activityId;
     }
@@ -87,7 +92,7 @@ class ResultData {
     public function getFinished() {
         return $this->finished;
     }
-    
+
     public function isFinished() {
         return $this->finished;
     }
@@ -115,6 +120,21 @@ class ResultData {
     public function setDate($date) {
         $this->date = $date;
     }
+    
+    public function getCustomerId() {
+        return $this->customerId;
+    }
 
+    public function getCustomerName() {
+        return $this->customerName;
+    }
+
+    public function setCustomerId($customerId) {
+        $this->customerId = $customerId;
+    }
+
+    public function setCustomerName($customerName) {
+        $this->customerName = $customerName;
+    }
 
 }

@@ -121,6 +121,7 @@ class ActivityReportDAO extends BasicDAO {
 
         $startDate = $filters['startDate'];
         $endDate = $filters['endDate'];
+        $customer = $filters['customer'];
 
         if ($startDate === null) {
             $startDate = new DateTime('00:00:00');
@@ -136,34 +137,54 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('name', 'activityName', 'string');
         $rsm->addScalarResult('allocated', 'allocated', 'string');
         $rsm->addScalarResult('finished', 'finished', 'boolean');
+        $rsm->addScalarResult('customerid', 'customerId', 'integer');
+        $rsm->addScalarResult('customername', 'customerName', 'string');
         $rsm->addScalarResult('wday', 'day', 'date');
 
         $sql = 'select a.id,
                        a.name, 
                        a.status = 1 as finished,
+                       c.id as customerId,
+                       c.name as customerName,
                        to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
                        to_char(ai.start_date, \'YYYY-MM-DD\') as wday
                   from activity a
+                  join customer c on c.id = a.customer_id
                   join activity_interaction ai on ai.activity_id = a.id
                  where ai.start_date between :startDate and :endDate
                    and a.active = true
                    and ai.end_date is not null
-              group by a.id, wday
-              order by wday, a.name';
+                   ';
+
+        if ($customer != '') {
+            $sql .= "and c.id = :customer \n";
+        }
+
+        $sql .='
+              group by a.id, wday, c.id
+              order by wday, customerName, a.name';
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
         $q->setParameter('startDate', $startDate, 'datetime');
         $q->setParameter('endDate', $endDate, 'datetime');
 
+        if ($customer != '') {
+            $q->setParameter("customer", $customer);
+        }
+        
         $dbResult = $q->getResult();
 
         $result = new \report\result\ActivityReportResult();
 
         foreach ($dbResult as $v) {
+            
             $r = new report\result\ResultData(
-                    $v['activityId'], $v['activityName'], $v['allocated'], $v['finished'], $v['day']);
+                    $v['activityId'], $v['activityName'], $v['allocated'], 
+                    $v['finished'], $v['day'], $v['customerId'], $v['customerName']);
+            
             $result->add($r);
+            
         }
 
         return $result;
@@ -393,7 +414,7 @@ class ActivityReportDAO extends BasicDAO {
                    and ai.end_date is not null
               group by userName, activityType, wday, c.id
               order by wday, userName, activityType";
-        
+
         $q = $this->em->createNativeQuery($sql, $rsm);
 
         $q->setParameter('startDate', $startDate, 'datetime');

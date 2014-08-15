@@ -78,11 +78,10 @@ class ReportController extends AdminBase {
         if ($params['user'] == null) {
             $this->warn("Selecione o usuário");
             $this->response->redirect('report/index');
-
             $this->view->disable();
             return false;
         } else {
-            $results = $this->service->getWorkReport($this->getParams());
+            $results = $this->service->getWorkReport($params);
             $this->view->results = $results['results'];
             $this->view->total = $results['total'];
             $this->view->user = $params['user'];

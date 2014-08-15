@@ -134,6 +134,7 @@
                                                                 $('#paramsForm').attr('action', '{{ url("report/user")}}');
                                                             } else if (newval === '2') { // Activity
                                                                 $('#paramsForm').attr('action', '{{ url("report/activity")}}');
+                                                                $('#customer_id').removeAttr('disabled');
                                                             } else if (newval === '3') { // Activity type
                                                                 $('#paramsForm').attr('action', '{{ url("report/type")}}');
                                                                 $('#user_id').removeAttr('disabled');

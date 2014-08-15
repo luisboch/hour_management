@@ -18,10 +18,17 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="col-lg-3 col-md-3">Data</th>
-                                <th class="col-lg-6 col-md-6">Atividade</th>
-                                <th class="col-lg-3 col-md-3"><span class="hidden-xs">Alocado</span><span class="visible-xs">Alo.</span></th>
-                                <th class="col-lg-3 col-md-3"><span class="hidden-xs">Finalizada</span><span class="visible-xs">Fin.</span></th>
+                                <th class="col-lg-1 col-md-1">Data</th>
+                                <th class="col-lg-2 col-md-2">Cliente</th>
+                                <th class="col-lg-5 col-md-5">Atividade</th>
+                                <th class="col-lg-2 col-md-2">
+                                    <span class="hidden-xs">Alocado</span>
+                                    <span class="visible-xs">Alo.</span>
+                                </th>
+                                <th class="col-lg-2 col-md-2">
+                                    <span class="hidden-xs">Finalizada</span>
+                                    <span class="visible-xs">Fin.</span>
+                                </th>
                             </tr>
                         </thead>
 
@@ -29,6 +36,7 @@
                             {% for r in results.getData() %}
                             <tr>
                                 <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
+                                <td>{{ r.getCustomerName() }}</td>
                                 <td><a href="{{ url('activities/view/'~r.getActivityId() )}}">{{r.getActivityName()}}</a></td>
                                 <td>{{ r.getAllocated() }}</td>
                                 <td>{{ r.isFinished() ? 'SIM':'NAO' }}</td>
