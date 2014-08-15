@@ -146,7 +146,7 @@ class ActivityReportDAO extends BasicDAO {
                        a.status = 1 as finished,
                        c.id as customerId,
                        c.name as customerName,
-                       to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI\') as allocated,
+                       to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI:SS\') as allocated,
                        to_char(ai.start_date, \'YYYY-MM-DD\') as wday
                   from activity a
                   join customer c on c.id = a.customer_id
