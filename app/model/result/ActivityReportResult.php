@@ -14,6 +14,8 @@ class ActivityReportResult {
     private $finished = 0;
     private $idsFinished = array();
     private $idsTotal = array();
+    
+    private $totalHour;
 
     /**
      *
@@ -55,6 +57,13 @@ class ActivityReportResult {
         }
     }
 
+    public function getTotalHour() {
+        return $this->totalHour;
+    }
+
+    public function setTotalHour($totalHour) {
+        $this->totalHour = $totalHour;
+    }
 }
 
 class ResultData {
@@ -137,4 +146,6 @@ class ResultData {
         $this->customerName = $customerName;
     }
 
+    
+    
 }

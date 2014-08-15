@@ -123,17 +123,9 @@ class DateUtils {
      * @param {string|object} $value
      * @return float
      */
-    public static function getFloat($value) {
-
+    public function getFloat($value) {
         if (is_object($value) && $value instanceof DateTime) {
             $value = $value->format("H:i:s");
-        }
-
-        $isNegative = false;
-
-        if (substr($value, 0, 1) == '-') {
-            $isNegative = true;
-            $value = substr($value, 1);
         }
 
         $timestamp = strtotime($value);
@@ -142,13 +134,7 @@ class DateUtils {
         $minute = date('i', $timestamp);
         $second = date('s', $timestamp);
 
-        $float = $hour + ($minute / 60) + ($second / 60 / 60);
-
-        if ($isNegative) {
-            $float = $float * -1;
-        }
-
-        return $float;
+        return $hour + ($minute / 60) + ($second / 60 / 60);
     }
 
     /**

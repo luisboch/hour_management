@@ -176,16 +176,20 @@ class ActivityReportDAO extends BasicDAO {
         $dbResult = $q->getResult();
 
         $result = new \report\result\ActivityReportResult();
-
+        
+        $totalAllocated = 0;
+        
         foreach ($dbResult as $v) {
             
             $r = new report\result\ResultData(
                     $v['activityId'], $v['activityName'], $v['allocated'], 
                     $v['finished'], $v['day'], $v['customerId'], $v['customerName']);
-            
+            $totalAllocated += DateUtils::getFloat($r->getAllocated());
             $result->add($r);
             
         }
+        
+        $result->setTotalHour(DateUtils::getHour($totalAllocated));
 
         return $result;
     }
