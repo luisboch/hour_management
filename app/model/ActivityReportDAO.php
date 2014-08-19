@@ -139,6 +139,9 @@ class ActivityReportDAO extends BasicDAO {
         $rsm->addScalarResult('finished', 'finished', 'boolean');
         $rsm->addScalarResult('customerid', 'customerId', 'integer');
         $rsm->addScalarResult('customername', 'customerName', 'string');
+        $rsm->addScalarResult('userid', 'userId', 'integer');
+        $rsm->addScalarResult('username', 'userName', 'string');
+        $rsm->addScalarResult('typename', 'typeName', 'string');
         $rsm->addScalarResult('wday', 'day', 'date');
 
         $sql = 'select a.id,
@@ -146,11 +149,16 @@ class ActivityReportDAO extends BasicDAO {
                        a.status = 1 as finished,
                        c.id as customerId,
                        c.name as customerName,
+                       u.name as userName,
+                       u.id as userId, 
+                       t.name as typeName,
                        to_char(sum((ai.end_date - ai.start_date)::time),\'HH24:MI:SS\') as allocated,
                        to_char(ai.start_date, \'YYYY-MM-DD\') as wday
                   from activity a
                   join customer c on c.id = a.customer_id
                   join activity_interaction ai on ai.activity_id = a.id
+                  join users u on u.id = ai.user_id
+                  join activity_type t on a.type_id = t.id
                  where ai.start_date between :startDate and :endDate
                    and a.active = true
                    and ai.end_date is not null
@@ -161,8 +169,8 @@ class ActivityReportDAO extends BasicDAO {
         }
 
         $sql .='
-              group by a.id, wday, c.id
-              order by wday, customerName, a.name';
+              group by a.id, wday, c.id, u.id, t.id
+              order by wday, customerName, u.name, t.name, a.name';
 
         $q = $this->em->createNativeQuery($sql, $rsm);
 
@@ -183,7 +191,8 @@ class ActivityReportDAO extends BasicDAO {
             
             $r = new report\result\ResultData(
                     $v['activityId'], $v['activityName'], $v['allocated'], 
-                    $v['finished'], $v['day'], $v['customerId'], $v['customerName']);
+                    $v['finished'], $v['day'], $v['customerId'], $v['customerName'],
+                    $v['userId'], $v['userName'], $v['typeName']);
             $totalAllocated += DateUtils::getFloat($r->getAllocated());
             $result->add($r);
             

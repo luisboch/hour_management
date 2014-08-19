@@ -75,8 +75,12 @@ class ResultData {
     private $date;
     private $customerId;
     private $customerName;
+    private $userId;
+    private $userName;
+    private $typeName;
 
-    function __construct($activityId, $activityName, $allocated, $finished, $date, $customerId, $customerName) {
+    function __construct($activityId, $activityName, $allocated, $finished,
+            $date, $customerId, $customerName, $userId, $userName, $typeName) {
         $this->activityId = $activityId;
         $this->activityName = $activityName;
         $this->allocated = $allocated;
@@ -84,6 +88,9 @@ class ResultData {
         $this->date = $date;
         $this->customerId = $customerId;
         $this->customerName = $customerName;
+        $this->userId = $userId;
+        $this->userName = $userName;
+        $this->typeName = $typeName;
     }
 
     public function getActivityId() {
@@ -146,6 +153,28 @@ class ResultData {
         $this->customerName = $customerName;
     }
 
+    public function getUserId() {
+        return $this->userId;
+    }
+
+    public function getUserName() {
+        return $this->userName;
+    }
+
+    public function setUserId($userId) {
+        $this->userId = $userId;
+    }
+
+    public function setUserName($userName) {
+        $this->userName = $userName;
+    }
     
+    public function getTypeName() {
+        return $this->typeName;
+    }
+
+    public function setTypeName($typeName) {
+        $this->typeName = $typeName;
+    }
     
 }

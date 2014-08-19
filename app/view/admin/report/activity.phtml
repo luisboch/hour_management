@@ -15,42 +15,49 @@
             <div class="well row">
                 <fieldset>
                     <legend>Relatórios | Atividades</legend>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="col-lg-1 col-md-1">Data</th>
-                                <th class="col-lg-2 col-md-2">Cliente</th>
-                                <th class="col-lg-5 col-md-5">Atividade</th>
-                                <th class="col-lg-2 col-md-2">
-                                    <span class="hidden-xs">Alocado</span>
-                                    <span class="visible-xs">Alo.</span>
-                                </th>
-                                <th class="col-lg-2 col-md-2">
-                                    <span class="hidden-xs">Finalizada</span>
-                                    <span class="visible-xs">Fin.</span>
-                                </th>
-                            </tr>
-                        </thead>
+                    <div class="expand">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-1 col-md-1">Data</th>
+                                    <th class="col-lg-1 col-md-1">Cliente</th>
+                                    <th class="col-lg-1 col-md-1">Usuário</th>
+                                    <th class="col-lg-2 col-md-2">Tipo</th>
+                                    <th class="col-lg-5 col-md-5">Atividade</th>
+                                    <th class="col-lg-1 col-md-1">
+                                        <span class="hidden-xs">Alocado</span>
+                                        <span class="visible-xs">Alo.</span>
+                                    </th>
+                                    <th class="col-lg-1 col-md-1">
+                                        <span class="hidden-xs">Finalizada</span>
+                                        <span class="visible-xs">Fin.</span>
+                                    </th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                            {% for r in results.getData() %}
-                            <tr>
-                                <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
-                                <td>{{ r.getCustomerName() }}</td>
-                                <td><a href="{{ url('activities/view/'~r.getActivityId() )}}">{{r.getActivityName()}}</a></td>
-                                <td>{{ r.getAllocated() }}</td>
-                                <td>{{ r.isFinished() ? 'SIM':'NAO' }}</td>
+                            <tbody>
+                                {% for r in results.getData() %}
+                                <tr>
+                                    <td>{{ formatDate(r.getDate(), 'day-only') }}</td>
+                                    <td>{{ r.getCustomerName() }}</td>
+                                    <td>{{ r.getUserName() }}</td>
+                                    <td>{{ r.getTypeName() }}</td>
+                                    <td><a href="{{ url('activities/view/'~r.getActivityId() )}}">{{r.getActivityName()}}</a></td>
+                                    <td>{{ r.getAllocated() }}</td>
+                                    <td>{{ r.isFinished() ? 'SIM':'NAO' }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="7" class="text-right ">
+                            <p class="help-block">Total {{results.getTotalHour()}} ({{results.getTotal()}} atividades, {{results.getFinished()}} foram finalizadas)</p> 
+                            </th>
                             </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="5" class="text-right ">
-                        <p class="help-block">Total {{results.getTotalHour()}} ({{results.getTotal()}} atividades, {{results.getFinished()}} foram finalizadas)</p> 
-                        </th>
-                        </tr>
-                        </tfoot>
-                    </table>
+                            </tfoot>
+                        </table>
+
+                    </div>
                 </fieldset>
             </div>
         </div>
