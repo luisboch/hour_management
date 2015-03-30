@@ -84,8 +84,9 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="col-lg-7 col-xs-7">Atividade</th>
-                                <th class="col-lg-3 col-xs-3 text-center"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
+                                <th class="col-lg-6 col-xs-6">Atividade</th>
+                                <th class="col-lg-2 col-xs-2 text-center">Quem</th>
+                                <th class="col-lg-2 col-xs-2 text-center"><span class="hidden-lg hidden-md">Alcd.</span><span class="hidden-xs">Alocado</span></th>
                                 <th class="col-lg-2 col-xs-2 text-center">Status</th>
                             </tr>
                         </thead>
@@ -93,6 +94,7 @@
                             {% for r in activityResult.getData() %}
                             <tr>
                                 <td class="text-left"><a href="{{ url('activities/view/' ~ r.getActivityId() ) }}">{{ r.getActivityName() }}</a></td>
+                                <td class="">{{ r.getUserName() }}</td>
                                 <td class="">{{ r.getAllocated() }}</td>
                                 <td class="">{{ r.isFinished() ? 'Finalizado' : 'Aberto' }}</td>
                             </tr>
