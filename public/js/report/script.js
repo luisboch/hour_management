@@ -1,4 +1,4 @@
-$('#paramsForm').submit(function() {
+$('#paramsForm').submit(function () {
 
     var act = $(this).attr('action');
 
@@ -10,7 +10,7 @@ $('#paramsForm').submit(function() {
     var newval = $('#report_selection').val();
     var user = $('#user_id');
 
-    if (!user.is(':disabled') && newval !== '3') {
+    if (!user.is(':disabled') && newval !== '3' && newval !== '2') {
         try {
             if (user.val() === "") {
                 alert("Selecione um usuário!");
@@ -23,7 +23,7 @@ $('#paramsForm').submit(function() {
     return true;
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     $('#report_selection').trigger("change");
 });
 

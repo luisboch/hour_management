@@ -70,6 +70,7 @@ class ResultData {
 
     private $activityId;
     private $activityName;
+    private $activityDesc;
     private $allocated;
     private $finished;
     private $date;
@@ -79,10 +80,11 @@ class ResultData {
     private $userName;
     private $typeName;
 
-    function __construct($activityId, $activityName, $allocated, $finished,
+    function __construct($activityId, $activityName, $activityDesc,$allocated, $finished,
             $date, $customerId, $customerName, $userId, $userName, $typeName) {
         $this->activityId = $activityId;
         $this->activityName = $activityName;
+        $this->activityDesc = $activityDesc;
         $this->allocated = $allocated;
         $this->finished = $finished;
         $this->date = $date;
@@ -124,7 +126,15 @@ class ResultData {
     public function setActivityName($activityName) {
         $this->activityName = $activityName;
     }
+    
+    function getActivityDesc() {
+        return $this->activityDesc;
+    }
 
+    function setActivityDesc($activityDesc) {
+        $this->activityDesc = $activityDesc;
+    }
+    
     public function setAllocated($allocated) {
         $this->allocated = $allocated;
     }

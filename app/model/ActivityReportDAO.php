@@ -117,11 +117,13 @@ class ActivityReportDAO extends BasicDAO {
      * @param integer $offset
      * @return \report\result\ActivityReportResult
      */
-    public function getActivityReport($filters = array(), $limit = NULL, $offset = NULL) {
+    public function getActivityReport($filters = [], $limit = NULL, $offset = NULL) {
 
         $startDate = $filters['startDate'];
         $endDate = $filters['endDate'];
         $customer = $filters['customer'];
+        $user = $filters['user'];
+        $type = $filters['type'];
 
         if ($startDate === null) {
             $startDate = new DateTime('00:00:00');
@@ -135,6 +137,7 @@ class ActivityReportDAO extends BasicDAO {
 
         $rsm->addScalarResult('id', 'activityId', 'integer');
         $rsm->addScalarResult('name', 'activityName', 'string');
+        $rsm->addScalarResult('description', 'activityDesc', 'string');
         $rsm->addScalarResult('allocated', 'allocated', 'string');
         $rsm->addScalarResult('finished', 'finished', 'boolean');
         $rsm->addScalarResult('customerid', 'customerId', 'integer');
@@ -146,6 +149,7 @@ class ActivityReportDAO extends BasicDAO {
 
         $sql = 'select a.id,
                        a.name, 
+                       a.description,
                        a.status = 1 as finished,
                        c.id as customerId,
                        c.name as customerName,
@@ -168,7 +172,15 @@ class ActivityReportDAO extends BasicDAO {
             $sql .= "and c.id = :customer \n";
         }
 
-        $sql .='
+        if ($user != '') {
+            $sql .= "and u.id = :user \n";
+        }
+
+        if ($type != '') {
+            $sql .= "and t.id = :type \n";
+        }
+
+        $sql .= '
               group by a.id, wday, c.id, u.id, t.id
               order by wday, customerName, u.name, t.name, a.name';
 
@@ -180,24 +192,29 @@ class ActivityReportDAO extends BasicDAO {
         if ($customer != '') {
             $q->setParameter("customer", $customer);
         }
-        
+
+        if ($user != '') {
+            $q->setParameter("user", $user);
+        }
+
+        if ($type != '') {
+            $q->setParameter("type", $type);
+        }
+
         $dbResult = $q->getResult();
 
         $result = new \report\result\ActivityReportResult();
-        
+
         $totalAllocated = 0;
-        
+
         foreach ($dbResult as $v) {
-            
+
             $r = new report\result\ResultData(
-                    $v['activityId'], $v['activityName'], $v['allocated'], 
-                    $v['finished'], $v['day'], $v['customerId'], $v['customerName'],
-                    $v['userId'], $v['userName'], $v['typeName']);
+                    $v['activityId'], $v['activityName'], $v['activityDesc'], $v['allocated'], $v['finished'], $v['day'], $v['customerId'], $v['customerName'], $v['userId'], $v['userName'], $v['typeName']);
             $totalAllocated += DateUtils::getFloat($r->getAllocated());
             $result->add($r);
-            
         }
-        
+
         $result->setTotalHour(DateUtils::getHour($totalAllocated));
 
         return $result;

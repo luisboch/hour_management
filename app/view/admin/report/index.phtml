@@ -135,6 +135,9 @@
                                                             } else if (newval === '2') { // Activity
                                                                 $('#paramsForm').attr('action', '{{ url("report/activity")}}');
                                                                 $('#customer_id').removeAttr('disabled');
+                                                                $('#user_id').removeAttr('disabled');
+                                                                $('#type_id').removeAttr('disabled');
+                                                                $('div#user').find('span.text-danger').css('display', 'none');
                                                             } else if (newval === '3') { // Activity type
                                                                 $('#paramsForm').attr('action', '{{ url("report/type")}}');
                                                                 $('#user_id').removeAttr('disabled');
