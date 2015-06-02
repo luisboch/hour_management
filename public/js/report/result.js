@@ -6,6 +6,11 @@ function loadHeaderSelection() {
     // Add elements to filter
     localResultTable.find('thead > tr > th').each(function (i) {
         var title = $(this).text();
+        
+        if($(this).find('.hidden-xs').length > 0 ){
+            title = $(this).find('.hidden-xs').text();
+        }
+        
         filterLocation.append('<div class="checkbox">' +
                 '<label>' +
                 '<input class="" type="checkbox" name="column_' + i + '" \n\

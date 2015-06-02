@@ -64,3 +64,16 @@ body{
     width: 100%;
     overflow: auto;
 }
+/*
+table.header_locked tbody{
+    display: block;
+    overflow: auto;
+    height: 550px;
+}
+
+table.header_locked thead{
+    display: block;
+}
+table.header_locked tfoot{
+    display: block;
+}*/
