@@ -48,8 +48,8 @@
                             {% for t in userResults %}
                             <tr>
                                 <td class="text-left">
-                                    <form id="{{ 'formReportUser' ~ t.getUserId() }}" action="{{ url('report/work_detail/') }}">
-                                        <a type="submit" href="#" onclick="$('#{{'formReportUser' ~ t.getUserId() }}').submit();">{{ t.getUserName() }}</a>
+                                    <form id="{{ 'formReportUser' ~ t.getUserId() }}" action="{{ url('report/work_detail/') }}" >
+                                        <a type="submit" href="#" onclick="try{if(event.ctrlKey){ $('#formReportUser{{ t.getUserId() }}').attr('target','_blank');  } }catch(e){};$('#{{'formReportUser' ~ t.getUserId() }}').submit();return false;">{{ t.getUserName() }}</a>
                                         <input type="hidden" value="{{ formatDate(currentDate,'day-only') }}" name="endDate" id="endDate" />
                                         <input type="hidden" value="{{ formatDate(currentDate,'day-only') }}" name="startDate" name="startDate" />
                                         <input type="hidden" value="{{ t.getUserId() }}" name="user_id" />
