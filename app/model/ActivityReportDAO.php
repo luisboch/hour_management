@@ -582,7 +582,7 @@ class ActivityReportDAO extends BasicDAO {
                           from (select CURRENT_DATE + i as dt from generate_series(date '" . DateUtils::toDataBaseDate($startDate) . "' - CURRENT_DATE, date '" . DateUtils::toDataBaseDate($endDate) . "' - CURRENT_DATE ) i) as dates\n
                      left join users u on u.id = :user\n
                      left join user_work_day w on w.\"date\" = dates.dt and w.user_id = u.id\n
-                         where extract (DOW from dates.dt) in (1,2,3,4,5)\n
+                         where (extract (DOW from dates.dt) in (1,2,3,4,5) or dates.dt in (select uwd_inner.date from user_work_day uwd_inner)) \n
                            and dates.dt not in (select h.date from holiday h where h.active = true)\n
                       order by wday, userName\n
                 ) as tb \n";
