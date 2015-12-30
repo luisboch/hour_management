@@ -24,7 +24,7 @@ class HolidayDAO extends BasicDAO {
             $dql .= "where $where ";
         }
 
-        $dql .= "order by x.description";
+        $dql .= "order by x.date desc";
 
         $q = $this->em->createQuery($dql);
 
