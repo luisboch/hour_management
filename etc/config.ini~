@@ -1,10 +1,10 @@
 [database]
 driver =pdo_pgsql
 user = postgres
-password = AcT@2016@IDtrp7
+password = qu@ntoon2010
 dbname = activities
-port = 5432
-host = 192.168.1.8
+port = 5433
+host = 192.168.1.4
 [pagination]
 registers_limit_per_page = 20
 number_of_links_displayed = 9
